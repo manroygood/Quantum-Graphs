@@ -9,7 +9,7 @@ dataDir=makeDataDir(tag,dataDirNumber);
 
 inputDir=fullfile(dataDir,['branch' getLabel(inBranchNumber)]);
 
-Phi=load(fullfile(dataDir,'template.mat'),'Phi'); Phi=Phi.Phi;
+Phi=loadGraphTemplate(dataDir);
 fcns=getGraphFcns(Phi.laplacianMatrix);
 
 NVecOld=load(fullfile(inputDir,'NVec'));

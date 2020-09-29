@@ -7,7 +7,7 @@ end
 dataDir=makeDataDir(tag,dataDirNumber);
 [branchDir,branchNum]=makeBranchDir(dataDir,options);
 
-Phi=load(fullfile(dataDir,'template.mat'),'Phi');Phi=Phi.Phi;
+Phi=loadGraphTemplate(dataDir);
 fcns=getGraphFcns(Phi.laplacianMatrix);
 
 [PhiColumn,Lambda0,direction,NVecOld,LambdaVecOld]= ...

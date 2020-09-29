@@ -5,7 +5,7 @@ if ischar(solNumber)
     NVec=load(fullfile(branchDir,'NVec'));
     solNumber=length(NVec);
 end
-    
-Phi=load(fullfile(topDir,'template.mat'));Phi=Phi.Phi;
+
+Phi=loadGraphTemplate(topDir);
 vec=load(fullfile(branchDir,['PhiColumn.' int2str(solNumber)]));
 Phi.plot(vec);

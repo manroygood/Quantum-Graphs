@@ -8,7 +8,7 @@ dataDir=fullfile(topDir,getLabel(dataDirNum));
 tag='saved';
 fileNumber=incrementRunNumber(tag,dataDir);
 fileLabel=getLabel(fileNumber);
-Phi=load(fullfile(dataDir,'template')); Phi=Phi.Phi;
+Phi=loadGraphTemplate(dataDir);
 Phi=initPhiNLDumbbell(Phi,Lambda0,edges,signs);
 
 y=graph2column(Phi);
