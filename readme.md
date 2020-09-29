@@ -12,4 +12,3 @@ There's some documentation:
 Basic instructions are in a matlab live script `quantumGraphRoutines.mlx`, which has also been saved as an [html file](quantumGraphRoutines.html).
 
 Some additional examples are in live scripts in directories `source/examples`, and `documentation`.
-
