@@ -1,8 +1,8 @@
 %% Dumbbell Laplacian program
 % Computes the eigenvalues and eigenfunctions of the Laplace operator
 % Saves the data to files in the directory
-% data/dumbbell/getLabel(runNumber)
-function runNumber=dumbbellEigenfunctionsSaveData(LHoop,LHandle,nHoop,nHandle,nToPlot)
+% data/dumbbell/getLabel(diagramNumber)
+function diagramNumber=dumbbellEigenfunctionsSaveData(LHoop,LHandle,nHoop,nHandle,nToPlot)
 if ~exist('nToPlot','var'); nToPlot=4;end
 
 close all
@@ -11,8 +11,8 @@ dataDir=fullfile('data',tag);
 if ~exist(dataDir,'dir')
     mkdir(dataDir)
 end
-runNumber=incrementRunNumber(tag);
-outputDir=fullfile(dataDir,getLabel(runNumber));
+diagramNumber=incrementRunNumber(tag);
+outputDir=fullfile(dataDir,getLabel(diagramNumber));
 mkdir(outputDir);
 
 %% Set up the graph structure and coordinates of the problem
@@ -22,9 +22,6 @@ source=[1 1 2];
 target=[1 2 2];
 Phi = quantumGraph(source, target,LVec,'nxVec',nX);
 
-filename=fullfile(outputDir,'template');
-save(filename,'Phi');
-
 %% Set up coordinates on which to plot the solutions
 % Note that the user has to create the plotting function
 % Note further, you could also add this by adding the key-value pair
@@ -33,6 +30,16 @@ save(filename,'Phi');
 
 Phi.addPlotCoords(@dumbbellPlotCoords);
 Phi.plot('layout')
+
+%% Save the template to a file
+filename=fullfile(outputDir,'template');
+save(filename,'Phi');
+
+%% Save a comment file
+filename=fullfile(outputDir,'comment.txt');
+fid=fopen(filename,'w');
+fwrite(fid,'Another great quantum graph!')
+fclose(fid)
 
 %% Construct the Laplacian and calculate its eigenvalues and eigenvectors
 % A little cleanup needed because the null eigenvalue is sometimes
@@ -83,4 +90,4 @@ for k=1:nToPlot/2
 end
 
 fprintf('Saved to directory %s.\n',outputDir)
-fprintf('Run number is %i.\n',runNumber)
+fprintf('Run number is %i.\n',diagramNumber)
