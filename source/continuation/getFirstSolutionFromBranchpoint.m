@@ -1,5 +1,5 @@
 function [PhiColumn,Lambda0,direction,NVecOld,LambdaVecOld]= ...
-    getFirstSolutionFromBranchpoint(dataDir,branchNumber,pointNumber,fcns,direction,options)
+    getFirstSolutionFromBranchpoint(dataDir,branchNumber,pointNumber,fcns,direction)
 
 initTol=1e-6;
 branchDataDir=fullfile(dataDir,['branch' getLabel(branchNumber)]);

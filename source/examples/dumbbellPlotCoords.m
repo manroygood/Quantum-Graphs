@@ -10,10 +10,11 @@ L=LVec(2);
 plotCoords.x1Node=[-1; 1]*L/2;
 plotCoords.x2Node=[0; 0];
 
-n1=dumbbell.Edges.nx(1);
+nx=dumbbell.nx;
+n1=nx(1);
 theta=2*pi*((1:n1)-1/2)'/n1;
 
-n2=dumbbell.Edges.nx(2);
+n2=nx(2);
 x = ((1:n2)-1/2)'/n2;
 
 hoopLeftX1 = -L/2 -r +r*cos(theta);
