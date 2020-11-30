@@ -33,4 +33,3 @@ This package has been used in the following papers
 * Secular determinants for a wider variety of vertex conditions
 * Spectral (Chebyshev) implementation of Laplace operator
 * Happy to consider adding features, or merge in contributions.
-
