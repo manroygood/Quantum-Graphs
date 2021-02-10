@@ -1,0 +1,7 @@
+function x = chebptsFirstKind(N)
+% Discretizes the interval (0,1) using N Chebyshev points of the first
+% kind.
+
+x = (cos( ((2* (0:(N-1))+1) * pi)/(2*N) ) + 1)/2;
+
+end
