@@ -14,7 +14,7 @@ else                                  % If A is ill conditioned
     Ashift = -A + B;                  % Shift A using B so Ashift is not be singular
        
     [vecperp,valperp] = eigs(Ashift,B,n,'SM');  % Solves (-A + 1B)u = lambda Bu
-    val = real(valperp) - 1;                    % Shift evals back and neglect small imaginary component
+    val = diag(diag(real(valperp)) - 1);        % Shift evals back and neglects small imaginary component
     vec = real(vecperp);                        % Same evecs up to a small imaginary component
 
     if sum(abs(imag(valperp)))>10^(-9)
