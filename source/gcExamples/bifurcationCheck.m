@@ -32,8 +32,8 @@ rmdir data/LineContinuation s
 
 lineEigenfunctionsSaveDataCheb
 close all
-lineNonlinContFromEigCheb(1,1,1,0.1,1,-5,4,true,true);
-% continueFromBranchPointCheb('LineContinuation',1,6,-1,3,.1,1,1);   % ds = .01 in graphNonlinearContCheb
+lineNonlinContFromEigCheb(1,1,1,0.1,1,-8,4,true,true);
+continueFromBranchPointCheb('LineContinuation',1,100,-1,3,.1,1,1);   % ds = .01 in graphNonlinearContCheb
 % continueFromBranchPointCheb('DumbbellContinuation',1,12,1,5,.1,1);     % ds = .005
 % continueFromBranchPointCheb('DumbbellContinuation',1,12,-1,3,1,1);     % ds = .005
 % continueFromBranchPointCheb('DumbbellContinuation',6,26,-1,3,.1,1);  % ds = .01
@@ -46,7 +46,11 @@ rmdir data/LineContinuationFinite s
 
 lineEigenfunctionsSaveData
 close all
-lineNonlinContFromEig(1,1,1,0.1,1,-1,4,true,true);
+lineNonlinContFromEig(1,1,1,0.1,1,-8,4,true,true);
+continueFromBranchPoint('LineContinuationFinite',1,102,-1,3,.1,1,1); 
+
+
+
 
 %% Plot Dumbbell Eigenfunctions at Bifurcation Points
 LVec=[2*pi,4,2*pi];
