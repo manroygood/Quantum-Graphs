@@ -75,7 +75,9 @@ end
 %% Plot the first few multiplicity-two eigenfunctions
 if exist('nDoubles','var') && nDoubles>0 && ~isempty(doubles)
     nn=0;
-    resolveDoubles=str2func([tag 'ResolveDoubles']);
+    resolveString=[tag 'ResolveDoubles'];
+    assert(exist(resolveString,'file'),sprintf('The function %s does not exist.',resolveString))
+    resolveDoubles=str2func(resolveString);
     for j=1:nToPlot/2
         for k=1:nDoubles
             %%
@@ -98,7 +100,9 @@ end
 %% Plot the first few multiplicity-two eigenfunctions
 if exist('nTriples','var') && nTriples>0 && ~isempty(triples)
     nn=0;
-    resolveTriples=str2func([tag 'ResolveTriples']);
+    resolveString=[tag 'ResolveTriples'];
+    assert(exist(resolveString,'file'),sprintf('The function %s does not exist.',resolveString))
+    resolveTriples=str2func(resolveString);
     for j=1:nToPlot/2
         for k=1:nTriples
             %%
