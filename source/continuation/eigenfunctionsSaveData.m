@@ -1,8 +1,13 @@
-%% EigenvectorSaveData
+function diagramNumber=eigenfunctionsSaveData(Phi,tag,nToPlot,nDoubles,nTriples)
+%% EigenfunctionsSaveData
 % Computes the eigenvalues and eigenfunctions of the Laplace operator
 % Saves the data to files in the directory
-% data/dumbbell/getLabel(diagramNumber)
-function diagramNumber=eigenfunctionsSaveData(tag,LVec,nxVec,robinCoeff,nToPlot,nDoubles,nTriples)
+% data/<tag>/getLabel(diagramNumber)
+% If saving double or triple eigenvalues, need routines named
+% <tag>ResolveDoubles.m
+% <tag>ResolveTriples.m
+% These take the arguments (V,k,Phi)
+
 if ~exist('nToPlot','var'); nToPlot=4;end
 
 close all
@@ -14,22 +19,7 @@ diagramNumber=incrementRunNumber(tag);
 outputDir=fullfile(dataDir,getLabel(diagramNumber));
 mkdir(outputDir);
 
-%% Set up the graph structure and coordinates of the problem
-templateFunction=str2func([tag 'Template']);
-[source,target]=templateFunction([]);
-if isempty(robinCoeff)
-    robinCoeff=zeros(max(target),1);
-end
-Phi = quantumGraph(source, target,LVec,'nxVec',nxVec,'robinCoeff',robinCoeff);
-
-%% Set up coordinates on which to plot the solutions
-% Note that the user has to create the plotting function
-% Note further, you could also add this by adding the key-value pair
-% 'PlotCoordinateFcn',@dumbbellPlotCoords to the above line of code
-% Phi = quantumGraph(...
-
-plotCoordFunction=str2func([tag 'PlotCoords']);
-Phi.addPlotCoords(plotCoordFunction);
+%% Plot the graph layout
 Phi.plot('layout')
 
 %% Save the template to a file
@@ -39,8 +29,7 @@ save(filename,'Phi');
 %% Save a comment file
 filename=fullfile(outputDir,'comment.txt');
 fid=fopen(filename,'w');
-fwrite(fid,'Another great quantum graph!');
-fclose(fid);
+fprintf(fid,'This directory contains:\n');
 
 %% Construct the Laplacian and calculate its eigenvalues and eigenvectors
 % A little cleanup needed because the null eigenvalue is sometimes
@@ -55,7 +44,7 @@ V=real(V(:,ord));V(:,1)=abs(V(:,1));
 
 [singles,doubles,triples]=separateEigs(lambda); % No triple eigenvalue unless handle and hoops resonant
 
-%% Plot the first few multiplicity-one eigenfunctions
+%% Plot and Save the first few multiplicity-one eigenfunctions
 for j=1:nToPlot
     %%
     figure
@@ -70,57 +59,60 @@ for j=1:nToPlot
     filename=fullfile(outputDir,lambdafile);
     eigenvalue=lambda(singles(j));
     save(filename,'eigenvalue','-ascii')
+    fprintf(fid,'lambda.%i: Multiplicity 1, eigenvalue = %0.3f\n',j, eigenvalue);
 end
 
-%% Plot the first few multiplicity-two eigenfunctions
+nn=nToPlot;
+%% Plot and save the first few multiplicity-two eigenfunctions
 if exist('nDoubles','var') && nDoubles>0 && ~isempty(doubles)
-    nn=0;
     resolveString=[tag 'ResolveDoubles'];
     assert(exist(resolveString,'file'),sprintf('The function %s does not exist.',resolveString))
     resolveDoubles=str2func(resolveString);
-    for j=1:nToPlot/2
-        for k=1:nDoubles
+    for j=1:nDoubles
+        for k=1:2
             %%
-            vDouble=resolveDoubles(V,doubles(j),nxVec);
+            vDouble=resolveDoubles(V,doubles(j),Phi);
             nn=nn+1;
             figure
             v1=vDouble{k};
             Phi.plot(v1)
-            title(sprintf('(%s) $\\lambda = %0.3f$', letter(nToPlot+nn), lambda(doubles(j))));
-            fcnfile=['eigenfunction.' int2str(nToPlot+nn)];
+            title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(doubles(j))));
+            fcnfile=['eigenfunction.' int2str(nn)];
             filename=fullfile(outputDir,fcnfile);
             save(filename,'v1','-ascii')
-            lambdafile=['lambda.' int2str(nToPlot+nn)];
+            lambdafile=['lambda.' int2str(nn)];
             filename=fullfile(outputDir,lambdafile);
-            eigenvalue=lambda(singles(j));
+            eigenvalue=lambda(doubles(j));
             save(filename,'eigenvalue','-ascii')
+            fprintf(fid,'lambda.%i: Multiplicity 2, eigenvalue = %0.3f\n',nn, eigenvalue);
         end
     end
 end
-%% Plot the first few multiplicity-two eigenfunctions
+%% Plot the first few multiplicity-three eigenfunctions
 if exist('nTriples','var') && nTriples>0 && ~isempty(triples)
-    nn=0;
     resolveString=[tag 'ResolveTriples'];
     assert(exist(resolveString,'file'),sprintf('The function %s does not exist.',resolveString))
     resolveTriples=str2func(resolveString);
-    for j=1:nToPlot/2
-        for k=1:nTriples
+    for j=1:nTriples
+        for k=1:3
             %%
-            vTriple=resolveTriples(V,triples(j));
+            vTriple=resolveTriples(V,triples(j),Phi);
             nn=nn+1;
             figure
             v1=vTriple{k};
             Phi.plot(v1)
-            title(sprintf('(%s) $\\lambda = %0.3f$', letter(nToPlot+nn), lambda(triples(j))));
-            fcnfile=['eigenfunction.' int2str(nToPlot+nn)];
+            title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(triples(j))));
+            fcnfile=['eigenfunction.' int2str(nn)];
             filename=fullfile(outputDir,fcnfile);
             save(filename,'v1','-ascii')
-            lambdafile=['lambda.' int2str(nToPlot+nn)];
+            lambdafile=['lambda.' int2str(nn)];
             filename=fullfile(outputDir,lambdafile);
-            eigenvalue=lambda(singles(j));
+            eigenvalue=lambda(triples(j));
             save(filename,'eigenvalue','-ascii')
+            fprintf(fid,'lambda.%i: Multiplicity 3, eigenvalue = %0.3f\n',nn, eigenvalue);
         end
     end
 end
+fclose(fid);
 fprintf('Saved to directory %s.\n',outputDir)
 fprintf('Run number is %i.\n',diagramNumber)

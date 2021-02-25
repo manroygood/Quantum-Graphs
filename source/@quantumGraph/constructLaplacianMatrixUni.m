@@ -1,4 +1,4 @@
-function M = laplacianMatrix(G)
+function M = constructLaplacianMatrixUni(G)
 % Construct the Laplacian matrix for the quantum graph domain G
 % Assumes Kirchoff junction conditions which reduce to Neumann at leaf
 % nodes
@@ -50,11 +50,3 @@ if rowDirection== 1            % If this is an incoming edge
 elseif rowDirection == -1      % If this is an outgoing edge
     rc=nxC(rowBranch)+1;
 end
-
-% function column=getColumn(G,colDirection,colBranch)
-% [~,nxC,~]=nx(G);
-% if colDirection== 1            % If this is an incoming edge
-%     column=nxC(colBranch+1);
-% elseif colDirection == -1      % If this is an outgoing edge
-%     column=nxC(colBranch)+1;
-% end

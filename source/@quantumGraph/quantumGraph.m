@@ -5,6 +5,7 @@ classdef quantumGraph < matlab.mixin.Copyable
     properties
         qg      % the main quantum graph, a digraph
         discretization;
+        laplacianMatrix;
     end
     methods
         function obj=quantumGraph(source,target,LVec,varargin)
@@ -92,7 +93,6 @@ classdef quantumGraph < matlab.mixin.Copyable
                 'Must have a discretization if setting up plot coordinates.');
 
             obj.qg=digraph(source,target,weights);
-            %clf;plot(G,'linewidth',1.5);axis equal;title('Layout of quantum graph')
             
             nNodes=numnodes(obj.qg);
             nEdges=numedges(obj.qg);
@@ -148,6 +148,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             
             if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'Uniform'))
                 obj.addUniformCoordinates(p.Results.nxVec);
+                obj.laplacianMatrix=obj.constructLaplacianMatrixUni;
             end
             
             if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'Chebyshev'))
@@ -159,87 +160,6 @@ classdef quantumGraph < matlab.mixin.Copyable
             end
             
         end % End of constructor
-        
-        % The Edges table
-        function E = Edges(G)
-            E = G.qg.Edges;
-        end
-        
-        % The Nodes table
-        function N = Nodes(G)
-            N = G.qg.Nodes;
-        end
-        
-        function len = L(G,j)
-            if nargin==1
-                len = G.qg.Edges.L;
-            else
-                len = G.qg.Edges.L(j);
-            end
-        end
-        
-        function X = x(G,j)
-            if nargin==1
-                X = G.qg.Edges.x;
-            else
-                X = G.qg.Edges.x(j);
-            end
-        end
-        
-%         function n = nx(G,j)
-%             if nargin==1
-%                 n = G.qg.Edges.nx;
-%             else
-%                 n = G.qg.Edges.nx(j);
-%             end
-%         end
-        
-        function rc = robinCoeff(G,j)
-            if nargin ==1
-                rc = G.qg.Nodes.robinCoeff;
-            else
-                rc = G.qg.Nodes.robinCoeff(j);
-            end
-        end
-        
-        function varargout = EndNodes(G,varargin)
-            
-            Edges=G.Edges;
-            if nargin ==1
-                EN = Edges.EndNodes;
-            elseif nargin==2
-                EN = Edges.EndNodes(varargin{1},:);
-            elseif nargin ==3
-                EN = Edges.EndNodes(varargin{1},varargin{2});
-            end
-            if nargout==1
-                varargout{1}=EN;
-            elseif nargout==2
-                varargout{1}=EN(:,1);
-                varargout{2}=EN(:,2);
-            end
-                
-        end
-        
-        function gm = ghostMatrix(G,j)
-            gm = G.qg.Nodes.ghostMatrix{j};
-        end
-        
-        function yy = y(G,j)
-            if nargin==1
-                yy = G.qg.Edges.y;
-            else
-                yy = G.qg.Edges.y{j};
-            end
-        end
-        
-        % Returns the weight vector or the jth weight vector
-        function w = weight(G,j)
-            if nargin==1
-                w = G.qg.Edges.Weight;
-            else
-                w = G.qg.Edges.Weight(j);
-            end
-        end
-    end
+
+    end % End of methods section. All methods except the constructor are written in separate m-files in the @quantumgraphs folder
 end
