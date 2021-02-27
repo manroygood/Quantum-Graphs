@@ -1,4 +1,4 @@
-function [S,D,f] = GCsecularDetNEW(G)
+function f = secularDet(G)
 L = sym(G.L);
 n = numedges(G);
 S = sym(zeros(2*n));
