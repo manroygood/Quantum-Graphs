@@ -1,7 +1,7 @@
 classdef quantumGraph < matlab.mixin.Copyable 
     % Declaring this using matlab.mixin.copybable allows us to copy graph objects, 
     % i.e. if g is a graph then the command 'g1=copy(g)' will create a new object
-    % g1 with all of the values of g
+    % g1 that duplicates all of the values of g
     properties
         qg      % the main quantum graph, a digraph
         discretization;
