@@ -1,0 +1,14 @@
+This directory contains:\lambda.1: Multiplicity 1, eigenvalue = 0.000
+lambda.2: Multiplicity 1, eigenvalue = 0.430
+lambda.3: Multiplicity 1, eigenvalue = 1.340
+lambda.4: Multiplicity 1, eigenvalue = 3.554
+lambda.5: Multiplicity 2, eigenvalue = 0.000
+lambda.6: Multiplicity 2, eigenvalue = 0.000
+lambda.7: Multiplicity 2, eigenvalue = 0.430
+lambda.8: Multiplicity 2, eigenvalue = 0.430
+lambda.9: Multiplicity 3, eigenvalue = 0.000
+lambda.10: Multiplicity 3, eigenvalue = 0.000
+lambda.11: Multiplicity 3, eigenvalue = 0.000
+lambda.12: Multiplicity 3, eigenvalue = 0.430
+lambda.13: Multiplicity 3, eigenvalue = 0.430
+lambda.14: Multiplicity 3, eigenvalue = 0.430
