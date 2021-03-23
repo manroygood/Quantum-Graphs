@@ -1,5 +1,6 @@
-function vv=BMPResolveDoubles(V,k,nXVec)
-n1=nXVec(1);n2=nXVec(2);
+function vv=BMPResolveDoubles(V,k,Phi)
+nx=Phi.nx;
+n1=nx(1);n2=nx(2);
 % Recombines the eigenfunctions of multiplicity-two eigenvalues on dumbell
 % graph in order to display that these eigenfunctions are identically zero
 % on some edges
