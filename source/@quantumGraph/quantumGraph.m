@@ -72,8 +72,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             
             % If version number is < 9.4 (i.e. pre MATLAB 2018a), then multigraphs are
             % not allowed. Check for multigraphs if using older version.
-            version=ver('MATLAB');
-            if str2double(version.Version)<9.4
+            if verLessThan('matlab','9.4')
                 for j=1:nSource-1
                     for k= j+1:nSource
                         if source(j)==source(k) && target(j)==target(k)

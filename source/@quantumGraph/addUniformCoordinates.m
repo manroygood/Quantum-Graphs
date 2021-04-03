@@ -3,13 +3,16 @@ function addUniformCoordinates(G,nxVec,ny)
 nEdges=G.numedges;
 nNodes=G.numnodes;
 
-if length(nxVec)==1
-    nxVec=nxVec*ones(nEdges,1);
-end
-
 if ~exist('ny','var')
     ny=1;
 end
+
+% If length(nxVec)==1, then it is interpreted to be the density of points
+% per unit length on each edge
+if length(nxVec)==1
+    nxVec=ceil(nxVec*G.L); 
+end
+    
 
 assert(length(nxVec)==nEdges,'quantumGraph:nxMismatch','Length of nxVec must match number of edges');
 G.qg.Edges.nx=nxVec(:);

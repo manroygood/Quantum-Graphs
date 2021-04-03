@@ -7,5 +7,5 @@ if ischar(solNumber)
 end
 
 Phi=loadGraphTemplate(topDir);
-vec=load(fullfile(branchDir,['PhiColumn.' int2str(solNumber)]));
+vec=load(fullfile(branchDir,['PhiColumn.' getLabel(solNumber)]));
 Phi.plot(vec);

@@ -1,1 +1,5 @@
-Another great quantum graph!
+This directory contains:
+lambda.1: Multiplicity 1, eigenvalue = 0.000
+lambda.2: Multiplicity 1, eigenvalue = 0.912
+lambda.3: Multiplicity 1, eigenvalue = 2.466
+lambda.4: Multiplicity 1, eigenvalue = 4.775

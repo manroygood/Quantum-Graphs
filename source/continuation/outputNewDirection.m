@@ -37,7 +37,7 @@ else % so the second direction is parallel to the current branch
     xPerturbation = xDir1; %#ok<NASGU>
     LambdaPerturbation = muDir1; %#ok<NASGU>
 end
-label=int2str(k);
+label=getLabel(k);
 xfile=['PhiPerturbation.' label '.mat'];xfile =fullfile(outputDir,xfile);
 mufile=['LambdaPerturbation.' label '.mat'];mufile =fullfile(outputDir,mufile);
 save(xfile,'xPerturbation')
