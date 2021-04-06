@@ -1,5 +1,6 @@
-function vv=yShapeResolveDoubles(V,k,nXVec)
-N1=nXVec(1);N2=nXVec(2);
+function vv=yShapeResolveDoubles(V,k,Phi)
+nx=Phi.nx;
+N1=nx(1);N2=nx(2);
 % Recombines the eigenfunctions of multiplicity-two eigenvalues on tribell
 % graph in order to display that these eigenfunctions are identically zero
 % on some edges
