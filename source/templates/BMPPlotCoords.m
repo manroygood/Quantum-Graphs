@@ -1,4 +1,4 @@
-function plotCoords = BMPPlotCoords(dumbbell)
+function plotCoords = BMPPlotCoords(Phi)
 % Creates coordinates on which to lay out functions defined on the
 % multi-handle dumbbell used by Berkolaiko, Marzuola, & Pelinovsky
 % These are independent of the coordinates used to define the dumbbell
@@ -7,26 +7,23 @@ function plotCoords = BMPPlotCoords(dumbbell)
 % Assumes that the length of each handle/hoop and the discretization number
 % on that edge are the same
 
-LVec=dumbbell.L;
+LVec=Phi.L;
 r1=LVec(1)/2/pi;
 L=LVec(2);
 
 plotCoords.x1Node=[-1; 1]*L/2;
 plotCoords.x2Node=[0; 0];
 
-nx=dumbbell.nx;
+nx=Phi.nx;
 
-n1=nx(1);
-thetaHoop=2*pi*((1:n1)-1/2)'/n1;
+thetaHoop=Phi.distributePlotCoords(0,2*pi,1);
 hoop1X1 = -L/2 -r1 +r1*cos(thetaHoop);
 hoop1X2 = r1*sin(thetaHoop);
 
-n2=nx(2);
-x = ((1:n2)-1/2)'/n2;
-handle2X1 = -L/2 + L*x;
-handle2X2 = zeros(size(x));
+handle2X1 = Phi.distributePlotCoords(-L/2,L/2,2);
+handle2X2 = zeros(nx(2),1);
 
-theta2=pi*((n2:-1:1)-1/2)'/n2;
+theta2 = Phi.distributePlotCoords(pi,0,2);
 handle3X1= L/2*cos(theta2);
 handle3X2= L/2*sin(theta2);
 

@@ -7,5 +7,5 @@ N1=nx(1); N2=nx(4);
 V1=V(:,k);
 V2=tribellShift(V1,N1,N2);
 v1= V1*V2(1)-V2*V1(1); 
-v{1}=v1/max(v1);
+v{1}=v1/Phi.norm(v1);
 v{2}=tribellShift(V1,N1,N2);

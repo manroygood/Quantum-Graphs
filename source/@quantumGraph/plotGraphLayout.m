@@ -23,7 +23,8 @@ plot(Nodes.x1,Nodes.x2,'bo','markersize',10,'MarkerFaceColor','b')
 
 lightgray=.95*[1 1 1];
 for k=1:numnodes(G)
-    text(Nodes.x1(k)+dx,Nodes.x2(k)+dx,int2str(k),'fontsize',18,'horizontalalignment','center')
+    text(Nodes.x1(k)+dx,Nodes.x2(k)+dx,int2str(k),'fontsize',18,'horizontalalignment','center',...
+        'edgecolor','k','background',lightgray)
 end
 
 hold off
