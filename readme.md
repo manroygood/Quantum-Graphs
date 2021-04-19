@@ -10,10 +10,11 @@ This package contains an object-oriented framework for working with quantum grap
 
 This code is written as a MATLAB [_Project_](https://www.mathworks.com/help/simulink/project-management.html). In order to run it, first type
 ```>> openProject QGObject.prj``` 
-at the MATLAB prompt or else click on the file `QGObject.prj` in the file listing on the left. This will open up a project window. This does two things that allow you to run the codes.
+at the MATLAB prompt or else click on the file `QGObject.prj` in the file listing on the left. This will open up a project window. This does three things that allow you to run the codes.
 
 1. Set the paths.
 2. Change some plotting defaults. The users defaults are saved in a `tmp` directory and are restored when the user closes the project by closing the project window.
+3. Verify that certain MATLAB toolboxes are installed that are necessary for certain functioning of the package.
 
 There's some documentation:
 
