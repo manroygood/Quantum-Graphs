@@ -1,4 +1,6 @@
 function Phi=wheel(opts)
+% Template for a wheel-shaped graph
+
 % Optional input arguments
 % n = number of sides of the wheel
 % nX = number of points per unit length, must be scalar
