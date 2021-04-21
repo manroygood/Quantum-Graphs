@@ -1,4 +1,4 @@
-function M = constructLaplacianMatrixUni(G)
+function [M,B] = constructLaplacianMatrixUni(G)
 % Construct the Laplacian matrix for the quantum graph domain G
 % Assumes Kirchoff junction conditions which reduce to Neumann at leaf
 % nodes
@@ -40,6 +40,9 @@ for j=1:nNodes-nDirichlet    % Loop over the nodes
         end
     end
 end
+
+B = eye(length(M));
+
 
 % Helper function for finding the rows and columns needed for the
 % corrected Laplacian matrix

@@ -153,6 +153,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             
             if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'Chebyshev'))
                 obj.addChebyshevCoordinates(p.Results.nxVec);
+                obj.laplacianMatrix=obj.constructLaplacianMatrixCheb;
             end
             
             if ~any(strcmp('plotCoordinateFcn',p.UsingDefaults))

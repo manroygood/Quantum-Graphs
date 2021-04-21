@@ -1,4 +1,4 @@
-function [A,B] = GCrectangularCollocation(G)
+function [A,B] = constructLaplacianMatrixCheb(G)
 % Produces the Laplacian matrix A with encoded boundary conditions and
 % projection matrix B that would be used for the eigen value problem
 % A*x = lambda.B*x

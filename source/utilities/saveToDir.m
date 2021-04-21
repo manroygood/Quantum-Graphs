@@ -1,6 +1,6 @@
 function saveToDir(x,directory,n)
 
-global nLabel
+global nLabel   % Is this actually useful?
 if ~exist(directory,'dir')
     mkdir(directory)
 end
@@ -8,7 +8,7 @@ end
 if nargin<3
     filename=inputname(1);
 else
-    filename=[inputname(1) '.' get_label(n,nLabel)];
+    filename=[inputname(1) '.' getLabel(n)];
 end
 
 if ischar(x)
