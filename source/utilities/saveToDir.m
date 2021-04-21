@@ -1,6 +1,5 @@
 function saveToDir(x,directory,n)
 
-global nLabel   % Is this actually useful?
 if ~exist(directory,'dir')
     mkdir(directory)
 end

@@ -10,6 +10,7 @@ if exist('tmp','dir')
     % Change some settings back to the default values
     set(groot,'DefaultAxesFontSize',default.AxesFontsize)
     set(groot,'DefaultLineLineWidth',default.LineLineWidth)
+    set(groot,'DefaultFunctionLineLineWidth',default.FunctionLineLineWidth)
     set(groot,'DefaultTextInterpreter',default.TextLabelInterpreter)
     set(groot,'DefaultAxesTickLabelInterpreter',default.AxesTickLabelInterpreter)
     set(groot,'DefaultLegendInterpreter',default.LegendInterpreter);

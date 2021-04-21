@@ -8,8 +8,8 @@ assert(exist(branchDataDir,'dir'),'No such branch file exists')
 NVecOld=load(fullfile(branchDataDir,'NVec'));
 LambdaVecOld=load(fullfile(branchDataDir,'LambdaVec'));
 LambdaOld=LambdaVecOld(pointNumber);
-pointlabel=int2str(pointNumber);
-PhiOld=load(fullfile(branchDataDir,['PhiColumn.' getLabel(pointNumber)]));
+pointlabel=getLabel(pointNumber);
+PhiOld=load(fullfile(branchDataDir,['PhiColumn.' pointlabel]));
 dPhi = load(fullfile(branchDataDir,['PhiPerturbation.' pointlabel '.mat']));dPhi=dPhi.xPerturbation;
 dLambda = load(fullfile(branchDataDir,['LambdaPerturbation.' pointlabel '.mat']));dLambda=dLambda.LambdaPerturbation;
 

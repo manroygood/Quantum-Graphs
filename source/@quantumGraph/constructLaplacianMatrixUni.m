@@ -14,17 +14,17 @@ for k=1:numedges(G)
     n = nxVec(k);
     e = ones(n,1);
     A = spdiags([e -2*e e], -1:1, n, n)/dx(k)^2;
-    M(nxC(k)+1:nxC(k+1),nxC(k)+1:nxC(k+1))=A;
+    M(nxC(k)+1:nxC(k+1),nxC(k)+1:nxC(k+1))=A; %#ok<SPRIX>
 end
 
-nDirichlet=sum(isnan(G.Nodes.robinCoeff));
+nDirichlet=sum(G.isDirichlet);
 nNodes=numnodes(G);
 
 % The Laplacian is modified at the grid points adjacent to the junctions
 % where Robin or Kirchhoff conditions hold. Do nothing at Dirichlet nodes
 for j=1:nNodes-nDirichlet    % Loop over the nodes
     mat=G.Nodes.ghostMatrix{j};
-    if ~isnan(G.Nodes.robinCoeff(j))
+    if ~isDirichlet(G,j)
         [fullDegree,inOrOut,allEdges]=fullDegreeEtc(G,j);
         for branch = 1:fullDegree   % loop over all edges adjacent to given nodes (rows of matrix)
             rowBranch = allEdges(branch);

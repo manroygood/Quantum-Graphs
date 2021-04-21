@@ -5,7 +5,7 @@ epsilon=0.001;
 initTol=1e-6;
 
 % Load data
-eigLabel= int2str(eigNum);
+eigLabel= getLabel(eigNum);
 fcnFile=fullfile(dataDir,['eigenfunction.' eigLabel]);
 lambdaFile=fullfile(dataDir,['lambda.' eigLabel]);
 assert(exist(fcnFile,'file'),'Eigenfunction file does not exist')

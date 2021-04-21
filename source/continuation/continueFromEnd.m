@@ -21,7 +21,7 @@ if ind==1; pointNumber=1; else; pointNumber=length(NVecOld);end
 
 Lambda0=LambdaVecOld(pointNumber);
 N0=NVecOld(pointNumber);
-pointlabel=int2str(pointNumber);
+pointlabel=getLabel(pointNumber);
 PhiColumn=load(fullfile(inputDir,['PhiColumn.' pointlabel]));
 
 options=continuerSet(options,'NThresh',N0+NExtra,'LambdaThresh',Lambda0-LambdaExtra);

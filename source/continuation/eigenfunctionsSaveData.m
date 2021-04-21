@@ -51,11 +51,11 @@ for j=1:nToPlot
     Phi.plot(V(:,singles(j)))
     title(sprintf('(%s) $\\lambda = %0.3f$', letter(j),lambda(singles(j))));
     %    title(sprintf('Eigenfunction %i, \\lambda = %0.3f',singles(k), lambda(singles(k))));
-    fcnfile=['eigenfunction.' int2str(j)];
+    fcnfile=['eigenfunction.' getLabel(j)];
     filename=fullfile(outputDir,fcnfile);
     eigenfunction=V(:,singles(j));
     save(filename,'eigenfunction','-ascii')
-    lambdafile=['lambda.' int2str(j)];
+    lambdafile=['lambda.' getLabel(j)];
     filename=fullfile(outputDir,lambdafile);
     eigenvalue=lambda(singles(j));
     save(filename,'eigenvalue','-ascii')
@@ -77,10 +77,10 @@ if exist('nDoubles','var') && nDoubles>0 && ~isempty(doubles)
             v1=vDouble{k};
             Phi.plot(v1)
             title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(doubles(j))));
-            fcnfile=['eigenfunction.' int2str(nn)];
+            fcnfile=['eigenfunction.' getLabel(nn)];
             filename=fullfile(outputDir,fcnfile);
             save(filename,'v1','-ascii')
-            lambdafile=['lambda.' int2str(nn)];
+            lambdafile=['lambda.' getLabel(nn)];
             filename=fullfile(outputDir,lambdafile);
             eigenvalue=lambda(doubles(j));
             save(filename,'eigenvalue','-ascii')
@@ -102,10 +102,10 @@ if exist('nTriples','var') && nTriples>0 && ~isempty(triples)
             v1=vTriple{k};
             Phi.plot(v1)
             title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(triples(j))));
-            fcnfile=['eigenfunction.' int2str(nn)];
+            fcnfile=['eigenfunction.' getLabel(nn)];
             filename=fullfile(outputDir,fcnfile);
             save(filename,'v1','-ascii')
-            lambdafile=['lambda.' int2str(nn)];
+            lambdafile=['lambda.' getLabel(nn)];
             filename=fullfile(outputDir,lambdafile);
             eigenvalue=lambda(triples(j));
             save(filename,'eigenvalue','-ascii')

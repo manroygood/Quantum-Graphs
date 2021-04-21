@@ -7,7 +7,7 @@ yNodes=zeros(nNodes,1);
 
 for j = 1:nDep
     for k = 1:nNodes
-        if isnan(G.robinCoeff(k))
+        if isDirichlet(G,k)
             yNodes(k,j)=0;
         else
             mat = G.ghostMatrix(k);

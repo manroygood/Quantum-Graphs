@@ -1,8 +1,8 @@
-function varargout = EndNodes(G,varargin)
+function varargout = EndNodes(Phi,varargin)
 % Returns the end nodes
 % If one output argument, returns an nnodes*2 matrix
 % If two output arguments, returns 2 nnodes*1 matrices
-Edges=G.Edges;
+Edges=Phi.Edges;
 if nargin ==1
     EN = Edges.EndNodes;
 elseif nargin==2

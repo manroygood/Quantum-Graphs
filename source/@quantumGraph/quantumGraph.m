@@ -1,7 +1,8 @@
 classdef quantumGraph < matlab.mixin.Copyable 
     % Declaring this using matlab.mixin.copybable allows us to copy graph objects, 
     % i.e. if g is a graph then the command 'g1=copy(g)' will create a new object
-    % g1 with all of the values of g
+    % g1 that duplicates all of the values of g, rather than simply being a
+    % second name for g
     properties
         qg      % the main quantum graph, a digraph
         discretization;
@@ -19,7 +20,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             % The input parser section
             p=inputParser;
             defaultRobinCoeff=zeros(nNodes,1);
-            defaultWeights=ones(nSource,1);
+            defaultWeight=ones(nSource,1);
             validVectorPosNum = @(x) isnumeric(x) && min(size(x))==1 && (all(x > 0));
             validVector = @(x) isnumeric(x) && min(size(x))==1;
             expectedDiscretizations={'None','Uniform','Chebyshev'};
@@ -31,7 +32,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             addRequired(p,'target',validVectorPosNum);
             addRequired(p,'Lvec',validVectorPosNum);
             addParameter(p,'RobinCoeff',defaultRobinCoeff,validVector);
-            addParameter(p,'Weights',defaultWeights,validVectorPosNum);
+            addParameter(p,'Weight',defaultWeight,validVectorPosNum);
             addParameter(p,'Discretization',defaultDiscretization,...
                 @(x) any(validatestring(x,expectedDiscretizations)));
             addParameter(p,'nxVec',defaultNxVec,validVectorPosNum);
@@ -72,8 +73,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             
             % If version number is < 9.4 (i.e. pre MATLAB 2018a), then multigraphs are
             % not allowed. Check for multigraphs if using older version.
-            version=ver('MATLAB');
-            if str2double(version.Version)<9.4
+            if verLessThan('matlab','9.4')
                 for j=1:nSource-1
                     for k= j+1:nSource
                         if source(j)==source(k) && target(j)==target(k)
@@ -84,15 +84,15 @@ classdef quantumGraph < matlab.mixin.Copyable
                 end
             end
             
-            weights=p.Results.Weights;
-            assert(length(weights)==nSource,'quantumGraph:weightMismatch',...
-                'Length of weights must match number of edges');
+            Weight=p.Results.Weight;
+            assert(length(Weight)==nSource,'quantumGraph:WeightMismatch',...
+                'Length of Weight must match number of edges');
             
             assert(any(strcmp('plotCoordinateFcn',p.UsingDefaults)) || ~isempty(p.Results.nxVec), ...
                 'quantumGraph:plotCoordsButNoCoords',...
                 'Must have a discretization if setting up plot coordinates.');
 
-            obj.qg=digraph(source,target,weights);
+            obj.qg=digraph(source,target,Weight);
             
             nNodes=numnodes(obj.qg);
             nEdges=numedges(obj.qg);
@@ -112,10 +112,10 @@ classdef quantumGraph < matlab.mixin.Copyable
             
             obj.qg.Nodes.robinCoeff=robinCoeff;
             
-            if any(isnan(robinCoeff))
+            if any(isDirichlet(obj))
                 % Check that Dirichlet boundary conditions are given only at leaf nodes
                 for j=1:nNodes
-                    if isnan(robinCoeff(j)) && ~isLeaf(obj,j)
+                    if isDirichlet(obj,j) && ~isLeaf(obj,j)
                         error('quantumGraph:dirichletNotLeaf',...
                             'Dirichlet boundary conditions only sensible at leaf nodes.')
                     end
@@ -124,7 +124,7 @@ classdef quantumGraph < matlab.mixin.Copyable
                 % node
                 for j=1:nEdges
                     firstNode=obj.EndNodes(j,1);
-                    if isnan(robinCoeff(firstNode))
+                    if isDirichlet(obj,firstNode)
                         error('quantumGraph:leafDirection',...
                             'Edges connected to Dirichlet leaf nodes must point TOWARD leaf node')
                     end
@@ -133,7 +133,7 @@ classdef quantumGraph < matlab.mixin.Copyable
                 % listed. (This is so that in the chebyshev discretization only
                 % the non-dirichlet nodes will be assigned values
                 for j=nNodes:-1:2
-                    if isnan(robinCoeff(j-1)) && ~isnan(robinCoeff(j))
+                    if isDirichlet(obj,j-1) && ~isDirichlet(obj,j)
                         error('quantumGraph:leafNotLast','Leaf nodes must be listed last.')
                     end
                 end
