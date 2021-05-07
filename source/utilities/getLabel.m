@@ -1,6 +1,6 @@
 
 function label = getLabel(j)
-% GET_LABEL - writes a 3-numeral string from a number between 0 and 999
+% GETLABEL - writes a 3-numeral string from a number between 0 and 999
 
 if(or(j<0,j>1000))
   error('j out of range');

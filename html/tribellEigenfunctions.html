@@ -1,0 +1,168 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>tribellEigenfunctions</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-09-01"><meta name="DC.source" content="tribellEigenfunctions.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">tribell Laplacian program</a></li><li><a href="#2">Set up the graph structure and coordinates of the problem</a></li><li><a href="#3">Set up coordinates on which to plot the solutions</a></li><li><a href="#4">Construct the Laplacian and calculate its eigenvalues and eigenvectors</a></li><li><a href="#5">Plot the first few multiplicity-one eigenfunctions</a></li><li><a href="#8">Plot the first few multiplicity-two eigenfunctions</a></li><li><a href="#11">Plot the first few multiplicity-three eigenfunctions</a></li></ul></div><h2 id="1">tribell Laplacian program</h2><p>Computes the eigenvalues and eigenfunctions of the Laplace operator</p><pre class="codeinput"><span class="keyword">function</span> tribellEigenfunctions
+</pre><h2 id="2">Set up the graph structure and coordinates of the problem</h2><p>We have to be careful here and in the next step <b>addTribellPlotCoords</b> if we want different segments to have different lengths and discretizations. The order that the edges are labeled is not necessarily the order in which they are given here.</p><pre class="codeinput">sources=[1 1 1 2 3 4];
+targets=[2 3 4 2 3 4];
+L1=2; L2=2*pi; L = [L1 L1 L1 L2 L2 L2];
+N1 = 20; N2=64; <span class="comment">% want N2 a multiple of four for later</span>
+N=[N1 N1 N1 N2 N2 N2];
+tribell = quantumGraph(sources,targets,L,<span class="string">'nxVec'</span>,N);
+</pre><h2 id="3">Set up coordinates on which to plot the solutions</h2><pre class="codeinput">tribell.addPlotCoords(@tribellPlotCoords);
+tribell.plot(<span class="string">'layout'</span>)
+</pre><img vspace="5" hspace="5" src="tribellEigenfunctions_01.png" alt=""> <h2 id="4">Construct the Laplacian and calculate its eigenvalues and eigenvectors</h2><p>A little cleanup needed because the null eigenvalue is sometimes is calculated as positive and sometimes as negative and this screws up the sorting.</p><pre class="codeinput">Mtribell = laplacianMatrix(tribell);
+[V,d]=eig(full(Mtribell));
+d=diag(d); d=-abs(d); <span class="comment">% The aforementioned cleanup</span>
+[lambda,ord]=sort(d,<span class="string">'descend'</span>);
+V=real(V(:,ord));V(:,1)=abs(V(:,1));
+
+[singles,doubles,triples]=separateEigs(lambda);
+nToPlot=4;
+</pre><h2 id="5">Plot the first few multiplicity-one eigenfunctions</h2><pre class="codeinput"><span class="keyword">for</span> k=1:nToPlot
+</pre><pre class="codeinput">    figure
+    <span class="keyword">if</span>(V(1,singles(k))&lt;0)
+        V(:,singles(k))=-V(:,singles(k));
+    <span class="keyword">end</span>
+    plot(tribell,V(:,singles(k)))
+    title(sprintf(<span class="string">'Eigenfunction %i, $\\lambda = %0.3f$'</span>,singles(k), lambda(singles(k))));
+</pre><img vspace="5" hspace="5" src="tribellEigenfunctions_02.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_03.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_04.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_05.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="8">Plot the first few multiplicity-two eigenfunctions</h2><pre class="codeinput"><span class="keyword">for</span> k=1:nToPlot
+</pre><pre class="codeinput">    figure
+    [v1,~]=tribellResolveDoubles(V,doubles(k),N1,N2);
+    plot(tribell,v1)
+    title(sprintf(<span class="string">'Eigenfunction %i, $\\lambda = %0.3f$'</span>,doubles(k), lambda(doubles(k))));
+</pre><img vspace="5" hspace="5" src="tribellEigenfunctions_06.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_07.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_08.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_09.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="11">Plot the first few multiplicity-three eigenfunctions</h2><pre class="codeinput"><span class="keyword">for</span> k=1:nToPlot
+</pre><pre class="codeinput">    figure
+    [v1,~,~]=tribellResolveTriples(V,triples(k),N1,N2);
+    plot(tribell,v1)
+    title(sprintf(<span class="string">'Eigenfunction %i, $\\lambda = %0.3f$'</span>,triples(k), lambda(triples(k))));
+</pre><img vspace="5" hspace="5" src="tribellEigenfunctions_10.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_11.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_12.png" alt=""> <img vspace="5" hspace="5" src="tribellEigenfunctions_13.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% tribell Laplacian program
+% Computes the eigenvalues and eigenfunctions of the Laplace operator
+function tribellEigenfunctions
+
+%% Set up the graph structure and coordinates of the problem
+% We have to be careful here and in the next step *addTribellPlotCoords* if we want different
+% segments to have different lengths and discretizations. The order that
+% the edges are labeled is not necessarily the order in which they are
+% given here.
+sources=[1 1 1 2 3 4];
+targets=[2 3 4 2 3 4];
+L1=2; L2=2*pi; L = [L1 L1 L1 L2 L2 L2];
+N1 = 20; N2=64; % want N2 a multiple of four for later
+N=[N1 N1 N1 N2 N2 N2];
+tribell = quantumGraph(sources,targets,L,'nxVec',N);
+%% Set up coordinates on which to plot the solutions
+tribell.addPlotCoords(@tribellPlotCoords);
+tribell.plot('layout')
+%% Construct the Laplacian and calculate its eigenvalues and eigenvectors
+% A little cleanup needed because the null eigenvalue is sometimes is
+% calculated as positive and sometimes as negative and this screws up the
+% sorting.
+Mtribell = laplacianMatrix(tribell);
+[V,d]=eig(full(Mtribell));
+d=diag(d); d=-abs(d); % The aforementioned cleanup
+[lambda,ord]=sort(d,'descend'); 
+V=real(V(:,ord));V(:,1)=abs(V(:,1)); 
+
+[singles,doubles,triples]=separateEigs(lambda);
+nToPlot=4;
+%% Plot the first few multiplicity-one eigenfunctions
+for k=1:nToPlot
+    %%
+    figure
+    if(V(1,singles(k))<0)
+        V(:,singles(k))=-V(:,singles(k));
+    end
+    plot(tribell,V(:,singles(k)))
+    title(sprintf('Eigenfunction %i, $\\lambda = %0.3f$',singles(k), lambda(singles(k))));
+end
+
+%% Plot the first few multiplicity-two eigenfunctions
+for k=1:nToPlot
+    %%
+    figure
+    [v1,~]=tribellResolveDoubles(V,doubles(k),N1,N2);
+    plot(tribell,v1)
+    title(sprintf('Eigenfunction %i, $\\lambda = %0.3f$',doubles(k), lambda(doubles(k))));
+end
+
+%% Plot the first few multiplicity-three eigenfunctions
+for k=1:nToPlot
+    %%
+    figure
+    [v1,~,~]=tribellResolveTriples(V,triples(k),N1,N2);
+    plot(tribell,v1)
+    title(sprintf('Eigenfunction %i, $\\lambda = %0.3f$',triples(k), lambda(triples(k))));
+end
+##### SOURCE END #####
+--></body></html>

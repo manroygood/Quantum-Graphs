@@ -5,9 +5,10 @@ nDep=numDependent(G);
 nNodes=numnodes(G);
 yNodes=zeros(nNodes,1);
 
+% Use the boundary conditions to extend the solution to the vertices
 for j = 1:nDep
     for k = 1:nNodes
-        if isnan(G.robinCoeff(k))
+        if isDirichlet(G,k)
             yNodes(k,j)=0;
         else
             mat = G.ghostMatrix(k);
@@ -21,13 +22,12 @@ for j = 1:nDep
 end
 G.qg.Nodes.y=yNodes;
 
-    function yy = firstValue(k,j)  % Nested function
-        y = G.y(allEdges(k));
-        if inOrOut(k)==1
-            yy =y(end,j);
-        else
-            yy = y(1,j);
-        end
+function yy = firstValue(k,j)  % Nested function
+    y = G.y(allEdges(k));
+    if inOrOut(k)==1
+        yy =y(end,j);
+    else
+        yy = y(1,j);
     end
-
+end
 end

@@ -13,9 +13,9 @@ import matlab.unittest.constraints.IsEqualTo
 import matlab.unittest.constraints.IsTrue
 import matlab.unittest.TestCase 
 
-testCase.verifyThat(testCase,G.numedges,IsEqualTo(4)) 
-testCase.verifyThat(testCase,G.numnodes,IsEqualTo(3)) 
-testCase.verifyClass(testCase,G,'quantumGraph') 
+testCase.verifyThat(G.numedges,IsEqualTo(4)) 
+testCase.verifyThat(G.numnodes,IsEqualTo(3)) 
+testCase.verifyClass(G,'quantumGraph') 
 %verifyThat(testCase,G.numedges,IsEqualTo(4));
 %verifyThat(testCase,G.numnodes,IsEqualTo(3));
 %verifyClass(testCase,G,'quantumGraph')
@@ -92,9 +92,8 @@ end
 
 %% Test that it responds appropriately when multigraph entered
 function versionMultiGraphTest(testCase)
-version = ver('MATLAB');
     s=[1 1]; t=[2 2];L=10;
-if str2double(version.Version)<9.4
+if verLessThan('matlab','9.4')
     verifyError(testCase,@()quantumGraph(s,t,L),'quantumGraph:multigraphVersion'); % fails
 else
     G = quantumGraph(s,t,L); %#ok<NASGU> % works

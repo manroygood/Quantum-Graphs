@@ -23,6 +23,7 @@ function setPlotPreferences
 % Save the user's default settings
 default.AxesFontsize=get(groot,'DefaultAxesFontSize');
 default.LineLineWidth=get(groot,'DefaultLineLineWidth');
+default.FunctionLineLineWidth=get(groot,'DefaultFunctionLineLineWidth');
 default.TextLabelInterpreter=get(groot,'DefaultTextInterpreter');
 default.AxesTickLabelInterpreter=get(groot,'DefaultAxesTickLabelInterpreter');
 default.LegendInterpreter=get(groot,'DefaultLegendInterpreter');
@@ -37,6 +38,7 @@ save(fullfile('tmp','default.mat'),'default')
 % Reset to use Roy's preferred settings (which he believes are superior)
 set(groot,'DefaultAxesFontSize',14)
 set(groot,'DefaultLineLineWidth',2)
+set(groot,'DefaultFunctionLineLineWidth',2)
 set(groot,'DefaultTextInterpreter','latex')
 set(groot,'DefaultAxesTickLabelInterpreter','latex')
 set(groot,'DefaultLegendInterpreter','latex');

@@ -1,1 +1,4 @@
 # List of untracked files to ignore
+/data/
+/tmp/
+.*_number
