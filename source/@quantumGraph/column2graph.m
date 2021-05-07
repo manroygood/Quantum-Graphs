@@ -10,4 +10,10 @@ for k=1:numedges(G)
 end
 
 % Use the boundary conditions to extend the solution to the vertices
-G.interpAtNodes;
+if G.isUniform
+    G.interpAtNodes; 
+else  % in the case of chebyshev discretization
+%     for k=1:numnodes(G)
+%         G.qg.Nodes.y(k)=col(nxC(k+1)-1);
+%     end
+end

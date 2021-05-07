@@ -1,0 +1,5 @@
+This directory contains:
+lambda.1: Multiplicity 1, eigenvalue = 0.000
+lambda.2: Multiplicity 1, eigenvalue = 0.059
+lambda.3: Multiplicity 1, eigenvalue = 0.516
+lambda.4: Multiplicity 1, eigenvalue = 5.142

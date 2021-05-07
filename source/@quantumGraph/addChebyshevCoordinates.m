@@ -20,7 +20,7 @@ G.qg.Edges.x = cell(nEdges,1);
 
 for k=1:nEdges
     nx=nxVec(k);
-    xx=(cos(pi*(nx:-1:0)/nx)+1)*LVec(k)/2;
+    xx=chebptsSecondKind(nxVec(k));
     G.qg.Edges.x{k} = xx(2:end-1)';
     
     G.qg.Edges.y{k} = nan(nxVec(k),ny);
