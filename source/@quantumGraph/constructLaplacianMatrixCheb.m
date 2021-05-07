@@ -1,6 +1,6 @@
 function [A,B] = constructLaplacianMatrixCheb(G)
 % Produces the Laplacian matrix A with encoded boundary conditions and
-% projection matrix B that would be used for the eigen value problem
+% projection matrix B that would be used for the eigenvalue problem
 % A*x = lambda.B*x
 
 medges = G.numedges;        % Number of edges
@@ -8,7 +8,7 @@ mnodes = G.numnodes;        % Number of nodes
 mleaf = G.countLeaf;        % Number of leaf nodes
 minternal = mnodes-mleaf;   % Number of internal nodes
 L = G.L;                    % Vector of edge lengths
-n = G.Edges.nx;             % Vector of disc. points
+n = G.Edges.nx + 2*ones(size(G.Edges.nx));         % Vector of disc. points
 alpha = G.robinCoeff;       % Conditions at the nodes
 sizeintnodes = 0;           % Tracks number of internal nodes
 bc = 1;                     % Keeps track of where we are in the BC portion of the matrix

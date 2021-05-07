@@ -35,13 +35,7 @@ fprintf(fid,'This directory contains:\n');
 % A little cleanup needed because the null eigenvalue is sometimes
 % calculated as positive and sometimes as negative and this screws up the
 % sorting.
-G = Phi.laplacianMatrix;
-[V,d]=eig(full(G));
-d=diag(d); d=-abs(d); % The aforementioned cleanup
-[lambda,ord]=sort(d,'descend');
-lambda=abs(lambda);
-V=real(V(:,ord));V(:,1)=abs(V(:,1));
-
+[V,lambda] = eigs(Phi,15);
 [singles,doubles,triples]=separateEigs(lambda); % No triple eigenvalue unless handle and hoops resonant
 
 %% Plot and Save the first few multiplicity-one eigenfunctions

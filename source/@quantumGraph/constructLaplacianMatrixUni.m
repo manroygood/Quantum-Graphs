@@ -41,7 +41,7 @@ for j=1:nNodes-nDirichlet    % Loop over the nodes
     end
 end
 
-B = eye(length(M));
+B = speye(length(M));
 
 
 % Helper function for finding the rows and columns needed for the

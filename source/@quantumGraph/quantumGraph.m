@@ -7,6 +7,7 @@ classdef quantumGraph < matlab.mixin.Copyable
         qg      % the main quantum graph, a digraph
         discretization;
         laplacianMatrix;
+        weightMatrix;
     end
     methods
         function obj=quantumGraph(source,target,LVec,varargin)
@@ -148,12 +149,12 @@ classdef quantumGraph < matlab.mixin.Copyable
             
             if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'Uniform'))
                 obj.addUniformCoordinates(p.Results.nxVec);
-                obj.laplacianMatrix=obj.constructLaplacianMatrixUni;
+                [obj.laplacianMatrix,obj.weightMatrix]=obj.constructLaplacianMatrixUni;
             end
             
             if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'Chebyshev'))
                 obj.addChebyshevCoordinates(p.Results.nxVec);
-                obj.laplacianMatrix=obj.constructLaplacianMatrixCheb;
+                [obj.laplacianMatrix,obj.weightMatrix]=obj.constructLaplacianMatrixCheb;
             end
             
             if ~any(strcmp('plotCoordinateFcn',p.UsingDefaults))
