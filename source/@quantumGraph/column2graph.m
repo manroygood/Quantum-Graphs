@@ -13,6 +13,7 @@ end
 if G.isUniform
     G.interpAtNodes; 
 else  % in the case of chebyshev discretization
+% Do nothing since the nodes are already encoded in the edge data
 %     for k=1:numnodes(G)
 %         G.qg.Nodes.y(k)=col(nxC(k+1)-1);
 %     end

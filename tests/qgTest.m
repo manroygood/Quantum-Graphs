@@ -131,14 +131,14 @@ end
 %% Test Secular Determinant
 function secularDetTest(testCase)
 import matlab.unittest.constraints.IsEqualTo
+x=sym('x');
 
 s=[1 1 1];t=[2 3 4];
 L = pi;
 robinCoeff=[0 0 0 nan];
 G=quantumGraph(s,t,L,'robinCoeff',robinCoeff);
 f=G.secularDet;
-k=sym('k');
-g=8*sin(pi*k)*(sin(pi*k) - 1)*(sin(pi*k) + 1);
+g=8*sin(pi*x)*(sin(pi*x) - 1)*(sin(pi*x) + 1);
 verifyThat(testCase,f,IsEqualTo(g));
 end
 

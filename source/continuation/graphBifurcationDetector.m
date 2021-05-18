@@ -19,7 +19,7 @@ muBif=muGuess;
 while residual>tol && updateSize>tol && tries < maxTries
     tries=tries+1;
     Fkmu = fcns.fMu(xBif,muBif);
-    Fkxxu= fcns.fxxu(xBif,muBif,u0);
+    Fkxxu= fcns.fxxz(xBif,muBif,u0);
     Fkxmu = fcns.fxMu(xBif,muBif);
     
     z1 = Fkx\(-Fk);  % Nayfeh (6.2.8)

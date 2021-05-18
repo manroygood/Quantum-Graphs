@@ -6,10 +6,11 @@ D = sym(zeros(2*n));
 Eye = sym(eye(2*n));
 ThetaR = 0;             % Phase angle for Det(S) from Robin
 ThetaK = 0;             % Phase angle for Det(S) from Kirchoff
-syms k real
+syms x
+assume(x >= 0)
 
 for j=1:n       % Builds D
-    entry=exp(1i*L(j)*k);
+    entry=exp(1i*L(j)*x);
     D(j,j)=entry;
     D(j+n,j+n)=entry;
 end
@@ -28,19 +29,19 @@ for j=1:2*n
         if dv==1 && jprime==jbar
             if j<=n && ~isnan(G.robinCoeff(G.EndNodes(j,2)))        % Robin Boundary Conditions
                 alpha = G.robinCoeff(G.EndNodes(j,2));
-                S(jprime,j) = (1i*k+alpha)/(1i*k-alpha);
+                S(jprime,j) = (1i*x+alpha)/(1i*x-alpha);
                 if alpha == 0
                     ThetaR = ThetaR+pi;     % SHOULDN'T IT BE pi/2?!
                 else
-                    ThetaR = ThetaR + atan(alpha/k);
+                    ThetaR = ThetaR + atan(alpha/x);
                 end
             elseif jprime<=n && ~isnan(G.robinCoeff(G.EndNodes(jprime,1)))
                 alpha = G.robinCoeff(G.EndNodes(jprime,1));
-                S(jprime,j) = (1i*k+alpha)/(1i*k-alpha);
+                S(jprime,j) = (1i*x+alpha)/(1i*x-alpha);
                 if alpha == 0
                     ThetaR = ThetaR+pi;   % SHOULDN'T IT BE pi/2?!
                 else
-                    ThetaR = ThetaR + atan(alpha/k);
+                    ThetaR = ThetaR + atan(alpha/x);
                 end
             elseif j<=n && isnan(G.robinCoeff(G.EndNodes(j,2)))                           % Dirichlet BCs
                 S(jprime,j) = -1;
@@ -50,18 +51,18 @@ for j=1:2*n
         elseif jprime==jbar
             node = G.GCsharedNode(j,jprime);            % Kirchhoff condition
             alpha = G.robinCoeff(node);
-            S(jprime,j) = 2/(dv-alpha/(1i*k))-1;
-            ThetaK = ThetaK + atan(alpha/(dv*k))/dv;    % Divide by dv because the code loops through edges so we'll do this for each edge
+            S(jprime,j) = 2/(dv-alpha/(1i*x))-1;
+            ThetaK = ThetaK + atan(alpha/(dv*x))/dv;    % Divide by dv because the code loops through edges so we'll do this for each edge
         elseif G.follows(j,jprime)
             node = G.GCsharedNode(j,jprime);            % Kirchhoff condition
             alpha = G.robinCoeff(node);
-            S(jprime,j) = 2/(dv-alpha/(1i*k));
+            S(jprime,j) = 2/(dv-alpha/(1i*x));
         end
     end
 end
 LL=sum(L);
 
-f = det(Eye-S*D)*exp(-1i*k*LL)*exp(1i*ThetaR)*exp(1i*ThetaK);
+f = det(Eye-S*D)*exp(-1i*x*LL)*exp(1i*ThetaR)*exp(1i*ThetaK);
 f = rewrite(f,'sin');
 f = simplify(f);
 [n,d] = numden(f);
