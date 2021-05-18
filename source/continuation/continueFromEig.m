@@ -16,7 +16,7 @@ dataDir=makeDataDir(tag,dataDirNumber);
 [branchDir,branchNum]=makeBranchDir(dataDir,options);
 
 Phi=loadGraphTemplate(dataDir);
-fcns=getGraphFcns(Phi.laplacianMatrix);
+fcns=getGraphFcns(Phi.laplacianMatrix,Phi.weightMatrix);
 
 [PhiColumn,LambdaFirst]=getFirstSolutionFromEigenfunction(dataDir,eigNumber,Phi,fcns);
 

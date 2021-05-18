@@ -20,7 +20,7 @@ if options.plotFlag; plot(x,PhiColumn,'color',randomColor); end
 if options.saveFlag; saveToDir(PhiColumn,outputDir,1); end
 
 NVec(1)=dotProduct.dot(PhiColumn,PhiColumn);
-M=Phi.laplacianMatrix;
+% M=Phi.laplacianMatrix;    % THIS WAS UNUSED!
 LambdaVec(1)=Lambda0;
 
 PhiColOld=PhiColumn;

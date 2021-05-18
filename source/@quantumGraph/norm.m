@@ -54,7 +54,7 @@ else
     for k = 1:nEdges
         y1(nxC(k)+1:nxC(k+1)) = G.Edges.y{k};
     end
-    y = (chebdot(G,abs(y1).^(p/2),abs(y1).^(p/2)))^(1/p);
+    y = (qgdotCheb(G, abs(y1).^(p/2) ,abs(y1).^(p/2) ))^(1/p);
   
 end
 
