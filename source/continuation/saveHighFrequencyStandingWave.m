@@ -9,7 +9,6 @@ function fileNumber=saveHighFrequencyStandingWave(tag,dataDirNum,Lambda0,edges,s
 % edges............A list of edges supporting sech-like initial guesses
 % signs............a list of the signs of the sech function on each nonzero edge
 
-
 topDir=fullfile('data',tag);
 if ~(exist(topDir,'dir'))
     fprintf('No such directory.\n') 
@@ -40,7 +39,6 @@ function Phi=initNLStanding(Phi,Lambda0,edges,signs)
 % are located at the centers of the edges specificied in the input argument
 % "edges" and which have signs specified by the input argument "signs"
 
-
 sL=sqrt(abs(Lambda0));
 
 L=Phi.Edges.L;
@@ -57,8 +55,6 @@ for k=1:length(edges)
     x=Phi.Edges.x{kk};
     y(j1:j2)=signs(k)*sL*sech(sL*(x-x0));
 end
-
-
 
 M=Phi.laplacianMatrix;
 fcns=getGraphFcns(M);

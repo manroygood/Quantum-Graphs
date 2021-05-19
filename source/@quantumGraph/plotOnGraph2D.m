@@ -3,7 +3,7 @@ function plotOnGraph2D(G,myColor)
 % Graph must have Nodes.x1 and Nodes.x2 defined
 
 if nargin==1
-    myColor=mcolor('bluish');
+    myColor=mcolor('blueish');
 end
 nEdges=numedges(G);
 Edges=G.Edges; 

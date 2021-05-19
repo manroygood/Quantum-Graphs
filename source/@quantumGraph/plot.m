@@ -10,8 +10,11 @@ elseif nargin==2
         myColor=mcolor('blueish');
     elseif isa(varargin{1},'char')
         if strcmp(varargin{1},'layout')
-            plotGraphLayout(G);
+            plotGraphLayout(G,false);
             return
+        elseif strcmp(varargin{1},'mutelayout')
+            plotGraphLayout(G,true);
+            return            
         else
             myColor= varargin{1};
         end
