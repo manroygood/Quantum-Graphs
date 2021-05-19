@@ -1,5 +1,5 @@
 function incoming = GCfindIncoming(G,j)
-% A simple but missing command to find all incoming edges at node j
+% A simple command to find all incoming edges at node j
 sz=1;
 incoming = [];
 

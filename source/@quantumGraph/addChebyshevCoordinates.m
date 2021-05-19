@@ -21,7 +21,7 @@ G.qg.Edges.x = cell(nEdges,1);
 for k=1:nEdges
     nx=nxVec(k);
     xx=chebptsSecondKind(nxVec(k));
-    G.qg.Edges.x{k} = xx(2:end-1)';
+    G.qg.Edges.x{k} = xx(2:end-1);
     
     G.qg.Edges.y{k} = nan(nxVec(k),ny);
 end

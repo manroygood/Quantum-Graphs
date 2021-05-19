@@ -1,5 +1,5 @@
 function outgoing = GCfindOutgoing(G,j)
-% A simple but missing command to find all outgoing edges at node j
+% A simple to find all outgoing edges at node j
 sz = 1;
 outgoing = [];
 
