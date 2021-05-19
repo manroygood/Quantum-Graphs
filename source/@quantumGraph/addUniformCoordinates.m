@@ -35,6 +35,7 @@ for k=1:nEdges
     end
     Phi.qg.Edges.y{k} = nan(nxVec(k),ny);
 end
+Phi.qg.Nodes.y=nan(nNodes,1);
 
 % Create the Ghost matrices at each node. These are the matrices that give
 % you the value of the function of the point at a distance dx(j)/2 beyond

@@ -2,16 +2,19 @@ function plot(G,varargin)
 % Converts column vector to a graph, interpolates at the nodes, and plots
 
 if nargin==1
-    myColor='b';
+    myColor=mcolor('blueish');
 elseif nargin==2
     if isa(varargin{1},'double')
         column=varargin{1};
         G.column2graph(column);
-        myColor='b';
+        myColor=mcolor('blueish');
     elseif isa(varargin{1},'char')
         if strcmp(varargin{1},'layout')
-            plotGraphLayout(G);
+            plotGraphLayout(G,false);
             return
+        elseif strcmp(varargin{1},'mutelayout')
+            plotGraphLayout(G,true);
+            return            
         else
             myColor= varargin{1};
         end
@@ -25,3 +28,4 @@ end
 
 
 plotOnGraph(G,myColor)
+

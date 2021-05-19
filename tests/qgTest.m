@@ -16,9 +16,6 @@ import matlab.unittest.TestCase
 testCase.verifyThat(G.numedges,IsEqualTo(4)) 
 testCase.verifyThat(G.numnodes,IsEqualTo(3)) 
 testCase.verifyClass(G,'quantumGraph') 
-%verifyThat(testCase,G.numedges,IsEqualTo(4));
-%verifyThat(testCase,G.numnodes,IsEqualTo(3));
-%verifyClass(testCase,G,'quantumGraph')
 
 disc=G.discretization;
 flag = strcmp(disc,'Uniform') || strcmp(disc,'Chebyshev') || strcmp(disc,'None');

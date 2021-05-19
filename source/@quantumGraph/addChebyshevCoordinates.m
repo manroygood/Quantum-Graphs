@@ -25,3 +25,4 @@ for k=1:nEdges
     
     G.qg.Edges.y{k} = nan(nxVec(k),ny);
 end
+G.qg.Nodes.y=nan(nNodes,1);
