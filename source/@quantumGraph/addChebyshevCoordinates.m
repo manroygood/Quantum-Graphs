@@ -21,8 +21,7 @@ G.qg.Edges.x = cell(nEdges,1);
 for k=1:nEdges
     nx=nxVec(k);
     xx=(cos(pi*(nx:-1:0)/nx)+1)*LVec(k)/2;
-    G.qg.Edges.x{k} = xx(2:end-1)';
-    
-    G.qg.Edges.y{k} = nan(nxVec(k),ny);
+    G.qg.Edges.x{k} = xx(2:end-1)';   
+    G.qg.Edges.y{k} = nan(nxVec(k)-1,ny);
 end
 G.qg.Nodes.y=nan(nNodes,1);
