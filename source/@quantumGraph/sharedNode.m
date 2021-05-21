@@ -1,4 +1,4 @@
-function node = GCsharedNode(G,j,jprime)
+function node = sharedNode(G,j,jprime)
     % Finds the node that is adjacent to both edge_j and edge_jprime in graph G
     
     n=numedges(G);
