@@ -6,6 +6,7 @@ function y=norm(G,varargin)
 % y = norm(G,p)    Calculates the 2-norm of the y-component of G
 % y = norm(G,v,p). Assigns the vector v to the y component of G and then
 %                  calculates the 2-norm
+
 if nargin==1
     p=2;
 elseif nargin>1
@@ -49,12 +50,15 @@ if G.isUniform
     y=dot(dxVec.*weightVec,norm_p_vec)^(1/p);
     
 else
-    [~,nxC,nxT] = G.nx;
-    y=zeros(nxT,1);
+    nxC=zeros(nEdges+1,1);
+    for k = 1:nEdges
+        nxC(k+1) = G.Edges.nx(k) + nxC(k);
+    end
+    
+    y1=zeros(nxC(nEdges+1),1);
     for k = 1:nEdges
         y1(nxC(k)+1:nxC(k+1)) = G.Edges.y{k};
     end
     y = (qgdotCheb(G, abs(y1).^(p/2) ,abs(y1).^(p/2) ))^(1/p);
-  
+    
 end
-
