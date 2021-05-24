@@ -1,6 +1,10 @@
 function [nxVec,nxC,nxTot]=nx(Phi,varargin)
+% Returns the total number of points in the mesh on the quantum graph Phi.
+% Note this will be different depending on the discretization type as the
+% Chebyshev discretization includes the nodes for it calculations. When
+% only the interior points are needed, one should call on G.Edges.nx
+% instead.
 
-% Returns the number of points in the mesh on the quantum graph Phi
 if Phi.isUniform
     
     if nargin==1   

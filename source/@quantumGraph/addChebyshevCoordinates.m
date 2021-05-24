@@ -17,11 +17,12 @@ G.qg.Edges.nx=nxVec(:);
 
 % create containers for the x-coordinates
 G.qg.Edges.x = cell(nEdges,1);
+G.qg.Edges.y = cell(nEdges,ny);
 
 for k=1:nEdges
     nx=nxVec(k);
     xx=chebptsSecondKind(nx);
-    G.qg.Edges.x{k} = xx(2:end-1);
+    G.qg.Edges.x{k} = xx(2:end-1)*LVec(k);
     G.qg.Edges.y{k} = nan(nx,ny);
 end
 G.qg.Nodes.y=nan(nNodes,1);

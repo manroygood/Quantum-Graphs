@@ -7,6 +7,7 @@ function vv=dumbbellResolveDoubles(V,k,Phi)
 % eigenvalue resolution program to take three arguments V, k, and Phi.
 % For the dumbbell graph, we don't need Phi to calculate the resolved
 % eigenfunctions, so we use the ~ placeholder.
+
 if Phi.isUniform
     V1=V(:,k);
     V2=flip(V1);
