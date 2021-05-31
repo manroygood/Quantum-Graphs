@@ -20,28 +20,18 @@ if G.isUniform
 else  % in the case of chebyshev discretization
     
     for k=1:numedges(G)
-        G.qg.Edges.y{k}=col(nxC(k)+2:nxC(k+1)-1);
-    end
-    
-    for k=1:numnodes(G)
-        if ~isempty(G.incoming(k))
-           e = G.incoming(k);
-           G.qg.Nodes.y(k) = col(nxC(e(1))+1);
-        else
-           e = G.outgoing(k);
-           G.qg.Nodes.y(k) = col(nxC(e(1)+1));
-        end
+        G.qg.Edges.y{k}=flip(col(nxC(k)+2:nxC(k+1)-1));
     end
 
-%     for k=1:numnodes(G)
-%         if ~isempty(G.outgoing(k))
-%            e = G.outgoing(k);
-%            G.qg.Nodes.y(k) = 0; % col(nxC(e(1)+1));
-%         else
-%            e = G.incoming(k);
-%            G.qg.Nodes.y(k) = col(nxC(e(1))+1);
-%         end
-%     end
+    for k=1:numnodes(G)
+        if ~isempty(G.outgoing(k))
+           e = G.outgoing(k);
+           G.qg.Nodes.y(k) = col(nxC(e(1)+1));
+        else
+           e = G.incoming(k);
+           G.qg.Nodes.y(k) = col(nxC(e(1))+1);
+        end
+    end
 
     
 end

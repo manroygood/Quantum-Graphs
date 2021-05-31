@@ -13,7 +13,7 @@ dataDir=makeDataDir(tag,dataDirNum);
 [branchDir,branchNum]=makeBranchDir(dataDir,options);
 
 Phi=loadGraphTemplate(dataDir);
-fcns=getGraphFcns(Phi.laplacianMatrix);
+fcns=getGraphFcns(Phi.laplacianMatrix,Phi.weightMatrix);
 
 label=getLabel(fileNum);
 yFile=fullfile(dataDir,['savedFunction.' label]);

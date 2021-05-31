@@ -57,7 +57,8 @@ for k=1:length(edges)
 end
 
 M=Phi.laplacianMatrix;
-fcns=getGraphFcns(M);
+B=Phi.weightMatrix;
+fcns=getGraphFcns(M,B);
 myF=@(z) fcns.f(z,Lambda0);
 myMatrix = @(u) fcns.fLinMatrix(u,Lambda0);
 initTol=1e-6;
