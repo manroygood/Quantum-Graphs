@@ -16,12 +16,22 @@ if Phi.isUniform
     vv{1}=v1;
     vv{2}=v2;
 else
+    [~,nxC,~]=Phi.nx;
     V1=V(:,k);
     V2=V(:,k+1);
-    v1 = (V1 + V2*V1(end-10)/V2(end-10))/2;
-    v1 = v1/Phi.norm(v1);
-    v2 = (V1 - V2*V1(10)/V2(10))/2;
-    v2 = v2/Phi.norm(v2);
+    [~,i1] = max(V1(nxC(1)+1:nxC(2)));
+    [~,i2] = max(V2(nxC(1)+1:nxC(2)));
+    if i1 == i2
+        v1 = (V1 + V2 * max(V1(nxC(3)+1:nxC(4)))/max(V2(nxC(3)+1:nxC(4))) )/2;
+        v1 = v1/Phi.norm(v1);
+        v2 = (V1 - V2 * max(V1(nxC(1)+1:nxC(2)))/max(V2(nxC(1)+1:nxC(2))) )/2;
+        v2 = v2/Phi.norm(v2);
+    else
+        v1 = (V1 + V2 * max(V1(nxC(1)+1:nxC(2)))/max(V2(nxC(1)+1:nxC(2))) )/2;
+        v1 = v1/Phi.norm(v1);
+        v2 = (V1 - V2 * max(V1(nxC(3)+1:nxC(4)))/max(V2(nxC(3)+1:nxC(4))) )/2;
+        v2 = v2/Phi.norm(v2);
+    end
     vv{1} = v1;
     vv{2} = v2;
 end
