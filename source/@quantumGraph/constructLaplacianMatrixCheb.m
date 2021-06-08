@@ -7,6 +7,7 @@ medges = G.numedges;        % Number of edges
 mnodes = G.numnodes;        % Number of nodes
 mleaf = G.countLeaf;        % Number of leaf nodes
 minternal = mnodes-mleaf;   % Number of internal nodes
+[~,nxC,~] = G.nx;           % A useful vector giving positions of final disc point of each edge
 L = G.L;                    % Vector of edge lengths
 n = G.Edges.nx + 2*ones(size(G.Edges.nx));         % Vector of disc. points
 alpha = G.robinCoeff;       % Conditions at the nodes
@@ -42,8 +43,8 @@ for i=1:medges       % Loops over each edge
     
     D2matrix( (x+1):(x+M) , (y+1):(y+N) ) = D2;
     B( (x+1):(x+M) , (y+1):(y+N) ) = Project;
-    
-    
+ 
+ 
     % Boundary Conditions
     [node1,node2] = G.edgeNodes(i);                   % Nodes that adjacent to e_i
     nx = nx + N;                                        % Position of ui_1
@@ -52,19 +53,19 @@ for i=1:medges       % Loops over each edge
     if G.isLeaf(node1)          % If node1 is a Leaf...
         if ismember(i,G.incoming(node1))        % When orientation is node2 -> node1
             if isnan(alpha(node1))              % If Robin Condition is NAN then we have Dirichlet BC's
-                BC(bc,:) = I(nx+1-N,:);
+                BC(bc,:) = I(nxC(i+1),:);       % Picks the last disc point on edge_i because it's incoming
             else
-                BC(bc,:) = ( I(nx+1-N,:)*D1matrix(:,:,i) ) + alpha(node1)*I(nx+1-N,:); % CHANGE THIS?!?!
+                BC(bc,:) = ( I(nxC(i+1),:)*(-1)*D1matrix(:,:,i) ) + alpha(node1)*I(nxC(i+1),:);
             end
         else                                    % When orientation is node1 -> node2
             if isnan(alpha(node1))              % If Robin Condition is NAN then we have Dirichlet BC's
-                BC(bc,:) = I(nx,:);
+                BC(bc,:) = I(nxC(i)+1,:);       % Picks the first disc point on edge_i because it's outgoing
             else
-                BC(bc,:) = ( I(nx,:)*D1matrix(:,:,i) ) + alpha(node1)*I(nx,:);
+                BC(bc,:) = ( I(nxC(i)+1,:)*(-1)*D1matrix(:,:,i) ) + alpha(node1)*I(nxC(i)+1,:);
             end
         end
         bc = bc + 1;
-    else                        % If node1 is an Internal Node...
+    else                        % If node1 is an internal node...
         if not(ismember(node1,internalnodes))       % add it to the list of internal nodes if it isn't there yet
             sizeintnodes = sizeintnodes + 1;        % Track how many internal nodes we have so far
             internalnodes(sizeintnodes) = node1;
@@ -72,17 +73,17 @@ for i=1:medges       % Loops over each edge
     end
     
     if G.isLeaf(node2)          % If node2 is a Leaf...
-        if ismember(i,G.incoming(node2))        % When orientations is node1 -> node2
+        if ismember(i,G.incoming(node2))        % When orientation is node1 -> node2
             if isnan(alpha(node2))              % If Robin Condition is NAN then we have Dirichlet BC's
-                BC(bc,:) = I(nx+1-N,:);
+                BC(bc,:) = I(nxC(i+1),:);       % Picks the last disc point on edge_i because it's incoming
             else
-                BC(bc,:) = ( I(nx+1-N,:)*D1matrix(:,:,i) ) + alpha(node2)*I(nx+1-N,:);
+                BC(bc,:) = ( I(nxC(i+1),:)*D1matrix(:,:,i) ) + alpha(node2)*I(nxC(i+1),:);
             end
         else                                    % When orientations is node2 -> node1
             if isnan(alpha(node2))              % If Robin Condition is NAN then we have Dirichlet BC's
-                BC(bc,:) = I(nx,:);
+                BC(bc,:) = I(nxC(i)+1,:);       % Picks the first disc point on edge_i because it's outgoing
             else
-                BC(bc,:) = ( I(nx+1,:)*D1matrix(:,:,i) ) + alpha(node2)*I(nx+1,:);
+                BC(bc,:) = ( I(nxC(i)+1,:)*D1matrix(:,:,i) ) + alpha(node2)*I(nxC(i)+1,:);
             end
         end
         bc = bc + 1;
@@ -97,55 +98,44 @@ end
 
 
 % Internal Node Conditions
-
 for i=1:sizeintnodes          % Takes any internal nodes of graph G and applies Kirchoff Conditions
-    nx = 0;
-    node = internalnodes(i);                        % The internal vertex in question
-    incoming = transpose(G.incoming(node));         % The incoming edge to the node
-    outgoing = transpose(G.outgoing(node));         % The outgoing edge to the node
+    node = internalnodes(i);                        % The internal node in question
+    incoming = transpose(G.incoming(node));         % The incoming edge(s) to the node
+    outgoing = transpose(G.outgoing(node));         % The outgoing edge(s) to the node
     adjacentEdges = unique([incoming outgoing]);    
     
-    for j=1:adjacentEdges(1)
-        nx = nx + n(j);             % Positions us at first disc point on respective adjacent edge
-    end
-    
     % Selects correct orientation
-      % Remember the orientation is flipped so the last disc point is first vector entry because we used Cheb pts
     if ismember(adjacentEdges(1),incoming)      % If incoming is first...
-        e1 = I(nx-n(adjacentEdges(1))+1 , :);       % pick e1 so it gives us the last disc point on the edge
+        e1 = I(nxC(adjacentEdges(1)+1),:);          % pick e1 so it gives us the last disc point on the edge
         c = 1;                                      % and add to the Kirchoff condition
     else                                        % If outgoing is first...
-        e1 = I(nx,:);                               % pick e1 so it gives us the first disc point on the edge
+        e1 = I(nxC(adjacentEdges(1))+1 , :);        % pick e1 so it gives us the first disc point on the edge
         c = -1;                                     % and subtract it from the Kirchoff condition
     end
     
-    kirchoff = c*e1*D1matrix(:,:,adjacentEdges(1));
+    kirchoff = c*e1*(-1)*D1matrix(:,:,adjacentEdges(1));
     
     if ismember(adjacentEdges(1),incoming) && ismember(adjacentEdges(1),outgoing)          % Checks for loop
-        e2 = I(nx,:);                               % e2 picks up the first disc point on the edge
+        e2 = I(nxC(adjacentEdges(1))+1,:);          % e2 picks up the first disc point on the edge
         BC(bc,:) = e1 - e2;                         % Continuity Condition for a loop
         bc = bc + 1;
-        kirchoff = kirchoff - e2*D1matrix(:,:,adjacentEdges(1));
+        kirchoff = kirchoff - e2*(-1)*D1matrix(:,:,adjacentEdges(1));
     end
     
     for j=2:length(adjacentEdges)                   % Finds additional Continuity and Kirchoff Conditions
-        nx = 0;
-        for k=1:adjacentEdges(j)
-            nx = nx + n(k);                         % Positions us at first disc point on respective adjacent edge
+        
+        if ismember(adjacentEdges(j),incoming)      % If the next adjacent edge is incoming...
+            e2 = I(nxC(adjacentEdges(j)+1) , :);        % pick the last disc point on that edge..
+            BC(bc,:) = e1 - e2;                         % and give the continuity condition...
+            bc = bc + 1;
+            kirchoff = kirchoff + e2*(-1)*D1matrix(:,:,adjacentEdges(j));     % and the Kirchoff Condition
         end
         
-        if ismember(adjacentEdges(j),incoming)
-            e2 = I(nx-n(adjacentEdges(j))+1 , :);   
-            BC(bc,:) = e1 - e2;                     % Continuity
+        if ismember(adjacentEdges(j),outgoing)      % If the next adjacent edge is outgoing...
+            e2 = I(nxC(adjacentEdges(j))+1,:);          % pick the first disc point on that edge...
+            BC(bc,:) = e1 - e2;                         % and give the continuity condition...
             bc = bc + 1;
-            kirchoff = kirchoff + e2*D1matrix(:,:,adjacentEdges(j));     % Kirchoff Condition
-        end
-        
-        if ismember(adjacentEdges(j),outgoing)
-            e2 = I(nx,:);
-            BC(bc,:) = e1 - e2;                     % Continuity
-            bc = bc + 1;
-            kirchoff = kirchoff - e2*D1matrix(:,:,adjacentEdges(j));    % Kirchoff Condition
+            kirchoff = kirchoff - e2*(-1)*D1matrix(:,:,adjacentEdges(j));    % and the Kirchoff Condition
         end
     end
     
@@ -157,3 +147,4 @@ end
 A = [D2matrix; BC];
 
 end
+

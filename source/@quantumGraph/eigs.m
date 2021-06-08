@@ -27,7 +27,7 @@ else  % if discretization is Chebyshev
     
     if isempty(null(A))                   % If A is well conditioned
         [vec,val] = eigs(-A,B,n,'SM');    % Use regular eigs solver as it is good enough
-        val = real(val);
+        val = real(val);c
         vec = real(vec);
     else                                  % If A is ill conditioned
 
