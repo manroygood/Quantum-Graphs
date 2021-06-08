@@ -13,21 +13,18 @@ if G.isUniform
     else
         Ashift = -A + B;                        % Shift A using B so Ashift is not be singular
         [vecperp,d] = eigs(full(Ashift),full(B),n,'SM');    % Solves (-A + 1B)u = lambda Bu
-        d = diag(diag(real(d)) - 1);                  % Shift evals back and neglect small imaginary component
+        d = diag(diag(real(d)) - 1);                        % Shift evals back and neglect small imaginary component
         vec = real(vecperp);
     end
     d=diag(d); val=abs(d);
     vec=real(vec);
     vec(:,1)=abs(vec(:,1));
-    for k=1:n
-       vec(:,k) = vec(:,k)/G.norm(vec(:,k)); 
-    end
-        
+            
 else  % if discretization is Chebyshev
     
     if isempty(null(A))                   % If A is well conditioned
         [vec,val] = eigs(-A,B,n,'SM');    % Use regular eigs solver as it is good enough
-        val = real(val);c
+        val = real(val);
         vec = real(vec);
     else                                  % If A is ill conditioned
 
@@ -36,11 +33,17 @@ else  % if discretization is Chebyshev
         [vecperp,valperp] = eigs(Ashift,B,n,'SM');  % Solves (-A + 1B)u = lambda Bu
         val = diag(real(valperp)) - 1;              % Shift evals back and neglect small imaginary component
         vec = real(vecperp);                        % Same evecs up to a small imaginary component
-
+        
         if sum(abs(imag(valperp)))>10^(-9)
             disp('Imaginary portion of eigenvalues is non-negligable.')
         end
 
     end
 end
+
+vec(:,1)=abs(vec(:,1));
+for k=1:n
+   vec(:,k) = vec(:,k)/G.norm(vec(:,k)); 
+end
+
 end
