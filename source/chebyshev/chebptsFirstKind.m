@@ -3,5 +3,6 @@ function x = chebptsFirstKind(N)
 % kind.
 
 x = (1 - cos( ((2* (0:(N-1))+1) * pi)/(2*N) ))/2;
+x = x';
 
 end

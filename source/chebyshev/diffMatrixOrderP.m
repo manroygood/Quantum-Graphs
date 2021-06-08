@@ -64,6 +64,6 @@ for i=1:m
     Dp(i,thisj) = -DpRowSum + adjustme;
 end
 
-Dp = Dp.*4/L^2;     % Scale by length of interval and account for orientation x
+Dp = (-1)^P*Dp.*4/L^2;     % Scale by length of interval
 
 end

@@ -28,4 +28,7 @@ xRange = min(x1Range,x2Range);
 zRange= diff(get(gca, 'ZLim'));
 
 set(gca,'DataAspectRatio',[xRange xRange 1.25*zRange])
+if yRange == 0
+    yRange = 10^(-16);
+end
 set(gca,'ZLim',[(yMin-yRange/4), (yMax +yRange/4)])

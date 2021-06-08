@@ -33,4 +33,4 @@ fcns.fxxz = @(u,mu,z)B*spdiags(12*u.*z,0,n,n); % f_xx*z, which takes a little mo
 % This is Fzz considered as a tensor that takes three arguments,
 % essentially a cubic form
 fcns.fTriple=@(z,u,v,w) (12*sum(u.*z.*v(1:end-1).*w(1:end-1)) + ...
-                         dot(z,v(end)*w(1:end-1)+w(end)*v(1:end-1))); % Hessian
+                         dot(z,v(end)*w(1:end-1)+w(end)*v(1:end-1))); % Hessian %STILL NEEDS TO BE INTERPRETTED
