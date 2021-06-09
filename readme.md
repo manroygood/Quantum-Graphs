@@ -30,11 +30,12 @@ This package has been used in the following papers
 * Kairzhan, A., Pelinovsky, D. E., & Goodman, R. H., Drift of Spectrally Stable Shifted States on Star Graphs. *SIAM Journal on Applied Dynamical Systems*, *18*(4), 1723–1755, (2019). http://doi.org/10.1137/19M1246146 (Much of this is reproduced in `source/examples/shiftedStates`.)
 * Berkolaiko, G., Marzuola, J. L., & Pelinovsky, D. E., Edge-localized states on quantum graphs in the limit of large mass, _Annales de l'Institut Henri Poincaré C, Analyse non linéaire,_ 2020,  https://doi.org/10.1016/j.anihpc.2020.11.003.
 * Beck, T., Bors, I., Conte, G., Cox, G. & Marzuola, J.L., Limiting eigenfunctions of Sturm–Liouville operators subject to a spectral flow. *Ann. Math. Québec* (2020). https://doi.org/10.1007/s40316-020-00142-6 (Gracie Conte's spectrally-accurate modifcation.)
+* Kairzhan, A. & Pelinovsky, D. E., Multi-pulse edge-localized states on quantum graphs, aXiv preprint 2105.11938 (2021), https://arxiv.org/abs/2105.11938
 
 #### Coming Soon
 * Secular determinants for a wider variety of vertex conditions
 * Spectral (Chebyshev) implementation of Laplace operator
-* We areappy to consider adding features and/or merge in contributions.
+* We are happy to consider adding features and/or to merge in contributions.
 
 If you use the package please site it as
 
