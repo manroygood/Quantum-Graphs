@@ -6,12 +6,18 @@ arguments
     opts.Lx1=1;
     opts.Lx2=1;
     opts.robinCoeff=0;
+    opts.nX=20;
+    opts.Discretization='Uniform';
 end
 
-nx1=opts.nx1; Lx1 = opts.Lx1;
-nx2=opts.nx2; Lx2 = opts.Lx2;
+% note that I interpret nx1 and nx2 as the number of cells in each
+% direction, so we need one more row of vertices in each direction
+nx1=1+opts.nx1; Lx1 = opts.Lx1;
+nx2=1+opts.nx2; Lx2 = opts.Lx2;
 
-% edges pointing to the right
+% edges pointing to the right. 
+% Note that this expression adds a row vector to a column vector to produce
+% a rectangualar array.
 horizontalSource=(1:nx1-1)+nx1*(0:nx2-1)';
 horizontalTarget=(2:nx1)+nx1*(0:nx2-1)';
 % edges pointed upward
@@ -27,9 +33,21 @@ Edges=[horizontalSource(:) horizontalTarget(:);
 Edges=sortrows(Edges);
 source=Edges(:,1);
 target=Edges(:,2);
-LVec = sqrt((X1(target)-X1(source)).^2+(X2(target)-X2(source)).^2);
-Phi = quantumGraph(source,target,LVec,'robinCoeff',opts.robinCoeff,'nXVec',opts.nx1);
 
+L = norm(nodes(target(1),:)-nodes(source(1),:));
+LVec = L*ones(length(Edges),1);
+nodes = nodes/L;
+
+Phi = quantumGraph(source, target,LVec,'nxVec',opts.nX,'robinCoeff',opts.robinCoeff,'Discretization',opts.Discretization);
 
 plotCoordFcn=@(G)plotCoordFcnFromNodes(G,nodes);
+
 Phi.addPlotCoords(plotCoordFcn);
+
+
+% LVec = sqrt((X1(target)-X1(source)).^2+(X2(target)-X2(source)).^2);
+% Phi = quantumGraph(source,target,LVec,'robinCoeff',opts.robinCoeff,'nXVec',opts.nx1);
+% 
+% 
+% plotCoordFcn=@(G)plotCoordFcnFromNodes(G,nodes);
+% Phi.addPlotCoords(plotCoordFcn);

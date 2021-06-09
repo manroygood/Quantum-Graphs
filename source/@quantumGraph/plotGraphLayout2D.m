@@ -28,5 +28,5 @@ if ~muteFlag
 end
 
 hold off
-axis equal off
+axis equal off tight
 set(gcf,'color','w')

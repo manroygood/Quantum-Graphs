@@ -21,7 +21,8 @@ PhiColumn=load(yFile);
 freqFile=fullfile(dataDir,['savedFrequency.' label]);
 LambdaFirst=load(freqFile);
 NN=Phi.qgdot(PhiColumn, PhiColumn);
-options= continuerSet(options,'NThresh',1.02*NN,'LambdaThresh',1.02*LambdaFirst);
+NT=max(options.NThresh,1.02*NN);
+options= continuerSet(options,'NThresh',NT,'LambdaThresh',1.02*LambdaFirst);
 
 if options.plotFlag; figure(1)
     clf; hold on; 

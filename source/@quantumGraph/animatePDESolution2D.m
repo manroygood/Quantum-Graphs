@@ -39,7 +39,6 @@ zRange=zMax-zMin;
 set(gca,'DataAspectRatio',[xRange xRange 1.25*zRange])
 set(gca,'ZLim',[zMin,1.1*zMax])
 
-
 for n=1:nt
     if realFlag
         Ut=U(:,n);

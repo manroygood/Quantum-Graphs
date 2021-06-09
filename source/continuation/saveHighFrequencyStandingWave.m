@@ -32,7 +32,7 @@ fprintf('File saved to %s.\n',eigFileName);
 fprintf('File number is %i. \n',fileNumber);
 
 end
-function Phi=initNLStanding(Phi,Lambda0,edges,signs)
+function Phi=initNLStanding(Phi,Lambda0,nonZeroEdges,signs)
 % Finds a large-amplitude standing wave with frequency Lambda0 
 %
 % It looks for a solution which looks like a sum of sech functions which
@@ -47,9 +47,14 @@ nXc=[0;cumsum(nX)];
 
 y=zeros(sum(nX,1));
 
-for k=1:length(edges)
-    kk=edges(k);
-    x0=L(kk)/2;
+for k=1:length(nonZeroEdges)
+    kk=nonZeroEdges(k);
+    j=Phi.target(kk);
+    if Phi.isLeaf(j) && ~Phi.isDirichlet(j)
+        x0=L(kk);     % If edge kk ends in a leaf node with non-dirichlet BC at the leaf, center the guess at the end
+    else
+        x0=L(kk)/2;   % Otherwise center the guess at the center of the edge
+    end
     j1=(nXc(kk)+1);
     j2=nXc(kk+1);
     x=Phi.Edges.x{kk};

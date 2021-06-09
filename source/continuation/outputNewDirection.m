@@ -24,18 +24,16 @@ n2=sqrt(dotProduct.big(xDir2,xDir2,muDir2,muDir2));
 xDir1=ds*xDir1/n1; muDir1=ds*muDir1/n1;
 xDir2=ds*xDir2/n2; muDir2=ds*muDir2/n2;
 
-
-
 branchDirection= xOld-xBif;
 dot1=abs(dot(xDir1,branchDirection));
 dot2=abs(dot(xDir2,branchDirection));
 
 if dot1 > dot2 % In this case the first direction is parallel to the current branch
-    xPerturbation = xDir2; %#ok<NASGU>
-    LambdaPerturbation = muDir2;%#ok<NASGU>
+    xPerturbation = xDir2;
+    LambdaPerturbation = muDir2;
 else % so the second direction is parallel to the current branch
-    xPerturbation = xDir1; %#ok<NASGU>
-    LambdaPerturbation = muDir1; %#ok<NASGU>
+    xPerturbation = xDir1; 
+    LambdaPerturbation = muDir1; 
 end
 label=getLabel(k);
 xfile=['PhiPerturbation.' label '.mat'];xfile =fullfile(outputDir,xfile);

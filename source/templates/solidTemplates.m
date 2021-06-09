@@ -1,4 +1,4 @@
-function Phi=geom3Dtemplates(shapeString,opts)
+function Phi=solidTemplates(shapeString,opts)
 arguments
     shapeString (1,1) string;
     opts.L {mustBeNumeric} = 1;
