@@ -22,7 +22,7 @@ dtheta = theta(2) - theta(1);
 
 a0 = 2/pi * (dot(f,cos(0*theta)) - .5 *(f(1)*cos(0*theta(1)) +  f(n)*cos(0*theta(n))) ) * dtheta;
 z = a0;
-eps = 10^(-8);
+eps = 10^(-14);
 maxk = 10^4;
 
 for k=2:maxk
@@ -31,7 +31,7 @@ for k=2:maxk
         ak = 2/pi * (dot(f,cos(k*theta)) - .5 *(f(1)*cos(k*theta(1)) +  f(n)*cos(k*theta(n))) ) * dtheta;   % Trapezoid rule 
         bk = 2*ak/(1-k^2);
         
-        if abs(bk)>eps && k~=maxk
+        if abs(bk)>eps && k<maxk
             z = z + bk;                 % Summation portion of integration
         else
             z = z + .5*bk;              % End point contribution for the integration

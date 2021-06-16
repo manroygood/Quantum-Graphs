@@ -1,4 +1,4 @@
-function y=norm(G,varargin)
+function z=norm(G,varargin)
 % Four possible syntaxes
 % y = norm(G)      Calculates the 2-norm of the y-component of G
 % y = norm(G,v).   Assigns the vector v to the y component of G and then
@@ -47,18 +47,15 @@ if G.isUniform
         end
         norm_p_vec(k)=sum(density);
     end
-    y=dot(dxVec.*weightVec,norm_p_vec)^(1/p);
+    z=dot(dxVec.*weightVec,norm_p_vec)^(1/p);
     
 else
-    nxC=zeros(nEdges+1,1);
+    [~,nxC,~]=G.nx;
+    y = zeros(nxC(nEdges+1),1);
     for k = 1:nEdges
-        nxC(k+1) = G.Edges.nx(k) + nxC(k);
+        [n1,n2] = G.adjacentNodes(k);
+        y(nxC(k)+1:nxC(k+1)) = [G.Nodes.y(n1); G.Edges.y{k}; G.Nodes.y(n2)];
     end
-    
-    y1=zeros(nxC(nEdges+1),1);
-    for k = 1:nEdges
-        y1(nxC(k)+1:nxC(k+1)) = G.Edges.y{k};
-    end
-    y = (qgdotCheb(G, abs(y1).^(p/2) ,abs(y1).^(p/2) ))^(1/p);
+    z = (qgdotCheb(G, abs(y).^(p/2) ,abs(y).^(p/2) ))^(1/p);
     
 end
