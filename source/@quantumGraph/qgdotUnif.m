@@ -1,5 +1,4 @@
 function z = qgdotUnif(Phi,u1col,u2col)
-
 % Note this does absolutely no checking to determine if two columns are
 % compatible with the template Phi. It just plows ahead and returns an error if it doesn't work
 u1=copy(Phi); u1.column2graph(u1col);

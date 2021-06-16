@@ -1,4 +1,4 @@
-function [n1,n2] = adjacentNodes(j,G)
+function [n1,n2] = adjacentNodes(G,j)
     % Finds the two nodes that are adjacent to edge j in graph G
     
     n1 = G.EndNodes(j,1);

@@ -2,10 +2,22 @@ function col = graph2column(G)
 % Assigns the a column vector (of the right length) to the Edges.y field of
 % a quantum graph with the same structure as template
 
-nx = G.Edges.nx;
-nn=[0;cumsum(nx)];
-col=zeros(nn(end),1);
+[~,nxC,nxT]=G.nx;
+col=zeros(nxT,1);
 
-for k=1:numedges(G)
-    col(nn(k)+1:nn(k+1))=G.Edges.y{k}(:);
+if G.isUniform
+    
+    for k=1:numedges(G)
+        col(nxC(k)+1:nxC(k+1)) = G.Edges.y{k}(:);
+    end
+    
+else
+    
+    for k=1:numedges(G)
+        [n1,n2] = G.adjacentNodes(k);
+        col(nxC(k)+1) = G.Nodes.y(n1);
+        col(nxC(k+1)) = G.Nodes.y(n2);
+        col(nxC(k)+2:nxC(k+1)-1) = G.Edges.y{k}(:);
+    end
+    
 end
