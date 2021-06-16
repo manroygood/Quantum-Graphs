@@ -22,7 +22,7 @@ dtheta = theta(2) - theta(1);
 
 a0 = 2/pi * (dot(f,cos(0*theta)) - .5 *(f(1)*cos(0*theta(1)) +  f(n)*cos(0*theta(n))) ) * dtheta;
 z = a0;
-eps = 10^(-11);
+eps = 10^(-8);
 maxk = 10^4;
 
 for k=2:maxk
@@ -40,6 +40,5 @@ for k=2:maxk
         end
     end
 end
-
 
 end
