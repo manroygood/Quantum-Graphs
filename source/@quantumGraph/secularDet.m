@@ -1,4 +1,4 @@
-function f = secularDet(G)
+function [f,S,D] = secularDet(G)
 L = sym(G.L);
 n = numedges(G);
 S = sym(zeros(2*n));
@@ -17,12 +17,12 @@ end
 
 
 for j=1:2*n
-    if j<=n         % Finds degree of vertex
+    if j<=n             % Finds degree of vertex
         jbar=j+n;
-        dv=fullDegreeEtc(G,G.EndNodes(j,2));        % When e_j goes into the node
+        dv=fullDegreeEtc(G,G.EndNodes(j,2));            % When e_j goes into the node
     else
         jbar=j-n;
-        dv=fullDegreeEtc(G,G.EndNodes(j-n,1));      % When e_jbar leaves the node
+        dv=fullDegreeEtc(G,G.EndNodes(j-n,1));          % When e_jbar leaves the node
     end
     
     for jprime =1:2*n                                   % Builds S
@@ -31,7 +31,7 @@ for j=1:2*n
                 alpha = G.robinCoeff(G.EndNodes(j,2));
                 S(jprime,j) = (1i*x+alpha)/(1i*x-alpha);
                 if alpha == 0
-                    ThetaR = ThetaR+pi;     % SHOULDN'T IT BE pi/2?!
+                    ThetaR = ThetaR+pi;
                 else
                     ThetaR = ThetaR + atan(alpha/x);
                 end
@@ -39,7 +39,7 @@ for j=1:2*n
                 alpha = G.robinCoeff(G.EndNodes(jprime,1));
                 S(jprime,j) = (1i*x+alpha)/(1i*x-alpha);
                 if alpha == 0
-                    ThetaR = ThetaR+pi;   % SHOULDN'T IT BE pi/2?!
+                    ThetaR = ThetaR+pi;
                 else
                     ThetaR = ThetaR + atan(alpha/x);
                 end
@@ -49,12 +49,12 @@ for j=1:2*n
                 S(jprime,j) = -1;
             end
         elseif jprime==jbar
-            node = G.sharedNode(j,jprime);            % Kirchhoff condition
+            node = G.sharedNode(j,jprime);              % Kirchhoff condition
             alpha = G.robinCoeff(node);
             S(jprime,j) = 2/(dv-alpha/(1i*x))-1;
             ThetaK = ThetaK + atan(alpha/(dv*x))/dv;    % Divide by dv because the code loops through edges so we'll do this for each edge
         elseif G.follows(j,jprime)
-            node = G.sharedNode(j,jprime);            % Kirchhoff condition
+            node = G.sharedNode(j,jprime);              % Kirchhoff condition
             alpha = G.robinCoeff(node);
             S(jprime,j) = 2/(dv-alpha/(1i*x));
         end
