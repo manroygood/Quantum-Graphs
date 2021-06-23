@@ -46,7 +46,7 @@ for i=1:medges       % Loops over each edge
  
  
     % Boundary Conditions
-    [node1,node2] = G.edgeNodes(i);                   % Nodes that adjacent to e_i
+    [node1,node2] = G.edgeNodes(i);                   % Nodes that are adjacent to e_i
     nx = nx + N;                                        % Position of ui_1
     D1matrix( (nx+1-N):nx , (nx+1-N):nx , i) = D1;      % Creates D1 matrix for edge_i leaving zeros elsewhere
     
@@ -139,7 +139,7 @@ for i=1:sizeintnodes          % Takes any internal nodes of graph G and applies 
         end
     end
     
-    BC(2*medges - minternal + kirchoffbc,:) = kirchoff - alpha(node)*e1; % Final Kirchoff Condition
+    BC(2*medges - minternal + kirchoffbc,:) = kirchoff - alpha(node)*e1; % Final Kirchoff Condition: sum u_j' + alpha
     kirchoffbc = kirchoffbc + 1;
     
 end
