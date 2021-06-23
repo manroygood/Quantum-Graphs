@@ -111,33 +111,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             end
             
             obj.qg.Nodes.robinCoeff=robinCoeff;
-            
-            if any(isDirichlet(obj))
-                % Check that Dirichlet boundary conditions are given only at leaf nodes
-                for j=1:nNodes
-                    if isDirichlet(obj,j) && ~isLeaf(obj,j)
-                        error('quantumGraph:dirichletNotLeaf',...
-                            'Dirichlet boundary conditions only sensible at leaf nodes.')
-                    end
-                end
-                % Check that all edges connected to leaf nodes point toward the leaf
-                % node
-                for j=1:nEdges
-                    firstNode=obj.EndNodes(j,1);
-                    if isDirichlet(obj,firstNode)
-                        error('quantumGraph:leafDirection',...
-                            'Edges connected to Dirichlet leaf nodes must point TOWARD leaf node')
-                    end
-                end
-                % Check that all dirichlet conditions are the last ones
-                % listed. (This is so that in the chebyshev discretization only
-                % the non-dirichlet nodes will be assigned values
-                for j=nNodes:-1:2
-                    if isDirichlet(obj,j-1) && ~isDirichlet(obj,j)
-                        error('quantumGraph:leafNotLast','Leaf nodes must be listed last.')
-                    end
-                end
-            end
+
             
             obj.discretization=p.Results.Discretization;
             % If the nxVec is set but the discretization is not, then the

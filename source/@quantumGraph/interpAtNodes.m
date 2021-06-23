@@ -7,15 +7,11 @@ yNodes=zeros(nNodes,1);
 
 for j = 1:nDep
     for k = 1:nNodes
-        if isDirichlet(G,k)
-            yNodes(k,j)=0;
-        else
-            mat = G.ghostMatrix(k);
-            [fullDegree,inOrOut,allEdges]=fullDegreeEtc(G,k);
-            yNodes(k,j) = firstValue(1,j)/2;
-            for branch = 1:fullDegree   % loop over all edges adjacent to given nodes (rows of matrix)
-                yNodes(k,j) = yNodes(k,j)+ mat(1,branch)*firstValue(branch,j)/2;
-            end
+        mat = G.ghostMatrix(k);
+        [fullDegree,inOrOut,allEdges]=fullDegreeEtc(G,k);
+        yNodes(k,j) = firstValue(1,j)/2;
+        for branch = 1:fullDegree   % loop over all edges adjacent to given nodes (rows of matrix)
+            yNodes(k,j) = yNodes(k,j)+ mat(1,branch)*firstValue(branch,j)/2;
         end
     end
 end

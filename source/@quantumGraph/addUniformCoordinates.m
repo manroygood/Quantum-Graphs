@@ -10,9 +10,9 @@ end
 % If length(nxVec)==1, then it is interpreted to be the density of points
 % per unit length on each edge
 if length(nxVec)==1
-    nxVec=ceil(nxVec*Phi.L); 
+    nxVec=ceil(nxVec*Phi.L);
 end
-    
+
 
 assert(length(nxVec)==nEdges,'quantumGraph:nxMismatch','Length of nxVec must match number of edges');
 Phi.qg.Edges.nx=nxVec(:);
@@ -23,16 +23,8 @@ Phi.qg.Edges.y = cell(nEdges,ny);
 Phi.qg.Edges.dx=zeros(nEdges,1);
 nx=Phi.nx;
 for k=1:nEdges
-    lastNode=Phi.EndNodes(k,2);
-    
-    if ~isDirichlet(Phi,lastNode)
-        Phi.qg.Edges.dx(k)=Phi.L(k) ./nx(k);
-        Phi.qg.Edges.x{k} = Phi.dx(k)*((1:nx(k))-1/2)';
-    else
-        dx=Phi.Edges.L(k) ./ (1/2+nx(k));
-        Phi.qg.Edges.dx(k)=dx;
-        Phi.qg.Edges.x{k} = ((1:nx(k))-1/2)'*dx;
-    end
+    Phi.qg.Edges.dx(k)=Phi.L(k) ./nx(k);
+    Phi.qg.Edges.x{k} = Phi.dx(k)*((1:nx(k))-1/2)';
     Phi.qg.Edges.y{k} = nan(nxVec(k),ny);
 end
 Phi.qg.Nodes.y=nan(nNodes,1);
@@ -41,19 +33,22 @@ Phi.qg.Nodes.y=nan(nNodes,1);
 % you the value of the function of the point at a distance dx(j)/2 beyond
 % the node. This is then used to interpolate the function value at the node
 % and to compute first or second derivatives at that point.
- 
+
 Phi.qg.Nodes.ghostMatrix =cell(nNodes,1);
 for j=1:nNodes
-    if ~isDirichlet(Phi,j)
+    [fullDegree,~,allEdges]=fullDegreeEtc(Phi,j);
+    LHM=diag(ones(fullDegree-1,1),1);
+    LHM(:,1)=-1;
+    RHM=diag(-ones(fullDegree-1,1),1);
+    RHM(:,1)=1;
+    if isDirichlet(Phi,j)
+        LHM(fullDegree,:) = zeros(fullDegree,1); LHM(fullDegree,1)=1/2;
+        RHM(fullDegree,:) = zeros(fullDegree,1); RHM(fullDegree,1)=-1/2;
+    else
         alpha = Phi.robinCoeff(j);
-        [fullDegree,~,allEdges]=fullDegreeEtc(Phi,j);
-        lastRow=Phi.weight(allEdges)./Phi.dx(allEdges);
-        LHM=diag(ones(fullDegree-1,1),1);
-        LHM(:,1)=-1;
-        LHM(fullDegree,:) = lastRow+alpha/fullDegree;
-        RHM=diag(-ones(fullDegree-1,1),1);
-        RHM(:,1)=1;
-        RHM(fullDegree,:) = lastRow-alpha/fullDegree;
-        Phi.qg.Nodes.ghostMatrix{j}=LHM\RHM;
+        lastRow=-Phi.weight(allEdges)./Phi.dx(allEdges);
+        LHM(fullDegree,:) = lastRow; LHM(fullDegree,1) = LHM(fullDegree,1)+ alpha/2;
+        RHM(fullDegree,:) = lastRow; RHM(fullDegree,1) = RHM(fullDegree,1)- alpha/2;
     end
+    Phi.qg.Nodes.ghostMatrix{j}=LHM\RHM;
 end

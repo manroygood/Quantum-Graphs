@@ -1,6 +1,6 @@
 function [V,lambda]=eigs(G,varargin)
-assert(G.uniform,'quantumGraph:eigNonuniform','Input graph G must be discretized under uniform discretization')
-assert(G.discretized,'quantumgraph:notDiscretized','Input graph G must have been discretized')
+assert(G.isUniform,'quantumGraph:eigNonuniform','Input graph G must be discretized under uniform discretization')
+assert(G.hasDiscretization,'quantumgraph:notDiscretized','Input graph G must have been discretized')
 if nargin>1
     n=varargin{1};
 else
