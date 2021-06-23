@@ -10,6 +10,10 @@ for k = 1:numedges(u1)
     z = z + weightVec(k)*edgeDot(u1,u2,k);
 end
 
+% Note that because x-values on the edges of the graph are offset by dx/2
+% each lies at the midpoint of a domain of size dx and using the midpoint
+% rule to compute dot products is second order accurate (i.e., we don't need
+% to modify the rule near the endpoints, as for the trapezoidal rule)
 function z = edgeDot(u1,u2,k)
 
 dx = u1.Edges.dx(k);
@@ -17,7 +21,5 @@ dx = u1.Edges.dx(k);
 v1 = u1.Edges.y{k};
 v2 = u2.Edges.y{k};
 
-v1Ends= u1.Nodes.y(u1.Edges.EndNodes(k,:));
-v2Ends= u2.Nodes.y(u2.Edges.EndNodes(k,:));
 
-z = dx * (dot(v1,v2) + dot(v1Ends,v2Ends)/2);
+z = dx * dot(v1,v2) ;

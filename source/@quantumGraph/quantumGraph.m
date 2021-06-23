@@ -1,5 +1,5 @@
-classdef quantumGraph < matlab.mixin.Copyable 
-    % Declaring this using matlab.mixin.copybable allows us to copy graph objects, 
+classdef quantumGraph < matlab.mixin.Copyable
+    % Declaring this using matlab.mixin.copybable allows us to copy graph objects,
     % i.e. if g is a graph then the command 'g1=copy(g)' will create a new object
     % g1 that duplicates all of the values of g, rather than simply being a
     % second name for g
@@ -9,67 +9,25 @@ classdef quantumGraph < matlab.mixin.Copyable
         laplacianMatrix;
     end
     methods
-        function obj=quantumGraph(source,target,LVec,varargin)
-            % Three required 
+        function obj=quantumGraph(source,target,LVec,opts)
+            % Three required
             % Constructs a quantum graph data structure
-            % This is the 2018 implementation implmenting Neumann/Kirchhoff BC via
+            % This is the 2021 implementation implmenting all vertex conditions via
             % ghostpoints
+            % 6/23/2021 replaced input parser with argument block
+            
+            arguments
+                source double {mustBeVector,mustBePositive,mustBeFinite}
+                target double {mustBeVector,mustBePositive,mustBeFinite}
+                LVec   double {mustBeVector,mustBePositive,mustBeFinite}
+                opts.RobinCoeff double {mustBeVector} = 0;
+                opts.Weight double {mustBeVector,mustBePositive} = 1;
+                opts.Discretization char {mustBeMember(opts.Discretization,{'None','Uniform','Chebyshev'})} = 'None'
+                opts.nxVec double {mustBeVector,mustBePositive,mustBeFinite} = 20;
+                opts.plotCoordinateFcn function_handle
+            end
+            
             nSource=length(source);
-            nNodes=max([max(source) max(target)]);
-            
-            % The input parser section
-            p=inputParser;
-            defaultRobinCoeff=zeros(nNodes,1);
-            defaultWeight=ones(nSource,1);
-            validVectorPosNum = @(x) isnumeric(x) && min(size(x))==1 && (all(x > 0));
-            validVector = @(x) isnumeric(x) && min(size(x))==1;
-            expectedDiscretizations={'None','Uniform','Chebyshev'};
-            defaultDiscretization='None';
-            defaultPlotCoordinateFcn='None';
-            defaultNxVec=[];
-            
-            addRequired(p,'source',validVectorPosNum);
-            addRequired(p,'target',validVectorPosNum);
-            addRequired(p,'Lvec',validVectorPosNum);
-            addParameter(p,'RobinCoeff',defaultRobinCoeff,validVector);
-            addParameter(p,'Weight',defaultWeight,validVectorPosNum);
-            addParameter(p,'Discretization',defaultDiscretization,...
-                @(x) any(validatestring(x,expectedDiscretizations)));
-            addParameter(p,'nxVec',defaultNxVec,validVectorPosNum);
-            addParameter(p,'plotCoordinateFcn',defaultPlotCoordinateFcn);
-                        
-            parse(p,source,target,LVec,varargin{:});
-            
-            % tests that source and target are same length
-            assert(length(target)==nSource,'quantumGraph:sourceTargetMismatch','Source and target must be same length');
-            
-            % test that the number of labeled nodes matches the number of
-            % nodes in the graph
-            allNodes=unique([source(:); target(:)]);
-            assert(length(allNodes)==allNodes(end),'quantumGraph:nodesMissing',...
-                'There shouldn''t be any gaps between entries');
-            
-            % tests that the nodes are sorted properly (if not sorted
-            % properly, the digraph constructor will sort them for you, which could
-            % mess you up!)
-            flag = true;
-            if any(sort(source)~=source)
-                flag=false;
-            else
-                for k=1:max(source)
-                    tt=target(source==k);
-                    if any(sort(tt)~=tt)
-                        flag=false; break;
-                    end
-                end
-            end
-            assert(flag,'quantumGraph:nodesMissorted',...
-                'Sources must be increasing as must all the targets of each source')
-            
-            if length(LVec)==1
-                LVec=LVec*ones(size(source));
-            end
-            assert(length(LVec)==nSource,'quantumGraph:LMismatch','Length of LVec must match number of edges');
             
             % If version number is < 9.4 (i.e. pre MATLAB 2018a), then multigraphs are
             % not allowed. Check for multigraphs if using older version.
@@ -84,22 +42,50 @@ classdef quantumGraph < matlab.mixin.Copyable
                 end
             end
             
-            Weight=p.Results.Weight;
+
+            % tests that source and target are same length
+            assert(length(target)==nSource,'quantumGraph:sourceTargetMismatch','Source and target must be same length');
+            
+            % test that the number of labeled nodes matches the number of
+            % nodes in the graph
+            allNodes=unique([source(:); target(:)]);
+            assert(length(allNodes)==allNodes(end),'quantumGraph:nodesMissing',...
+                'There shouldn''t be any gaps between entries');
+            
+            % tests that the nodes are sorted properly (if not sorted
+            % properly, the digraph constructor will sort them for you, which could
+            % mess you up!)
+            st = [source(:) target(:)];
+            stSorted=sortrows(st);
+            flag = all(st(:)==stSorted(:));
+            assert(flag,'quantumGraph:nodesMissorted',...
+                'Sources must be increasing as must all the targets of each source')
+
+            
+            if length(LVec)==1
+                LVec=LVec*ones(size(source));
+            end
+            assert(length(LVec)==nSource,'quantumGraph:LMismatch','Length of LVec must match number of edges');
+            
+            
+            Weight=opts.Weight;
+            if length(Weight)==1
+                Weight=Weight*ones(size(source));
+            end
             assert(length(Weight)==nSource,'quantumGraph:WeightMismatch',...
                 'Length of Weight must match number of edges');
             
-            assert(any(strcmp('plotCoordinateFcn',p.UsingDefaults)) || ~isempty(p.Results.nxVec), ...
+            assert( isfield(opts,'plotCoordinateFcn')|| ~isempty(opts.nxVec), ...
                 'quantumGraph:plotCoordsButNoCoords',...
                 'Must have a discretization if setting up plot coordinates.');
-
+            
             obj.qg=digraph(source,target,Weight);
             
             nNodes=numnodes(obj.qg);
-            nEdges=numedges(obj.qg);
             
             obj.qg.Edges.L=LVec(:);
             
-            robinCoeff=p.Results.RobinCoeff;
+            robinCoeff=opts.RobinCoeff;
             if length(robinCoeff)==nNodes
                 robinCoeff=robinCoeff(:);
             elseif length(robinCoeff)==1
@@ -111,29 +97,29 @@ classdef quantumGraph < matlab.mixin.Copyable
             end
             
             obj.qg.Nodes.robinCoeff=robinCoeff;
-
             
-            obj.discretization=p.Results.Discretization;
+            
+            obj.discretization=opts.Discretization;
             % If the nxVec is set but the discretization is not, then the
             % discretization should be Uniform
-            if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'None'))
-                    obj.discretization='Uniform';
+            if (~isempty(opts.nxVec) && strcmp(obj.discretization,'None'))
+                obj.discretization='Uniform';
             end
             
-            if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'Uniform'))
-                obj.addUniformCoordinates(p.Results.nxVec);
+            if (~isempty(opts.nxVec) && strcmp(obj.discretization,'Uniform'))
+                obj.addUniformCoordinates(opts.nxVec);
                 obj.laplacianMatrix=obj.constructLaplacianMatrixUni;
             end
             
-            if (~isempty(p.Results.nxVec) && strcmp(obj.discretization,'Chebyshev'))
-                obj.addChebyshevCoordinates(p.Results.nxVec);
+            if (~isempty(opts.nxVec) && strcmp(obj.discretization,'Chebyshev'))
+                obj.addChebyshevCoordinates(opts.nxVec);
             end
             
-            if ~any(strcmp('plotCoordinateFcn',p.UsingDefaults))
-                obj.addPlotCoords(p.Results.plotCoordinateFcn);
+            if isfield(opts,'plotCoordinateFcn')
+                obj.addPlotCoords(opts.plotCoordinateFcn);
             end
             
         end % End of constructor
-
+        
     end % End of methods section. All methods except the constructor are written in separate m-files in the @quantumgraphs folder
 end

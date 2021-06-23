@@ -85,7 +85,7 @@ weight = 3*(1:5);
 G=quantumGraph(s,t,L,'RobinCoeff',robinCoeff,'Weight',weight);
 
 import matlab.unittest.constraints.IsEqualTo
-for j=1:numedges(G)
+for j=1:G.numedges
     
     verifyThat(testCase,G.L(j),IsEqualTo(L(j)));
     verifyThat(testCase,G.weight(j),IsEqualTo(weight(j)));
