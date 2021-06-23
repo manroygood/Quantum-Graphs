@@ -127,17 +127,17 @@ for i=1:sizeintnodes          % Takes any internal nodes of graph G and applies 
         w2 = G.Edges.Weight(adjacentEdges(j));
         if ismember(adjacentEdges(j),incoming)      % If the next adjacent edge is incoming...
             e2 = I(nxC(adjacentEdges(j)+1) , :);        % pick the last disc point on that edge..
-            BC(bc,:) = e1 - e2;                         % and construct the continuity condition...
-            bc = bc + 1;
-            kirchoff = kirchoff + w2*e2*(-1)*D1matrix(:,:,adjacentEdges(j));     % and the Kirchoff Condition
+            c = 1;
         end
         
         if ismember(adjacentEdges(j),outgoing)      % If the next adjacent edge is outgoing...
             e2 = I(nxC(adjacentEdges(j))+1,:);          % pick the first disc point on that edge...
-            BC(bc,:) = e1 - e2;                         % and construct the continuity condition...
-            bc = bc + 1;
-            kirchoff = kirchoff - w2*e2*(-1)*D1matrix(:,:,adjacentEdges(j));    % and the Kirchoff Condition
+            c = -1;                                     % select the correct orientation for the Kirchoff Condition
         end
+        
+        BC(bc,:) = e1 - e2;                         % Continuity condition...
+        kirchoff = kirchoff + c*w2*e2*(-1)*D1matrix(:,:,adjacentEdges(j));    % and the Kirchoff Condition
+    
     end
     
     BC(2*medges - minternal + kirchoffbc,:) = kirchoff - alpha(node)*e1; % Final Kirchoff Condition: sum u_j' + alpha
