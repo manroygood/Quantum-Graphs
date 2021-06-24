@@ -1,10 +1,9 @@
 function M = quantumGraphLaplacianPML(Phi,PMLparams)
 % Construct the Laplacian matrix for the quantum graph domain Phi
-% 
+%
 % Uses centered second differences in space, and ghost points at junctions.
 % The first point of the discretization is at dx(k)/2 and the ghost point
 % is at -dx(k)/2;
-
 
 d=PMLparams.d;
 sigma=PMLparams.sigma;
@@ -34,26 +33,22 @@ for k=1:numedges(Phi)
     M(nxC(k)+1:nxC(k+1),nxC(k)+1:nxC(k+1))=A;
 end
 
-nDirichlet = sum(isDirichlet(Phi));
 nNodes=numnodes(Phi);
 
 % The Laplacian is modified at the grid points adjacent to the junctions
-% where Robin or Kirchhoff conditions hold. Do nothing at Dirichlet nodes
-for j=1:nNodes-nDirichlet    % Loop over the nodes
+for j=1:nNodes   % Loop over the nodes
     mat=Phi.Nodes.ghostMatrix{j};
-    if ~isDirichlet(Phi,j)
-        [fullDegree,inOrOut,allEdges]=fullDegreeEtc(Phi,j);
-        for branch = 1:fullDegree   % loop over all edges adjacent to given nodes (rows of matrix)
-            rowBranch = allEdges(branch);
-            rowDirection = inOrOut(branch);
-            row = getRowOrColumn(Phi,rowDirection,rowBranch);
-            dx=Phi.Edges.dx(rowBranch);
-            for neighbor = 1:fullDegree % loop over all neighboring edges, including self (columns of matrix)
-                columnBranch = allEdges(neighbor);
-                columnDirection = inOrOut(neighbor);
-                column= getRowOrColumn(Phi,columnDirection,columnBranch);
-                M(row,column) = M(row,column) + mat(branch,neighbor)/dx^2; %#ok<SPRIX>
-            end
+    [fullDegree,inOrOut,allEdges]=fullDegreeEtc(Phi,j);
+    for branch = 1:fullDegree   % loop over all edges adjacent to given nodes (rows of matrix)
+        rowBranch = allEdges(branch);
+        rowDirection = inOrOut(branch);
+        row = getRowOrColumn(Phi,rowDirection,rowBranch);
+        dx=Phi.Edges.dx(rowBranch);
+        for neighbor = 1:fullDegree % loop over all neighboring edges, including self (columns of matrix)
+            columnBranch = allEdges(neighbor);
+            columnDirection = inOrOut(neighbor);
+            column= getRowOrColumn(Phi,columnDirection,columnBranch);
+            M(row,column) = M(row,column) + mat(branch,neighbor)/dx^2; %#ok<SPRIX>
         end
     end
 end
