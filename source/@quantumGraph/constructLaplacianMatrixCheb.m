@@ -48,20 +48,20 @@ for i=1:medges       % Loops over each edge
     % Boundary Conditions
     [node1,node2] = G.edgeNodes(i);                   % Nodes that are adjacent to e_i
     nx = nx + N;                                        % Position of ui_1
-    D1matrix( (nx+1-N):nx , (nx+1-N):nx , i) = D1;      % Creates D1 matrix for edge_i leaving zeros elsewhere
+    D1matrix( (nx+1-N):nx , (nx+1-N):nx , i) = -D1;     % Creates D1 matrix for edge_i leaving zeros elsewhere
     
     if G.isLeaf(node1)          % If node1 is a Leaf...
         if ismember(i,G.incoming(node1))        % When orientation is node2 -> node1
             if isnan(alpha(node1))              % If Robin Condition is NAN then we have Dirichlet BC's
                 BC(bc,:) = I(nxC(i+1),:);       % Picks the last disc point on edge_i because it's incoming
             else
-                BC(bc,:) = ( I(nxC(i+1),:)*(-1)*D1matrix(:,:,i) ) + alpha(node1)*I(nxC(i+1),:);
+                BC(bc,:) = ( I(nxC(i+1),:)*D1matrix(:,:,i) ) + alpha(node1)*I(nxC(i+1),:);
             end
         else                                    % When orientation is node1 -> node2
             if isnan(alpha(node1))              % If Robin Condition is NAN then we have Dirichlet BC's
                 BC(bc,:) = I(nxC(i)+1,:);       % Picks the first disc point on edge_i because it's outgoing
             else
-                BC(bc,:) = ( I(nxC(i)+1,:)*(-1)*D1matrix(:,:,i) ) + alpha(node1)*I(nxC(i)+1,:);
+                BC(bc,:) = ( I(nxC(i)+1,:)*D1matrix(:,:,i) ) - alpha(node1)*I(nxC(i)+1,:);
             end
         end
         bc = bc + 1;
@@ -83,7 +83,7 @@ for i=1:medges       % Loops over each edge
             if isnan(alpha(node2))              % If Robin Condition is NAN then we have Dirichlet BC's
                 BC(bc,:) = I(nxC(i)+1,:);       % Picks the first disc point on edge_i because it's outgoing
             else
-                BC(bc,:) = ( I(nxC(i)+1,:)*D1matrix(:,:,i) ) + alpha(node2)*I(nxC(i)+1,:);
+                BC(bc,:) = ( I(nxC(i)+1,:)*D1matrix(:,:,i) ) - alpha(node2)*I(nxC(i)+1,:);
             end
         end
         bc = bc + 1;
@@ -114,13 +114,13 @@ for i=1:sizeintnodes          % Takes any internal nodes of graph G and applies 
         c = -1;                                     % and subtract it from the Kirchoff condition
     end
     
-    kirchoff = c*w1*e1*(-1)*D1matrix(:,:,adjacentEdges(1));
+    kirchoff = c*w1*e1*D1matrix(:,:,adjacentEdges(1));
     
     if ismember(adjacentEdges(1),incoming) && ismember(adjacentEdges(1),outgoing)          % Checks for loop
         e2 = I(nxC(adjacentEdges(1))+1,:);          % e2 picks up the first disc point on the edge
         BC(bc,:) = e1 - e2;                         % Continuity Condition for a loop
         bc = bc + 1;
-        kirchoff = kirchoff - e2*(-1)*D1matrix(:,:,adjacentEdges(1));
+        kirchoff = kirchoff - e2*D1matrix(:,:,adjacentEdges(1));
     end
     
     for j=2:length(adjacentEdges)                   % Finds additional Continuity and Kirchoff Conditions
@@ -129,14 +129,14 @@ for i=1:sizeintnodes          % Takes any internal nodes of graph G and applies 
             e2 = I(nxC(adjacentEdges(j)+1) , :);        % pick the last disc point on that edge..
             BC(bc,:) = e1 - e2;                         % and construct the continuity condition...
             bc = bc + 1;
-            kirchoff = kirchoff + w2*e2*(-1)*D1matrix(:,:,adjacentEdges(j));     % and the Kirchoff Condition
+            kirchoff = kirchoff + w2*e2*D1matrix(:,:,adjacentEdges(j));     % and the Kirchoff Condition
         end
         
         if ismember(adjacentEdges(j),outgoing)      % If the next adjacent edge is outgoing...
             e2 = I(nxC(adjacentEdges(j))+1,:);          % pick the first disc point on that edge...
             BC(bc,:) = e1 - e2;                         % and construct the continuity condition...
             bc = bc + 1;
-            kirchoff = kirchoff - w2*e2*(-1)*D1matrix(:,:,adjacentEdges(j));    % and the Kirchoff Condition
+            kirchoff = kirchoff - w2*e2*D1matrix(:,:,adjacentEdges(j));    % and the Kirchoff Condition
         end
     end
     

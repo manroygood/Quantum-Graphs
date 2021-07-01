@@ -17,7 +17,7 @@ if G.isUniform                  % If G has a uniform discretization
         [V,d] = eigs(full(Ashift),full(B),n,'SM');  % Solves (-A + 1B)u = lambda Bu
         val = diag(real(d)) - 1;                    % Shift evals back and neglect small imaginary component
     end
-            
+    
 else                            % If G has a Chebyshev discretization
     
     if isempty(null(A))                   % If A is well conditioned
@@ -29,8 +29,6 @@ else                            % If G has a Chebyshev discretization
         val = diag(real(d)) - 1;          % Shift evals back and neglect small imaginary component
     end
 end
-
-val = abs(val);
 
 k=1;
 while k <= n
