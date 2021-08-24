@@ -1,10 +1,10 @@
-function x=distributePlotCoords(Phi,xStart,xFinal,edge)
-n=Phi.Edges.nx(edge);
+function x=distributePlotCoords(G,xStart,xFinal,edge)
+n=G.nx(edge);
 
-if Phi.isUniform
-    xx = ( (1:n) - 1/2 )'/n; % Note that this works in both the cases of dirichlet or robin/kirchhoff bc's.
-elseif Phi.isChebyshev
-    chebpts = chebptsSecondKind(n);
-    xx = chebpts(2:end-1);
+if G.isUniform    
+    xx = ( (1:n) - 1/2 )'/n; 
+    xx= [0; xx; 1];
+elseif G.isChebyshev
+    xx = chebptsSecondKind(n);
 end
 x = xStart + (xFinal-xStart)*xx;

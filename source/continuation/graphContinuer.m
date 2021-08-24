@@ -30,7 +30,7 @@ end
 
 % Construct the predictors for x and mu
 muGuess = muStar + ds*muPrime;
-xGuess  = xStar + ds*xPrime;
+xGuess  = xStar + ds* xPrime;
 
 % The orthogonality condition for pseudo-arclength
 g=@(x,mu) ( dotProduct.big(x-xStar,xPrime,mu-muStar,muPrime) - ds );

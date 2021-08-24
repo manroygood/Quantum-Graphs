@@ -35,7 +35,7 @@ fprintf(fid,'This directory contains:\n');
 % A little cleanup needed because the null eigenvalue is sometimes
 % calculated as positive and sometimes as negative and this screws up the
 % sorting.
-[V,lambda] = eigs(Phi,15);
+[V,lambda]=Phi.eigs(2*nToPlot+2*nDoubles+3*nTriples);
 [singles,doubles,triples]=separateEigs(lambda); % No triple eigenvalue unless handle and hoops resonant
 
 %% Plot and Save the first few multiplicity-one eigenfunctions

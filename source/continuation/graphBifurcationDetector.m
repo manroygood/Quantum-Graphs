@@ -2,7 +2,6 @@ function [xBif,muBif,bifType]=graphBifurcationDetector(fcns,xGuess,muGuess,optio
 Fkx=fcns.fLinMatrix(xGuess,muGuess);
 
 [u0,~]=eigs(Fkx,1,'smallestabs');
-u0=u0/sqrt(dot(u0,u0));
 
 Fk = fcns.f(xGuess,muGuess);
 resid1  = norm(Fk);
@@ -19,7 +18,7 @@ muBif=muGuess;
 while residual>tol && updateSize>tol && tries < maxTries
     tries=tries+1;
     Fkmu = fcns.fMu(xBif,muBif);
-    Fkxxu= fcns.fxxz(xBif,muBif,u0);
+    Fkxxu= fcns.fxxu(xBif,muBif,u0);
     Fkxmu = fcns.fxMu(xBif,muBif);
     
     z1 = Fkx\(-Fk);  % Nayfeh (6.2.8)
@@ -52,7 +51,7 @@ while residual>tol && updateSize>tol && tries < maxTries
     residual = resid1+resid2+resid3;
 end
 
-assert(tries<maxTries,'Newton''s method failed to converge')
+assert(tries<maxTries,"Newton's method failed to converge")
 
 Fkmu = fcns.fMu(xBif,muBif);
 Fbig=full([Fkx Fkmu]);

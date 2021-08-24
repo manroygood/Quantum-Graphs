@@ -5,7 +5,7 @@ blueish=mcolor('blueish');
 clf;hold on
 Edges=G.Edges; Nodes=G.Nodes;
 for k=1:numedges(G)
-    [x1,x2,~]=G.fullEdge(k);
+    [~,x1,x2]=G.fullEdge(k);
     ww=Edges.Weight(k)*2;
     plot(x1,x2,'color',blueish,'linewidth',ww);
     x1m=x1(round(length(x1)/2));
@@ -28,5 +28,5 @@ if ~muteFlag
 end
 
 hold off
-axis equal off
+axis equal off tight
 set(gcf,'color','w')

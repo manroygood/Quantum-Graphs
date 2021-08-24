@@ -1,17 +1,20 @@
 function varargout = fullEdge(G,k)
-Edges=G.Edges; 
-Nodes=G.Nodes;
-n1=Edges.EndNodes(k,1);
-n2=Edges.EndNodes(k,2);
+y=G.Edges.y{k};
+x1=G.Edges.x1{k};
+x2=G.Edges.x2{k};
 
-x1=[Nodes.x1(n1); Edges.x1{k}; Nodes.x1(n2)];
-x2=[Nodes.x2(n1); Edges.x2{k}; Nodes.x2(n2)];
-
-y=[Nodes.y(n1); Edges.y{k}; Nodes.y(n2)];
+if G.isUniform
+    n1=G.EndNodes(k,1);
+    n2=G.EndNodes(k,2);
+    
+    y(1) = G.Nodes.y(n1);
+    y(end) =  G.Nodes.y(n2);    
+end
 
 if G.has3DLayout
-    x3=[Nodes.x3(n1); Edges.x3{k}; Nodes.x3(n2)];
-    varargout={x1,x2,x3,y};
+    x3 = G.Edges.x3{k};
+    varargout={y,x1,x2,x3};
 else
-    varargout={x1,x2,y};
+    varargout={y,x1,x2};
 end
+    

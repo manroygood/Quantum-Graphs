@@ -1,33 +1,20 @@
 function interpAtNodes(G)
 % Interpolates the Edges.y field of a quantum graph G to the Nodes.y field
 
-nDep=numDependent(G);
 nNodes=numnodes(G);
 yNodes=zeros(nNodes,1);
 
-% Use the boundary conditions to extend the solution to the vertices
-for j = 1:nDep
-    for k = 1:nNodes
-        if isDirichlet(G,k)
-            yNodes(k,j)=0;
-        else
-            mat = G.ghostMatrix(k);
-            [fullDegree,inOrOut,allEdges]=fullDegreeEtc(G,k);
-            yNodes(k,j) = firstValue(1,j)/2;
-            for branch = 1:fullDegree   % loop over all edges adjacent to given nodes (rows of matrix)
-                yNodes(k,j) = yNodes(k,j)+ mat(1,branch)*firstValue(branch,j)/2;
-            end
-        end
+for k = 1:nNodes
+    [~,inOrOut,allEdges]=fullDegreeEtc(G,k);
+    edge=allEdges(1);
+    y=G.y{edge};
+    if  inOrOut(1)==1
+        yNodes(k) = (y(end)+y(end-1))/2;
+    else
+        yNodes(k) = ( y(1)+y(2))/2;
     end
 end
+
 G.qg.Nodes.y=yNodes;
 
-function yy = firstValue(k,j)  % Nested function
-    y = G.y(allEdges(k));
-    if inOrOut(k)==1
-        yy =y(end,j);
-    else
-        yy = y(1,j);
-    end
-end
 end

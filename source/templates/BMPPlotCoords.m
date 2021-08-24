@@ -21,7 +21,7 @@ hoop1X1 = -L/2 -r1 +r1*cos(thetaHoop);
 hoop1X2 = r1*sin(thetaHoop);
 
 handle2X1 = Phi.distributePlotCoords(-L/2,L/2,2);
-handle2X2 = zeros(nx(2),1);
+handle2X2 = zeros(nx(2)+2,1);
 
 theta2 = Phi.distributePlotCoords(pi,0,2);
 handle3X1= L/2*cos(theta2);

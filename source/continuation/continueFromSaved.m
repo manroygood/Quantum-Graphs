@@ -13,15 +13,16 @@ dataDir=makeDataDir(tag,dataDirNum);
 [branchDir,branchNum]=makeBranchDir(dataDir,options);
 
 Phi=loadGraphTemplate(dataDir);
-fcns=getGraphFcns(Phi.laplacianMatrix,Phi.weightMatrix);
+fcns=getGraphFcns(Phi);
 
 label=getLabel(fileNum);
 yFile=fullfile(dataDir,['savedFunction.' label]);
 PhiColumn=load(yFile);
 freqFile=fullfile(dataDir,['savedFrequency.' label]);
 LambdaFirst=load(freqFile);
-NN=Phi.qgdot(PhiColumn, PhiColumn);
-options= continuerSet(options,'NThresh',1.02*NN,'LambdaThresh',1.02*LambdaFirst);
+NN=Phi.dot(PhiColumn, PhiColumn);
+NT=max(options.NThresh,1.02*NN);
+options= continuerSet(options,'NThresh',NT,'LambdaThresh',1.02*LambdaFirst);
 
 if options.plotFlag; figure(1)
     clf; hold on; 

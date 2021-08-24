@@ -1,36 +1,31 @@
-function fcns=getGraphFcns(A,B)
-% The functions used by the nonlinear continuation routines
+function fcns=getGraphFcns(Phi,f)
+% The functions used by the nonlinear continuation routines for continuing
+% the focusing cubic NLS on a graph
+% M is the Laplacian matrix
 % f is the basic function. All the others are its derivatives
-% nM=length(M);
-% fcns.f =@(z,Lambda)( M*z + 2*z.^3  + Lambda*z);
-% fcns.fLinMatrix = @(z,Lambda) (M + spdiags( 6*z.^2 + Lambda,0,nM,nM));
-% fcns.fLinMatrixMinus= @(z,Lambda) (M + spdiags( 2*z.^2 + Lambda,0,nM,nM));
-% fcns.fullLinearization=@(z,Lambda)[sparse(nM,nM) fcns.fLinMatrix(z,Lambda);...
-%                                    -fcns.fLinMatrixMinus(z,Lambda) sparse(nM,nM)];
-% fcns.fMu = @(z,Lambda)(z); % This is df/dmu where mu (i.e. Lambda) is the bifurcation parameter, here Lambda
-% fcns.fxMu = @(z,Lambda)(speye(nM));
-% fcns.fxxz =@(z,Lambda,u)spdiags(12*u.*z,0,nM,nM); % this is fxx*z, which takes a little more thinking about
-% 
-% % This is Fzz considered as a tensor that takes three arguments,
-% % essentially a cubic form
-% fcns.fTriple=@(z,u,v,w) (12*sum(z.*u.*v(1:end-1).*w(1:end-1)) + ...
-%                          dot(u,v(end)*w(1:end-1)+w(end)*v(1:end-1)));
 
-n = length(A);
+if nargin ==1
+    syms z
+    f = 2*z^3;
+end
+fprime= matlabFunction(diff(f));
+fpp = matlabFunction(diff(f,2));
+f = matlabFunction(f);
 
-fcns.f = @(u,mu)(A*u + B*(2*u.^3  + mu*u));                             % u_x + 2u^3 + mu*u = stationary eval prob
-fcns.fLinMatrix = @(u,mu) (A + B*spdiags( 6*(u).^2 + mu,0,n,n));        % = df/du = L+
-fcns.fLinMatrixMinus = @(u,mu) (A + B*spdiags( 2*u.^2 + mu,0,n,n));     % = L-
-fcns.fullLinearization=@(z,Lambda)[sparse(n,n) fcns.fLinMatrix(z,Lambda);...
-                                   -fcns.fLinMatrixMinus(z,Lambda) sparse(n,n)];  % = [0 L+; -L- 0] = [0 L- ; -L+ 0] = JL op
+A = Phi.laplacianMatrix;
+B = Phi.weightMatrix;
 
-
-fcns.fMu = @(u,mu)(B*u);                       % f_mu where mu is the bifurcation parameter
-fcns.fxMu = @(u,mu)B*(speye(n));               % f_xmu = partial wrt x then mu
-fcns.fxxz = @(u,mu,z)B*spdiags(12*u.*z,0,n,n); % f_xx*z, which takes a little more thinking about
-
+nA=length(A);
+fcns.f =@(z,Lambda)( A*z + B*(f(z) + Lambda*z));
+fcns.fLinMatrix = @(z,Lambda) (A + B*spdiags(fprime(z)+Lambda,0,nA,nA));
+fcns.fMu = @(z,Lambda)(B*z); % This is df/dmu where mu (i.e. Lambda) is the bifurcation parameter, here Lambda
+fcns.fxMu = @(z,Lambda)(B);
+fcns.fxxu =@(z,Lambda,u)B*spdiags(fpp(z).*u,0,nA,nA); % this is fxx*u, which takes a little more thinking about
 
 % This is Fzz considered as a tensor that takes three arguments,
 % essentially a cubic form
-fcns.fTriple=@(z,u,v,w) (12*sum(u.*z.*v(1:end-1).*w(1:end-1)) + ...
-                         dot(z,v(end)*w(1:end-1)+w(end)*v(1:end-1))); % Hessian %STILL NEEDS TO BE INTERPRETTED
+% This is used in (7.130) of Govaerts 2000 SIAM book
+% Note the components (1:end-1) of phi1 and phi2 contain the function 
+% and the end component contains the frequency parameter Lambda
+fcns.fTriple=@(z,psi,phi1,phi2) dot(psi, (phi2(end)*B*phi1(1:end-1) + phi1(end)*B*phi2(1:end-1)) ...
+                                        + B* (fpp(z).*phi1(1:end-1).*phi2(1:end-1)));

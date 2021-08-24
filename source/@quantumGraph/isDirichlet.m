@@ -1,7 +1,7 @@
-function z = isDirichlet(Phi,varargin)
-% Tests if the jth node of Phi has Dirichlet bc
+function z = isDirichlet(G,varargin)
+% Tests if the jth node of G has Dirichlet bc
 if nargin==1
-    z = isnan(Phi.robinCoeff);
+    z = isnan(G.robinCoeff);
 else
-    z=isnan(Phi.robinCoeff(varargin{1}));
+    z=isnan(G.robinCoeff(varargin{1}));
 end
