@@ -13,7 +13,7 @@ PhiOld=load(fullfile(branchDataDir,['PhiColumn.' pointlabel]));
 dPhi = load(fullfile(branchDataDir,['PhiPerturbation.' pointlabel '.mat']));dPhi=dPhi.xPerturbation;
 dLambda = load(fullfile(branchDataDir,['LambdaPerturbation.' pointlabel '.mat']));dLambda=dLambda.LambdaPerturbation;
 
-scaleFactor=1/8; % TRY FUDGING THIS
+scaleFactor=1/8;
 dPhi=dPhi*scaleFactor;
 dLambda=dLambda*scaleFactor;
 

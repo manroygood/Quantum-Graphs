@@ -10,7 +10,7 @@ NVec=zeros(2,1);
 LambdaVec=zeros(2,1);
 bifTypeVec=zeros(2,1);
 
-dotProduct.dot=@(Phi1,Phi2) Phi.qgdot(Phi1,Phi2);
+dotProduct.dot=@(Phi1,Phi2) Phi.dot(Phi1,Phi2);
 dotProduct.beta=options.beta;
 dotProduct.big=@(Phi1,Phi2,w1,w2) (dotProduct.dot(Phi1,Phi2)+options.beta*w1*w2);
 
@@ -20,7 +20,7 @@ if options.plotFlag; plot(x,PhiColumn,'color',randomColor); end
 if options.saveFlag; saveToDir(PhiColumn,outputDir,1); end
 
 NVec(1)=dotProduct.dot(PhiColumn,PhiColumn);
-% M=Phi.laplacianMatrix;    % THIS WAS UNUSED!
+M=Phi.laplacianMatrix;
 LambdaVec(1)=Lambda0;
 
 PhiColOld=PhiColumn;

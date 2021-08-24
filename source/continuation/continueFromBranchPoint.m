@@ -8,7 +8,7 @@ dataDir=makeDataDir(tag,dataDirNumber);
 [branchDir,branchNum]=makeBranchDir(dataDir,options);
 
 Phi=loadGraphTemplate(dataDir);
-fcns=getGraphFcns(Phi.laplacianMatrix,Phi.weightMatrix);
+fcns=getGraphFcns(Phi);
 
 [PhiColumn,Lambda0,direction,NVecOld,LambdaVecOld]= ...
     getFirstSolutionFromBranchpoint(dataDir,branchNumber,pointNumber,fcns,direction);

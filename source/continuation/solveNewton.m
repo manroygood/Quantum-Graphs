@@ -14,7 +14,6 @@ end
 
 %% The Newton step
 function [R,U,error]=newtonStep(R,U,myFunction,myMatrix)
-%[DU,flag]=bicgstab(A,R,[],[],precond); %#ok<ASGLU>
 M = myMatrix(U);
 DU=M\R;
 U=U+DU;

@@ -2,13 +2,9 @@ function Phi=BMP(opts)
 
 arguments
     opts.LVec  {mustBeNumeric} = [2 pi pi pi 2];
-    opts.nX  {mustBeNumeric} = 24;
+    opts.nX  {mustBeNumeric} = 10;
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
-    opts.weight {mustBeNumeric} = [];
 end
-
-if isempty(opts.weight); opts.weight=ones(length(opts.LVec),1); end
 
 assert( any(length(opts.nX)==[1 2 5]), 'nX must have length 1, 2, or 5')
 assert( any(length(opts.LVec) == [2 5]), 'LVec must have length  2 or 5')
@@ -29,5 +25,4 @@ end
 source=[1 1 1 1 2];
 target=[1 2 2 2 2];
 
-Phi = quantumGraph(source, target,opts.LVec,'nxVec',opts.nX,'robinCoeff',opts.robinCoeff,...
-    'Discretization',opts.Discretization,'weight',opts.weight);
+Phi = quantumGraph(source, target,opts.LVec,'nxVec',opts.nX,'robinCoeff',opts.robinCoeff);

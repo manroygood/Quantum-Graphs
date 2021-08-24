@@ -20,7 +20,7 @@ elseif ischar(varargin{1})||isstring(varargin{1})
     str=varargin{1};
     name=[
         "blueish"
-        "redddish"
+        "reddish"
         "yellowish"
         "purpleish"
         "greenish"

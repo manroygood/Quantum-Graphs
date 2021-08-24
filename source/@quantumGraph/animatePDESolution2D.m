@@ -1,21 +1,21 @@
-function animatePDESolution2D(Phi,U,t)
+function animatePDESolution2D(G,U,t)
 % Plots a graph G over its skeleton.
 % Graph must have Nodes.x1 and Nodes.x2 defined
 realFlag=isreal(U);
 
 myBlue = [0 0.4470 0.7410]; % The default MATLAB line color
 myGray = 0.7*[1 1 1];
-nEdges=Phi.numedges;
+nEdges=G.numedges;
 
 nt=length(t);
 l=cell(nEdges,1);
 clf;
 plot3(nan,nan,nan);
 hold on;
-Phi.column2graph(abs(U(:,1)).^2);
+G.column2graph(abs(U(:,1)).^2);
 for k=1:nEdges
-    [x1,x2]=Phi.fullEdge(k);
-    ww=Phi.weight(k)*2;
+    [~,x1,x2]=G.fullEdge(k);
+    ww=G.weight(k)*2;
     plot3(x1,x2,zeros(size(x1)),'color',myGray,'linewidth',ww);
     l{k} = plot3(nan,nan,nan);
     l{k}.XData = [];
@@ -25,7 +25,7 @@ for k=1:nEdges
     l{k}.LineWidth = ww;
 end
 
-[x1Range,x2Range]=plotRange(Phi);
+[x1Range,x2Range]=plotRange(G);
 xRange = min(x1Range,x2Range);
 if realFlag
     zMin=min(min(U));
@@ -39,7 +39,6 @@ zRange=zMax-zMin;
 set(gca,'DataAspectRatio',[xRange xRange 1.25*zRange])
 set(gca,'ZLim',[zMin,1.1*zMax])
 
-
 for n=1:nt
     if realFlag
         Ut=U(:,n);
@@ -47,8 +46,8 @@ for n=1:nt
         Ut=abs(U(:,n)).^2;
     end
     for k=1:nEdges
-        Phi.column2graph(Ut);
-        [x1,x2,y]=Phi.fullEdge(k);
+        G.column2graph(Ut);
+        [y,x1,x2]=G.fullEdge(k);
         l{k}.XData=x1;
         l{k}.YData=x2;
         l{k}.ZData=y;

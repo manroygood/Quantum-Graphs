@@ -6,7 +6,7 @@ clf;
 nEdges=numedges(G);
 G.interpAtNodes;
 for k=1:nEdges
-    [x1,x2,x3,y]=G.fullEdge(k);
+    [y,x1,x2,x3]=G.fullEdge(k);
     colorplot3(x1,x2,x3,y);
     hold on
 end

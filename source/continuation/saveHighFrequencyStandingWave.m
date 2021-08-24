@@ -4,14 +4,14 @@ function fileNumber=saveHighFrequencyStandingWave(tag,dataDirNum,Lambda0,edges,s
 % INPUT ARGUMENTS
 % tag..............the template used
 % dataDirNum.......the subdirectory where the template is stored
-% Lambda0..........(minus) the frequency of the desired standing wave. We 
+% Lambda0..........(minus) the frequency of the desired standing wave. We
 %                  assume that Lambda0>>1 so that the solution is localized on each edge
 % edges............A list of edges supporting sech-like initial guesses
 % signs............a list of the signs of the sech function on each nonzero edge
 
 topDir=fullfile('data',tag);
 if ~(exist(topDir,'dir'))
-    fprintf('No such directory.\n') 
+    fprintf('No such directory.\n')
 end
 
 dataDir=fullfile(topDir,getLabel(dataDirNum));
@@ -32,8 +32,9 @@ fprintf('File saved to %s.\n',eigFileName);
 fprintf('File number is %i. \n',fileNumber);
 
 end
-function Phi=initNLStanding(Phi,Lambda0,edges,signs)
-% Finds a large-amplitude standing wave with frequency Lambda0 
+
+function Phi=initNLStanding(Phi,Lambda0,nonZeroEdges,signs)
+% Finds a large-amplitude standing wave with frequency Lambda0
 %
 % It looks for a solution which looks like a sum of sech functions which
 % are located at the centers of the edges specificied in the input argument
@@ -42,23 +43,41 @@ function Phi=initNLStanding(Phi,Lambda0,edges,signs)
 sL=sqrt(abs(Lambda0));
 
 L=Phi.Edges.L;
-nX=Phi.Edges.nx;
-nXc=[0;cumsum(nX)];
+%[~,nXc,nXtot]=Phi.nx;
 
-y=zeros(sum(nX,1));
+% y=zeros(nXtot,1);
+%
+% for k=1:length(nonZeroEdges)
+%     kk=nonZeroEdges(k);
+%     j=Phi.target(kk);
+%     if Phi.isLeaf(j) && ~Phi.isDirichlet(j)
+%         x0=L(kk);     % If edge kk ends in a leaf node with non-dirichlet BC at the leaf, center the guess at the end
+%     else
+%         x0=L(kk)/2;   % Otherwise center the guess at the center of the edge
+%     end
+%     j1=(nXc(kk)+2);
+%     j2=nXc(kk+1)-1;
+%     x=Phi.Edges.x{kk};
+%     y(j1:j2)=signs(k)*sL*sech(sL*(x-x0));
+% end
 
-for k=1:length(edges)
-    kk=edges(k);
-    x0=L(kk)/2;
-    j1=(nXc(kk)+1);
-    j2=nXc(kk+1);
-    x=Phi.Edges.x{kk};
-    y(j1:j2)=signs(k)*sL*sech(sL*(x-x0));
+for k=1:Phi.numedges
+    if ismember(k,nonZeroEdges)
+        spot=(k==nonZeroEdges);
+        j=Phi.target(k);
+        if Phi.isLeaf(j) && ~Phi.isDirichlet(j)
+            x0=L(k);     % If edge kk ends in a leaf node with non-dirichlet BC at the leaf, center the guess at the end
+        else
+            x0=L(k)/2;   % Otherwise center the guess at the center of the edge
+        end
+        f = @(x) signs(spot)*sL*sech(sL*(x-x0));
+    else
+        f=@(x) zeros(size(x));
+    end
+    Phi.applyFunctionToEdge(f,k)
 end
-
-M=Phi.laplacianMatrix;
-B=Phi.weightMatrix;
-fcns=getGraphFcns(M,B);
+y=Phi.graph2column;
+fcns=getGraphFcns(Phi);
 myF=@(z) fcns.f(z,Lambda0);
 myMatrix = @(u) fcns.fLinMatrix(u,Lambda0);
 initTol=1e-6;

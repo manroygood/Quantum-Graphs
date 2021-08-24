@@ -11,8 +11,6 @@ L=LVec(2);
 plotCoords.x1Node=[-1; 1]*L/2;
 plotCoords.x2Node=[0; 0];
 
-nx=Phi.Edges.nx;
-
 % Left hoop
 edge=1;
 theta=Phi.distributePlotCoords(0,2*pi,edge);

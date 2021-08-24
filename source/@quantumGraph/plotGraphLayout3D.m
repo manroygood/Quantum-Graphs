@@ -5,7 +5,7 @@ blueish=mcolor('blueish');
 clf;
 Edges=G.Edges; Nodes=G.Nodes;
 for k=1:numedges(G)
-    [x1,x2,x3,~]=G.fullEdge(k);
+    [~,x1,x2,x3]=G.fullEdge(k);
     ww=Edges.Weight(k)*2;
     plot3(x1,x2,x3,'color',blueish,'linewidth',ww);
     hold on;
