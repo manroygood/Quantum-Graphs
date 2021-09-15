@@ -20,17 +20,7 @@ Lambda1=-2*phinorm4;
 LambdaFirst=lambda0+epsilon*Lambda1;
 PhiGuess = sqrt(epsilon)*(phi0);
 
-% Define the function and its gradient
-myF=@(z) fcns.f(z,LambdaFirst);
-myMatrix = @(u) fcns.fLinMatrix(u,LambdaFirst);
-
-% Define the "deflated" versions of these functions
-% These functions use the "deflation method" given in Charalampidis, 
-% Kevrekidis, & Farrell to avoid finding the trivial solution
-myQ=@(z) (1+1/norm(z)^2);
-gradQ= @(z) (-2*z/norm(z)^4);
-fDeflated=@(z)myQ(z)*myF(z);
-matrixDeflated = @(z) myF(z)*transpose(gradQ(z)) + myQ(z)*myMatrix(z);
+[fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,LambdaFirst);
 
 % Solve for the nonlinear standing wave numerically
 [PhiColumn,~,~]=solveNewton(PhiGuess,fDeflated,matrixDeflated,initTol);
