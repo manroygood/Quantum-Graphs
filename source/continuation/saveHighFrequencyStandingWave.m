@@ -43,23 +43,6 @@ function Phi=initNLStanding(Phi,Lambda0,nonZeroEdges,signs)
 sL=sqrt(abs(Lambda0));
 
 L=Phi.Edges.L;
-%[~,nXc,nXtot]=Phi.nx;
-
-% y=zeros(nXtot,1);
-%
-% for k=1:length(nonZeroEdges)
-%     kk=nonZeroEdges(k);
-%     j=Phi.target(kk);
-%     if Phi.isLeaf(j) && ~Phi.isDirichlet(j)
-%         x0=L(kk);     % If edge kk ends in a leaf node with non-dirichlet BC at the leaf, center the guess at the end
-%     else
-%         x0=L(kk)/2;   % Otherwise center the guess at the center of the edge
-%     end
-%     j1=(nXc(kk)+2);
-%     j2=nXc(kk+1)-1;
-%     x=Phi.Edges.x{kk};
-%     y(j1:j2)=signs(k)*sL*sech(sL*(x-x0));
-% end
 
 for k=1:Phi.numedges
     if ismember(k,nonZeroEdges)
@@ -78,9 +61,8 @@ for k=1:Phi.numedges
 end
 y=Phi.graph2column;
 fcns=getGraphFcns(Phi);
-myF=@(z) fcns.f(z,Lambda0);
-myMatrix = @(u) fcns.fLinMatrix(u,Lambda0);
+[fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,Lambda0);
 initTol=1e-6;
-[y,~,~]=solveNewton(y,myF,myMatrix,initTol);
+[y,~,~]=solveNewton(y,fDeflated,matrixDeflated,initTol);
 Phi.column2graph(y);
 end
