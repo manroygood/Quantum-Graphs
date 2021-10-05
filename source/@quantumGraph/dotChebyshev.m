@@ -1,4 +1,4 @@
-function z = qgdotCheb(Phi,u1col,u2col)
+function z = dotChebyshev(Phi,u1col,u2col)
 % Note this does absolutely no checking to determine if two columns are
 % compatible with the template Phi. It just surges ahead and returns an
 % error if it doesn't work

@@ -9,7 +9,7 @@ resid2 = norm(Fkx*u0);
 residual = resid1+resid2;
 
 updateSize=1;
-tol=1e-8;
+tol=1e-6;
 maxTries=200;
 tries=0;
 
