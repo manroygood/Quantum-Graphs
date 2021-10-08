@@ -18,9 +18,14 @@ end
 
 
 function z = edgeDotCheb(Phi,v1,v2,k)
-
-    l = Phi.Edges.L(k);
+    
     f = v1.*v2;
-    z = clencurt(f,l);  % Uses Clenshaw-Curtis quadrature to integrate 
+    l = Phi.Edges.L(k);
+    w = clencurtWeights(length(f));  % Weights for Clenshaw-Curtis quadrature
+    z = l/2 * w' * f;         % Clenshaw-Curtis quadrature
+
+%     l = Phi.Edges.L(k);
+%     f = v1.*v2;
+%     z = clencurt(f,l);  % Uses Clenshaw-Curtis quadrature to integrate 
 
 end
