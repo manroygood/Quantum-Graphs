@@ -40,6 +40,7 @@ function Phi=initNLStanding(Phi,Lambda0,nonZeroEdges,signs)
 % are located at the centers of the edges specificied in the input argument
 % "edges" and which have signs specified by the input argument "signs"
 
+initTol=1e-6;
 sL=sqrt(abs(Lambda0));
 
 L=Phi.Edges.L;
@@ -61,8 +62,10 @@ for k=1:Phi.numedges
 end
 y=Phi.graph2column;
 fcns=getGraphFcns(Phi);
-[fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,Lambda0);
-initTol=1e-6;
-[y,~,~]=solveNewton(y,fDeflated,matrixDeflated,initTol);
+%[fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,Lambda0);
+%[y,~,~]=solveNewton(y,fDeflated,matrixDeflated,initTol);
+ff=@(z) fcns.f(z,Lambda0);
+fM=@(z) fcns.fLinMatrix(z,Lambda0);
+[y,~,~]=solveNewton(y,ff,fM,initTol);
 Phi.column2graph(y);
 end
