@@ -54,8 +54,6 @@ end
 % These matrices are stored as entries in the Nodes table
 
 VCAMat = spalloc(nxTot,nNodes,nNodes);
-G.qg.Nodes.ghostMat = cell(nNodes,1);
-G.qg.Nodes.interiorMat = cell(nNodes,1);
 EMat=speye(nxTot);
 
 row = bottomRow;
@@ -102,8 +100,7 @@ for j=1:nNodes   % Loop over the nodes
         end
     end
     
-    G.qg.Nodes.ghostMat{j} = GhostMat;
-    G.qg.Nodes.interiorMat{j} = InteriorMat;
+    %G.qg.Nodes.interiorMat{j} = InteriorMat;
     EMatNode= GhostMat\InteriorMat;
     
     for iRow=1:fullDegree

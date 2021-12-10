@@ -3,9 +3,12 @@ function [U,errorU,iterations]=solveNewton(U,myFunction,myMatrix,errorMax,option
 R=-myFunction(U);
 errorU=max(abs(R(:)));
 iterations=0;
+if ~exist('options','var')
+    options.verboseFlag = false;
+end
 
 while errorU>= errorMax
-    [R,U,errorU]=newtonStep(R,U,myFunction,myMatrix);
+    [R,U,errorU]=newtonStep(R,U,myFunction,myMatrix,options);
     iterations=iterations+1;
 end
 if exist('options','var') && options.verboseFlag
@@ -13,9 +16,15 @@ if exist('options','var') && options.verboseFlag
 end
 
 %% The Newton step
-function [R,U,error]=newtonStep(R,U,myFunction,myMatrix)
+function [R,U,error]=newtonStep(R,U,myFunction,myMatrix,options)
 M = myMatrix(U);
 DU=M\R;
 U=U+DU;
 R=-myFunction(U);
 error=max(abs(R(:)));
+if exist('options','var') && options.verboseFlag
+    figure;
+    subplot(2,1,1);plot(U);
+    subplot(2,1,2);plot(R);
+    pause
+end

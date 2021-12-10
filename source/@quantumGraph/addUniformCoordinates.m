@@ -25,6 +25,6 @@ nx=G.nx;
 for k=1:nEdges
     G.qg.Edges.dx(k)=G.L(k) ./(nx(k));
     G.qg.Edges.x{k} = G.dx(k)*((0:(nx(k)+1))-1/2)';
-    G.qg.Edges.y{k} = nan(nxVec(k),ny);
+    G.qg.Edges.y{k} = nan(nxVec(k)+2,ny);  % This includes the two ghost points
 end
 G.qg.Nodes.y=nan(nNodes,1);

@@ -9,7 +9,7 @@ resid2 = norm(Fkx*u0);
 residual = resid1+resid2;
 
 updateSize=1;
-tol=1e-8;
+tol=1e-6;
 maxTries=200;
 tries=0;
 
@@ -46,7 +46,7 @@ while residual>tol && updateSize>tol && tries < maxTries
     Fkx=fcns.fLinMatrix(xBif,muBif);
     
     resid1 = norm(Fk);
-    resid2 = norm(Fkx*u0);
+    resid2 = norm(Fkx*u0,Inf);
     resid3 = abs(dot(u0,u0)-1);
     residual = resid1+resid2+resid3;
 end
