@@ -1,7 +1,7 @@
 function ek = ek(G,node,k)
 % Given a node (node) and kth edge affiliated with node, ek returns the standard
-% basis vector coresponding to the discretization point of edge k based on
-% it's orientation with respect to node.
+% basis vector coresponding to the discretization point of edge_k based on
+% edge's orientation with respect to node.
     [~,nxC,nxTot] = G.nx;
     I = eye(nxTot);
     [~,inOrOut,adjacentEdges] = G.fullDegreeEtc(node);
