@@ -1,11 +1,11 @@
 function robin = robinCondition(G,node,D1matrix)
-% Finds the Robin Condition for the given node
+% Finds the discretized Robin Condition for the given node.
 
     alpha = G.robinCoeff;
     [fullDegree,inOrOut,adjacentEdges] = G.fullDegreeEtc(node);
     
     if G.isDirichlet(node)
-        robin = G.ek(node,adjacentEdges(1));
+        robin = G.ek(node,1);
     else
         for k = 1:fullDegree
             c = inOrOut(k);
