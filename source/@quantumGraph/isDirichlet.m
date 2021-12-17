@@ -3,5 +3,5 @@ function z = isDirichlet(G,varargin)
 if nargin==1
     z = isnan(G.robinCoeff);
 else
-    z=isnan(G.robinCoeff(varargin{1}));
+    z = isnan(G.robinCoeff(varargin{1}));
 end
