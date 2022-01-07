@@ -49,15 +49,15 @@ end
 % Create the Vertex Condition Assignment Matrix VCAMat which maps the nonhomogeneous data
 % defined at the vertices to the correct row
 
-VCAMat = zeros(nxTot,nNodes,nNodes);
+VCAMat = zeros(nxTot,nNodes);
 BC = zeros(2*nEdges,nxTot);                % Initializes space for Boundary Conditions
 
 row = 0;
 for j=1:nNodes     % Loop over the nodes
-    [fullDegree,~,~] = G.fullDegreeEtc(j);
+    [fullDegree,inOrOut,~] = G.fullDegreeEtc(j);
     for k=1:fullDegree   % Loop over the edges connected to the node
         row = row+1;
-        
+
         if k == 1   % At first entry of block, enforce either Dirichlet or flux condition & put a one in the right spot of VCAMat
             BC(row,:) = robinCondition(G,j,D1matrix);
             VCAMat(row,j) = 1;
