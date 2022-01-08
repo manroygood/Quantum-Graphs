@@ -6,9 +6,11 @@ function [t,u] = timeEvolveDH(G,f,u0,tend)
     
     if isUniform(G)
         tol = 10-07;
-    else                    % Ensures the tolerence is set as small as possible
-        nx = G.Edges.nx(1);     % given how accurately the elliptic problem can
-        if nx<=16               % be solved for a given number of discretization pts
+    else                    % Ensures the  tolerence is set as small as possible
+        nx = G.Edges.nx(1);
+        if nx<=8
+            tol = 10^-08;
+        elseif nx<=16
             tol = 10^-13;
         elseif nx<=32
             tol = 10^-12;
@@ -18,7 +20,8 @@ function [t,u] = timeEvolveDH(G,f,u0,tend)
     end
     
     tspan = [0,tend];
-    B = G.weightMatrix;      
+    B = G.weightMatrix;
+%     tol = 2*abs( max(B*u0) - max(u0) );        
     odeopt = odeset('mass', B, 'masssing', 'yes', 'AbsTol', tol, 'RelTol', tol);
     
     [t, u] = ode15s(f, tspan, u0, odeopt);
