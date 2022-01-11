@@ -60,7 +60,7 @@ for j=1:nNodes     % Loop over the nodes
 
         if k == 1   % At first entry of block, enforce either Dirichlet or flux condition & put a one in the right spot of VCAMat
             BC(row,:) = robinCondition(G,j,D1matrix);
-            VCAMat(row,j) = 1;
+            VCAMat(nxTot-2*nEdges+row,j) = 1;
         else        % At remaining entries of  block, enforce continuity condition
             e1 = G.ek(j,1);
             e2 = G.ek(j,k);
