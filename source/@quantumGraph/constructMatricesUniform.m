@@ -69,7 +69,7 @@ for j=1:nNodes   % Loop over the nodes
         [ghostPt,interiorPt] = G.getEndPoints(direction,edge);
         row=row+1;
         
-        if k ==1    % At first entry of block, enforce either Dirichlet or flux condition & put a one in the right spot of VCAMat
+        if k == 1    % At first entry of block, enforce either Dirichlet or flux condition & put a one in the right spot of VCAMat
             if G.isDirichlet(j)  % Define Dirichlet Boundary Condition
                 LMat(row,ghostPt)=1/2;
                 LMat(row,interiorPt)=1/2;

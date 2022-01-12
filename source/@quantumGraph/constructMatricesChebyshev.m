@@ -31,7 +31,7 @@ for i=1:nEdges       % Loops over each edge
         x = x + n(i-1);         % Positions us so that we move past the previously built portion of the D2 part of the matrix
     end
     
-    D1matrix( (nxC(i)+1):nxC(i+1) , (nxC(i)+1):nxC(i+1) , i) = -D1;     % Creates square D1 matrix for edge_i leaving zeros elsewhere
+    D1matrix( (nxC(i)+1):nxC(i+1) , (nxC(i)+1):nxC(i+1) , i) = D1;     % Creates square D1 matrix for edge_i leaving zeros elsewhere
     D2matrix( (x+1):(x+M) , (nxC(i)+1):nxC(i+1) ) = D2;
     B( (x+1):(x+M) , (nxC(i)+1):nxC(i+1) ) = Project;
  
@@ -54,14 +54,14 @@ BC = zeros(2*nEdges,nxTot);                % Initializes space for Boundary Cond
 
 row = 0;
 for j=1:nNodes     % Loop over the nodes
-    [fullDegree,inOrOut,~] = G.fullDegreeEtc(j);
+    [fullDegree,~,~] = G.fullDegreeEtc(j);
     for k=1:fullDegree   % Loop over the edges connected to the node
-        row = row+1;
+        row = row + 1;
 
         if k == 1   % At first entry of block, enforce either Dirichlet or flux condition & put a one in the right spot of VCAMat
             BC(row,:) = robinCondition(G,j,D1matrix);
             VCAMat(nxTot-2*nEdges+row,j) = 1;
-        else        % At remaining entries of  block, enforce continuity condition
+        else        % At remaining entries of block enforce continuity condition
             e1 = G.ek(j,1);
             e2 = G.ek(j,k);
             BC(row,:) = e1 - e2;
