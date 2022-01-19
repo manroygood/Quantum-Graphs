@@ -12,7 +12,7 @@ function robin = robinCondition(G,node,D1matrix)
             w = G.Edges.Weight(adjacentEdges(k));
             ek = G.ek(node,k);
             if k == 1
-                robin = c*w*ek*D1matrix(:,:,adjacentEdges(1)) + c*alpha(node)*ek;
+                robin = c*w*ek*D1matrix(:,:,adjacentEdges(1)) + alpha(node)*ek;
             else
                 robin = robin + c*w*ek*D1matrix(:,:,adjacentEdges(k));
             end
