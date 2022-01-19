@@ -28,7 +28,7 @@ for j=1:2*n
     for jprime =1:2*n                                   % Builds S
         if dv==1 && jprime==jbar
             if j<=n && ~isnan(G.robinCoeff(G.EndNodes(j,2)))        % Robin Boundary Conditions
-                alpha = G.robinCoeff(G.EndNodes(j,2));
+                alpha = -G.robinCoeff(G.EndNodes(j,2));
                 S(jprime,j) = (1i*x+alpha)/(1i*x-alpha);
                 if alpha == 0
                     ThetaR = ThetaR+pi;
@@ -36,7 +36,7 @@ for j=1:2*n
                     ThetaR = ThetaR + atan(alpha/x);
                 end
             elseif jprime<=n && ~isnan(G.robinCoeff(G.EndNodes(jprime,1)))
-                alpha = G.robinCoeff(G.EndNodes(jprime,1));
+                alpha = -G.robinCoeff(G.EndNodes(jprime,1));
                 S(jprime,j) = (1i*x+alpha)/(1i*x-alpha);
                 if alpha == 0
                     ThetaR = ThetaR+pi;
@@ -52,7 +52,7 @@ for j=1:2*n
             node = G.sharedNode(j,jprime);              % Kirchhoff condition
             alpha = -G.robinCoeff(node);
             S(jprime,j) = 2/(dv-alpha/(1i*x))-1;
-            ThetaK = ThetaK + atan(alpha/(dv*x))/dv;    % Divide by dv because the code loops through edges so we'll do this for each edge
+            ThetaK = ThetaK + atan(alpha/(dv*x))/dv;    % Divide by dv because the code loops through edges so this is done for each edge
         elseif G.follows(j,jprime)
             node = G.sharedNode(j,jprime);              % Kirchhoff condition
             alpha = -G.robinCoeff(node);
