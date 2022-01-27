@@ -24,10 +24,10 @@ nx=Phi.nx;
 n1=nx(1);
 x=Phi.distributePlotCoords(0,L,1);
 plotCoords.x1Edge{1} = -x;
-plotCoords.x2Edge{1} = zeros(n1,1);
+plotCoords.x2Edge{1} = zeros(n1+2,1);
 
 plotCoords.x1Edge{2} = x;
-plotCoords.x2Edge{2} = zeros(n1,1);
+plotCoords.x2Edge{2} = zeros(n1+2,1);
 
 rr=2*cumsum([0;r]);
 for k = 1:n-1

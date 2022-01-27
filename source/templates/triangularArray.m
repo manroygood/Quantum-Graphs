@@ -1,6 +1,7 @@
 function Phi = triangularArray(opts)
 
 arguments
+    opts.nx = 10;
     opts.nx1=5;
     opts.nx2=3;
     opts.v1=[1 0];
@@ -35,11 +36,15 @@ nodes=[X1 X2]*[v1; v2];
 Edges=[v1Source(:) v1Target(:);
        v2Source(:) v2Target(:) 
        v3Source(:) v3Target(:)];
-Edges=sortrows(Edges);
+LVec=[norm(v1)*ones(size(v1Source(:)))
+      norm(v2)*ones(size(v2Source(:)))
+      norm(v1-v2)*ones(size(v3Source(:)))
+    ];
+[Edges,index]=sortrows(Edges);
+LVec=LVec(index);
 source=Edges(:,1);
 target=Edges(:,2);
-LVec = sqrt((X1(target)-X1(source)).^2+(X2(target)-X2(source)).^2);
-Phi = quantumGraph(source,target,LVec,'robinCoeff',opts.robinCoeff,'nXVec',opts.nx1);
+Phi = quantumGraph(source,target,LVec,'robinCoeff',opts.robinCoeff,'nXVec',opts.nx);
 
 plotCoordFcn=@(G)plotCoordFcnFromNodes(G,nodes);
 Phi.addPlotCoords(plotCoordFcn);

@@ -1,17 +1,17 @@
-function Phi = hexagonalArray(opts)
+function Phi = hexOfHexes(opts)
 
 arguments
     opts.nx = 10;
-    opts.nx1=5;
-    opts.nx2=3;
+    opts.edgeLength=2;
     opts.L=1;
     opts.robinCoeff=0;
 end
 
 % note that I interpret nx1 and nx2 as the number of cells in each
 % direction, so we need one more row of vertices in each direction
-nx1=1+opts.nx1; 
-nx2=1+opts.nx2; 
+nRings=opts.edgeLength-1;
+nx1=2*opts.edgeLength+2; 
+nx2=nx1;
 L=opts.L;
 v1=L*[sqrt(3) 1]/2;
 v2=L*[-sqrt(3) 1]/2;
@@ -65,7 +65,17 @@ Edges=sortrows(Edges);
 Edges=Edges(2:end-1,:)-1;
 source=Edges(:,1);
 target=Edges(:,2);
+
+PhiTemp=digraph(source,target);
+radiusSquared = (1+3*nRings+3*nRings^2)*L^2;
+keepers=X1.^2+X2.^2<radiusSquared+1e-9;
+tossers=find(X1.^2+X2.^2>radiusSquared+1e-9);
+PhiTemp=PhiTemp.rmnode(tossers);
+nodes=nodes(keepers,:);
+source=PhiTemp.Edges.EndNodes(:,1);
+target=PhiTemp.Edges.EndNodes(:,2);
 LVec = L*ones(size(source));
+
 Phi = quantumGraph(source,target,LVec,'robinCoeff',opts.robinCoeff,'nXVec',opts.nx);
 
 plotCoordFcn=@(G)plotCoordFcnFromNodes(G,nodes);

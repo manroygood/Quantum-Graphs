@@ -49,7 +49,7 @@ end
 % Create the Vertex Condition Assignment Matrix VCAMat which maps the nonhomogeneous data
 % defined at the vertices to the correct row
 
-VCAMat = zeros(nxTot,nNodes,nNodes);
+VCAMat = zeros(nxTot,nNodes);
 BC = zeros(2*nEdges,nxTot);                % Initializes space for Boundary Conditions
 
 row = 0;

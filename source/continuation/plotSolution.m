@@ -8,4 +8,10 @@ end
 
 Phi=loadGraphTemplate(topDir);
 vec=load(fullfile(branchDir,['PhiColumn.' getLabel(solNumber)]));
-Phi.plot(vec);
+
+if ~ismember('relinked', Phi.qg.Edges.Properties.VariableNames)
+    Phi.plot(vec);
+else
+    [PhiX,extensionMap]=loadGraphTemplateExtension(topDir);
+    PhiX.plotPeriodicExtension(Phi,extensionMap,vec);
+end

@@ -20,7 +20,6 @@ if options.plotFlag; plot(x,PhiColumn,'color',randomColor); end
 if options.saveFlag; saveToDir(PhiColumn,outputDir,1); end
 
 NVec(1)=dotProduct.dot(PhiColumn,PhiColumn);
-M=Phi.laplacianMatrix;
 LambdaVec(1)=Lambda0;
 
 PhiColOld=PhiColumn;
@@ -44,10 +43,11 @@ end
 if options.plotFlag; plot(x,PhiColumn,'color',randomColor); end
 if options.saveFlag; saveToDir(PhiColumn,outputDir,2); end
 
+normDelta=1; % Fake value so as not to trip up the 
 % calculate subsequent solutions on the branch
 k=2;
 LambdaOld=LambdaVec(1);Lambda=LambdaVec(2);
-while ~crossThresh(options.LambdaThresh,LambdaVec,k) && ~crossThresh(options.NThresh,NVec,k)
+while ~crossThresh(options.LambdaThresh,LambdaVec,k) && ~crossThresh(options.NThresh,NVec,k) &&normDelta > options.minNormDelta
     if k == length(NVec)
         if options.saveFlag;saveFilesToDir(outputDir,NVec,LambdaVec,bifTypeVec);end
         [NVec,LambdaVec]=extendAll(10,NVec,LambdaVec,bifTypeVec);
@@ -60,6 +60,7 @@ while ~crossThresh(options.LambdaThresh,LambdaVec,k) && ~crossThresh(options.NTh
         j=j+1; ds = ds*dsfactor;
         assert(j<=jmax,'nextGraphSolution failed!')
     end
+    normDelta=max(Phi.norm(PhiColumn-PhiColOld),abs(Lambda-LambdaOld));
     if tau*tauOld<0  % bifurcation detected
         [PhiBif,LambdaBif,bifType]=graphBifurcationDetector(fcns,PhiColumn,Lambda,options);
         if options.verboseFlag; fprintf('at step %i.\n',k);end
@@ -110,6 +111,8 @@ if crossThresh(options.LambdaThresh,LambdaVec,k)
     fprintf('Lambda threshold crossed.\n')
 elseif crossThresh(options.NThresh,NVec,k)
     fprintf('N threshold crossed.\n')
+elseif normDelta<options.minNormDelta
+    fprintf('Exited because distance between successive solutions below threshold.\n')
 end
 if k<length(NVec); NVec=NVec(1:k); LambdaVec=LambdaVec(1:k);  bifTypeVec=bifTypeVec(1:k); end
 if options.plotFlag

@@ -2,12 +2,19 @@ function plotGraphLayout2D(G,muteFlag)
 
 creamcolor=[255 253 208]/256;
 blueish=mcolor('blueish');
+reddish=mcolor('reddish');
 clf;hold on
+if ismember('relinked', G.qg.Edges.Properties.VariableNames)
+    relinked=G.qg.Edges.relinked;
+else
+    relinked=zeros(G.numedges,1);
+end
 Edges=G.Edges; Nodes=G.Nodes;
 for k=1:numedges(G)
     [~,x1,x2]=G.fullEdge(k);
     ww=Edges.Weight(k)*2;
-    plot(x1,x2,'color',blueish,'linewidth',ww);
+    nextLine=plot(x1,x2,'color',blueish,'linewidth',ww);
+    if relinked(k); set(nextLine,'color',reddish);end
     x1m=x1(round(length(x1)/2));
     x2m=x2(round(length(x1)/2));
     if ~muteFlag

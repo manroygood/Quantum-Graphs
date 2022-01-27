@@ -9,7 +9,8 @@ function vv=dumbbellResolveDoubles(V,k,Phi)
 % eigenfunctions, so we use the ~ placeholder.
 V1=V(:,k);
 V2=flip(V1);
-v1= V1*V2(1)-V2*V1(1); v1=v1/Phi.norm(v1);
+[~,p]=max(abs(V1));
+v1= V1*V2(p)-V2*V1(p); v1=v1/Phi.norm(v1);
 v2= flip(v1);
 vv{1}=v1;
 vv{2}=v2;

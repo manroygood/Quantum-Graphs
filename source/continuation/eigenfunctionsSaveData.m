@@ -20,7 +20,7 @@ outputDir=fullfile(dataDir,getLabel(diagramNumber));
 mkdir(outputDir);
 
 %% Plot the graph layout
-Phi.plot('layout')
+Phi.plot('mutelayout')
 
 %% Save the template to a file
 filename=fullfile(outputDir,'template');

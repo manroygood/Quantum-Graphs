@@ -5,7 +5,7 @@ function robin = robinCondition(G,node,D1matrix)
     [fullDegree,inOrOut,adjacentEdges] = G.fullDegreeEtc(node);
     
     if G.isDirichlet(node)
-        robin = G.ek(node,adjacentEdges(1));
+        robin = G.ek(node,1);
     else
         for k = 1:fullDegree
             c = inOrOut(k);

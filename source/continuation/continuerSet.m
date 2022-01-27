@@ -13,6 +13,7 @@ defaultLambdaThresh=setDefault(optionsIn,'LambdaThresh',-1);
 defaultSaveFlag=setDefault(optionsIn,'saveFlag',true);
 defaultPlotFlag=setDefault(optionsIn,'plotFlag',true);
 defaultVerboseFlag=setDefault(optionsIn,'verboseFlag',false);
+defaultMinNormDelta=setDefault(optionsIn,'minNormDelta',1e-2);
 
 % Define some tests for input validity
 validPosNum = @(x) isnumeric(x) && x > 0;
@@ -29,6 +30,7 @@ addParameter(p,'LambdaThresh',defaultLambdaThresh,validRealNum);
 addParameter(p,'saveFlag',defaultSaveFlag,validLogical);
 addParameter(p,'plotFlag',defaultPlotFlag,validLogical);
 addParameter(p,'verboseFlag',defaultVerboseFlag,validLogical);
+addParameter(p,'minNormDelta',defaultMinNormDelta,validPosNum);
 
 parse(p,optionsIn,varargin{:});
 

@@ -8,7 +8,7 @@ v1=V(:,k);
 v2=tribellShift(v1,N1,N2);
 v3=tribellShift(v2,N1,N2);
 vv=[v1 v2 v3];
-M=vv(end-ceil(N2/2)*(1:2:5),:);
+M=vv(end-ceil((N2+2)/2)*(1:2:5),:);
 w1=M\[1;0;0];
 vv1=vv*w1; vOut{1}=vv1/Phi.norm(vv1);
 w1=M\[0;1;0];
