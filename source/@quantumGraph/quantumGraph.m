@@ -6,8 +6,10 @@ classdef quantumGraph < matlab.mixin.Copyable
     properties
         qg      % the main quantum graph, a digraph
         discretization;
+        derivative;
         laplacianMatrix;
         weightMatrix;
+        weightMatrixWithBCs;
         vertexConditionAssignmentMatrix;
         explicitLaplacian;
     end

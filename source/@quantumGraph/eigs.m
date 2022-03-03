@@ -9,13 +9,13 @@ B = G.weightMatrix;
 vec = zeros(length(A),n);
 
 
-if isempty(null(full(A)))                  % If A is well conditioned
-    [V,d] = eigs(A,B,n,'SM');        % Use regular eigs solver as it is good enough
+if isempty(null(full(A)))            % If A is well conditioned
+    [V,d] = eigs(A,B,n,'SM');           % Use regular eigs solver as it is good enough
     val = diag(real(d));
-else                                  % If A is ill conditioned
-    Ashift = A - B;                  % Shift A using B so Ashift is not be singular
-    [V,d] = eigs(Ashift,B,n,'SM');    % Solves (-A + 1B)u = lambda Bu
-    val = diag(real(d)) + 1 ;          % Shift evals back and neglect small imaginary component
+else                                 % If A is ill conditioned
+    Ashift = A - B;                     % Shift A using B so Ashift is not be singular
+    [V,d] = eigs(Ashift,B,n,'SM');      % Solves (-A + 1B)u = lambda Bu
+    val = diag(real(d)) + 1 ;           % Shift evals back and neglect small imaginary component
 end
 
 k=1;

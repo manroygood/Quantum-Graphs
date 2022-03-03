@@ -5,7 +5,7 @@ function Phi=multibell(opts)
 % nBells = 1 returns the lollipop
 % nBells = 2 returns the dumbbell
 % nBells >= 3 returns the multibell, which consists of lollipops joined at
-%            the "bottoms of the sticks"
+%             the "bottoms of the sticks"
 
 arguments
     opts.LVec  {mustBeNumeric} = [2 pi];
