@@ -1,4 +1,4 @@
-function [u,t] = timeEvolveDAE(G,f,u0,h,tend,scheme)
+function [t,u] = timeEvolveDAE(G,f,u0,h,tend,scheme)
 % Given a graph G, function f and initial condition u0, this function 
 % evolves the solution to f(t,x) = u_xx in time using a 2nd, 4th or 8th
 % order scheme until t=tend using the given step size h. The result will be

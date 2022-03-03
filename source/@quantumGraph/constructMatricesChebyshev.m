@@ -10,7 +10,7 @@ nEdges = G.numedges;        % Number of edges
 nNodes = G.numnodes;        % Number of nodes
 [n,nxC,nxTot] = G.nx;       % A useful vector giving positions of final disc point of each edge
 L = G.L;                    % Vector of edge lengths
-D1matrix = zeros(nxTot,nxTot,nEdges);
+D1matrix = zeros(nxTot,nxTot);
 D2matrix = zeros(nxTot-2*nEdges, nxTot);   % D2matrix will contain the blocked D2 matricies and no BCs
 B = zeros(nxTot,nxTot);                    % Initializes projection matrix
 
@@ -31,7 +31,7 @@ for i=1:nEdges       % Loops over each edge
         x = x + n(i-1);         % Positions us so that we move past the previously built portion of the D2 part of the matrix
     end
     
-    D1matrix( (nxC(i)+1):nxC(i+1) , (nxC(i)+1):nxC(i+1) , i) = D1;     % Creates square D1 matrix for edge_i leaving zeros elsewhere
+    D1matrix( (nxC(i)+1):nxC(i+1) , (nxC(i)+1):nxC(i+1)) = D1;     % Creates square D1 matrix
     D2matrix( (x+1):(x+M) , (nxC(i)+1):nxC(i+1) ) = D2;
     B( (x+1):(x+M) , (nxC(i)+1):nxC(i+1) ) = Project;
  
@@ -71,10 +71,13 @@ for j=1:nNodes     % Loop over the nodes
 end
 
 LMat = [D2matrix; BC];
+C = B;
+C(nxTot-2*nEdges+1:end,:) = BC;
 
-
+G.derivative = -D1matrix;
 G.laplacianMatrix = LMat;
 G.weightMatrix = B;
+G.weightMatrixWithBCs = C;
 G.vertexConditionAssignmentMatrix=VCAMat;
 
 

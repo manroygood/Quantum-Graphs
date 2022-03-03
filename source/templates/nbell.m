@@ -6,7 +6,7 @@ arguments
     opts.nX  {mustBeNumeric} = 20;
     opts.robinCoeff {mustBeNumeric} = 0;
     opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
-    opts.nodeData{mustBeNumeric} = [0; 0];
+    opts.nodeData {mustBeNumeric} = [0 0];
 end
 
 assert(mod(length(opts.LVec),2)==0,'The length vector must have an even number of elements')
@@ -34,4 +34,4 @@ source=[nOnes nPlus];
 target=[nPlus nPlus];
 
 Phi = quantumGraph(source, target,opts.LVec,'nxVec',opts.nX,'robinCoeff',opts.robinCoeff,...
-      'Discretization',opts.Discretization);
+      'Discretization',opts.Discretization,'nodeData',opts.nodeData);
