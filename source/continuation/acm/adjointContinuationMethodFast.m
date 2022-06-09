@@ -1,4 +1,4 @@
-function [t,u,period] = adjointContinuationMethod(Phi,u0,T,mu)
+function [t,u,period] = adjointContinuationMethodFast(Phi,u0,T,mu)
 % This Adjoint Continuation Method follows from the purposed scheme by 
 % Williams, Wilkenings, Shlizerman and Kutz in Continuations of Periodic 
 % Solutions in the Waveguide array Mode-locked laser. See Appendix A.
@@ -11,7 +11,7 @@ function [t,u,period] = adjointContinuationMethod(Phi,u0,T,mu)
     
     A = Phi.laplacianMatrix;
     B = Phi.weightMatrix;
-    f =@(t,z) -1i*( A*z + B*(2*z.^2.*conj(z)));     % LHS of u_t = f(u,t)
+    f =@(t,z) -1i*( (A+mu*B)*z + B*(2*z.^2.*conj(z)));     % LHS of u_t = f(u,t)
     G = @(x) functionalG(Phi,f,x,mu);                      % Compute G and grad G from u, u_conj, u_t and u_0
     
     options = optimoptions('fminunc','SpecifyObjectiveGradient',true); % By default HessianApproximation is bfgs so maybe this doesn't need to be set
@@ -21,8 +21,8 @@ function [t,u,period] = adjointContinuationMethod(Phi,u0,T,mu)
     u0 = uinfo(1:nTot) + 1i* uinfo(nTot+1:2*nTot);
     period = uinfo(end);
     save 'uinfo.mat' uinfo;
-    
-    [t,u] = Phi.timeEvolveARK(f,u0,10^(-02),period);  % Evolve u(x,t) until t=period and store solution as final output
+
+    [t,u] = Phi.timeEvolveARK(f,u0,10^(-01),period);  % Evolve u(x,t) until t=period and store solution as final output
     
 end
 
@@ -35,7 +35,7 @@ function [G,gradG] = functionalG(Phi,f,x,mu)
     u0 = x(1:n) + 1i*x(n+1:2*n);                       % Reconstruct u0 and T from x
     T = x(end);
 
-    [t,u] = Phi.timeEvolve15s(f,u0,(-0.1):10^(-02):(T+0.1)); % Evolve u(x,t) until t=T and store solution...
+    [t,u] = Phi.timeEvolve15s(f,u0,(-0.1):10^(-01):(T+0.1)); % Evolve u(x,t) until t=T and store solution...
     uend = u(:,end);
     uT = f(t,uend);                                    % ...and time derivative
 
@@ -55,7 +55,7 @@ end
 function Qend = Qfunc(Phi,Q0,u,t,T,mu)
 % Solves the  Qs = DF* Q  equation for Q
     Qs = @(s,Q) DFstar(s,Q,Phi,u,t,T,mu);
-    [~,Q] = Phi.timeEvolveARK(Qs,Q0,10^(-02),T);
+    [~,Q] = Phi.timeEvolveARK(Qs,Q0,10^(-01),T);
     Qend = Q(:,end);
 end
 
@@ -65,5 +65,5 @@ function fstar = DFstar(s,Q,Phi,u,t,T,mu)
     A = Phi.laplacianMatrix;
     B = Phi.weightMatrix;
     uTminusS = transpose(interp1(t,transpose(u),T-s));
-    fstar = 1i*A*Q + 4i*(uTminusS.*conj(uTminusS)).*Q + 2i*(uTminusS.^2).*conj(Q);
+    fstar = 1i*(A+mu*B)*Q + 4i*(uTminusS.*conj(uTminusS)).*Q + 2i*(uTminusS.^2).*conj(Q);
 end

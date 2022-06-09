@@ -1,4 +1,4 @@
-function [t,u,period] = adjointContinuationMethod(Phi,u0,T,mu)
+function [t,u,period] = adjointContinuationMethodShift(Phi,u0,T,mu)
 % This Adjoint Continuation Method follows from the purposed scheme by 
 % Williams, Wilkenings, Shlizerman and Kutz in Continuations of Periodic 
 % Solutions in the Waveguide array Mode-locked laser. See Appendix A.
@@ -11,10 +11,10 @@ function [t,u,period] = adjointContinuationMethod(Phi,u0,T,mu)
     
     A = Phi.laplacianMatrix;
     B = Phi.weightMatrix;
-    f =@(t,z) -1i*( A*z + B*(2*z.^2.*conj(z)));     % LHS of u_t = f(u,t)
+    f = @(t,z) 1i*( (A-mu*B)*z + B*(2*z.^2.*conj(z)));     % LHS of u_t = f(u,t)
     G = @(x) functionalG(Phi,f,x,mu);                      % Compute G and grad G from u, u_conj, u_t and u_0
     
-    options = optimoptions('fminunc','SpecifyObjectiveGradient',true); % By default HessianApproximation is bfgs so maybe this doesn't need to be set
+    options = optimoptions('fminunc','SpecifyObjectiveGradient',true,'DerivativeCheck','on'); % By default HessianApproximation is bfgs so maybe this doesn't need to be set
     uinfo = fminunc(G,[real(u0);imag(u0);T],options);                  % Finds where G = 0 near uend giving us the period
     
     [~,~,nTot] = Phi.nx;
@@ -65,5 +65,5 @@ function fstar = DFstar(s,Q,Phi,u,t,T,mu)
     A = Phi.laplacianMatrix;
     B = Phi.weightMatrix;
     uTminusS = transpose(interp1(t,transpose(u),T-s));
-    fstar = 1i*A*Q + 4i*(uTminusS.*conj(uTminusS)).*Q + 2i*(uTminusS.^2).*conj(Q);
+    fstar = 1i*(A-mu*B)*Q + 4i*(uTminusS.*conj(uTminusS)).*Q + 2i*(uTminusS.^2).*conj(Q);
 end

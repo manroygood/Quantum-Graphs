@@ -4,6 +4,7 @@ arguments
     opts.LVec  {mustBeNumeric} = [2 pi pi pi 2];
     opts.nX  {mustBeNumeric} = 10;
     opts.robinCoeff {mustBeNumeric} = 0;
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
 end
 
 assert( any(length(opts.nX)==[1 2 5]), 'nX must have length 1, 2, or 5')

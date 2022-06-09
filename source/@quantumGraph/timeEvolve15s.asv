@@ -1,4 +1,4 @@
-function [t,u] = timeEvolveDH(G,f,u0,tend)
+function [t,u] = timeEvolve15s(G,f,u0,tend)
 % Given a function f and initial condition u0, this function evolves the 
 % solution to f(t,x) = u_xx in time using a ode15s until t=tend using the 
 % given step size h. The result will be a matrix the ith row of u is the 
@@ -17,7 +17,9 @@ function [t,u] = timeEvolveDH(G,f,u0,tend)
         end
     end
     
-    tspan = [0,tend];
+    if lenth()
+        tspan = [0,tend];
+    end
     B = G.weightMatrix;      
     odeopt = odeset('mass', B, 'masssing', 'yes', 'AbsTol', tol, 'RelTol', tol);
     

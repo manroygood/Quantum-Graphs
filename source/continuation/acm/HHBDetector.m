@@ -1,4 +1,4 @@
-function [hhb] = HHBDetector(Phi,PhiVec,muVec)
+function HHBDetector(Phi,PhiVec,muVec)
 % Detects if there is a Hamilton Hopf Bifrucation point between mu1 and mu2
 %
 % Parameters
@@ -9,69 +9,29 @@ function [hhb] = HHBDetector(Phi,PhiVec,muVec)
 %
 % Outputs
 % -------
-% hhb : the boolean truth value for if there's a HHB between mu1 and mu2
+% muBif : the eigenvalue at which there is a HHB
+% PhiBif : stationary state solutions associated with muBif
 
-    hhb = NaN;                          % HHB between lambda1 and lambda2? 0 = no; 1 = yes
     mu1 = muVec(1);
-    mu2 = muVec(2);
+    mu2 = muVec(end);
     PhiCol1 = PhiVec(:,1);
-    PhiCol2 = PhiVec(:,2);
-    
+    PhiCol2 = PhiVec(:,end);
+
     funcs = getGraphFcns(Phi);          % Defining our JL operator
     JL = @(z,lambda) funcs.JL(z,lambda);
     JL1 = full(JL(PhiCol1,mu1));
     JL2 = full(JL(PhiCol2,mu2));
 
-    B = Phi.weightMatrix;               % Defining the JL operator's affiliated weight matrix
-    n = length(B);
-    Bjl = [B zeros(n); zeros(n) B];
-    
-    [~,val1] = eigsJL(Phi,JL1,Bjl);     % Finds eigenvalues for JL
-    [~,val2] = eigsJL(Phi,JL2,Bjl);
+    [~,val1] = eigsJL(Phi,JL1,16);      % Finds eigenvalues for JL
+    [~,val2] = eigsJL(Phi,JL2,16);
 
     N1 = nnz(imag(val1));               % Number of imagainary eigenvalues
     N2 = nnz(imag(val2));
 
     % Checks if there are fewer imaginary evals
     if N1 > N2
-        hhb = 1;
+        [PhiBif,muBif] = HHBLocator(funcs, [PhiCol1';PhiCol2'], [mu1;mu2]);
     else
-        hhb = 0;
+        assert(~isnan(PhiBif),'Failed to find any HHB.')
     end
-end
-
-
-
-
-
-
-function [vec,val] = eigJL(A,B)
-% Solves the eigenvalue problem JLv=kJLv for the first n smallest eigenvalues
-% where JL is a non-self adjoint operator.
-% When A and B are not singular, it uses the normal function eigs but when 
-% they are, it mods out by the kernal of A.
-    
-    n=64;
-    val=zeros(n,1);
-    
-    if isempty(null(A))                 % If A is well conditioned
-        [vec,val] = eigs(A,B,n,'SM');   % Use regular eig solver as it is good enough
-        valdiag = diag(val);
-        vec = vec;
-    else                                  % If A is ill conditioned
-        
-        Ashift = A + 10*B;                % Shift A using B so Ashift is not be singular
-           
-        [vecperp,valperp] = eig(Ashift,B);    % Solves (A + 10*B)u = lambda Bu
-        valdiag = diag(valperp) - 10;         % Shift evals back
-        vec = vecperp;                        % Same evecs
-        
-    end
-    
-    for i=1:64
-        if real(valdiag(i)) < 10^(-12)  % If the real component of an eigenvalue is very small...
-            val(i) = imag(valdiag(i));  % ... the real component is assumed to be zero
-        end
-    end
-
 end
