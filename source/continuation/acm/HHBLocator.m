@@ -1,4 +1,4 @@
-function [PhiBif,muBif,bifType] = HHBLocator(fcns, PhiColVec, muVec)
+function [PhiBif,muBif] = HHBLocator(fcns, PhiColVec, muVec)
 % After determing that there is a bifurcation point between muVec[1] and
 % muVec[2], this program is then used to locate the bifurcation point muBif
 % and determine its affiliated eigenfunction, PhiBif.
@@ -13,21 +13,21 @@ function [PhiBif,muBif,bifType] = HHBLocator(fcns, PhiColVec, muVec)
 % -------
 % PhiBif : the NLS solution at the HHB
 % muBif : the HHB point
-% bifType : tells the parent program that the bifurcation type is HHB
 
     mu1 = muVec(1);
     mu2 = muVec(2);
-    PhiCol1 = PhiColVec(1);
-    PhiCol2 = PhiColVec(2);
+    PhiCol1 = PhiColVec(:,1);
+    PhiCol2 = PhiColVec(:,2);
     muGuess = (mu1 + mu2)/2;                    % Initial guess for HHB point
     muBif = muGuess;
+    error = 10^(-6);
     
     myF = @(z,mu) fcns.f(z,mu);
     myMatrix = @(u) fcns.fLinMatrix(u,mu);
-    if abs(muGuess-mu1) < abs(m2-muGuess)       % Checks to see if muGuess is closer to mu1 than mu2
+    if abs(muGuess-mu1) < abs(mu2-muGuess)      % Checks to see if muGuess is closer to mu1 than mu2
         myFGuess = @(z) myF(z,muGuess);
         myMatrixGuess = @(u) myMatrix(u,muGuess);
-        [PhiGuess,~,~] = solveNewton(PhiCol1,myFGuess,myMatrixGuess,error);
+        [PhiGuess,~,~] = solveNewton(PhiCol1,myFGuess,myMatrixGuess,);
     else
         myFGuess = @(z) myF(z,muGuess);
         myMatrixGuess = @(u) myMatrix(u,muGuess);
@@ -71,10 +71,5 @@ function [PhiBif,muBif,bifType] = HHBLocator(fcns, PhiColVec, muVec)
     end
     
     assert(tries<maxTries,'Newton''s method failed to converge')
-    
-    % bifType = -1 for folds
-    % bifType = 1 for branch points
-    % bifType = 3 for HHB point ? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    bifType = 3;
 
 end

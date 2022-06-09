@@ -5,8 +5,8 @@ function [vec,val] = eigsJL(G,JL,n)
 nJL = size(JL,2);
 B = G.weightMatrix;
 BJL = zeros(nJL,nJL);
-BJL(1:(nJL/2),(nJL/2+1):nJL) = B;
-BJL((nJL/2+1):nJL,1:(nJL/2)) = B;
+BJL(1:(nJL/2),1:(nJL/2)) = B;
+BJL((nJL/2+1):nJL,(nJL/2+1):nJL) = B;
 
 if isempty(null(full(JL)))                  % If JL is well conditioned
     [V,d] = eigs(JL,BJL,n,'SM');                % Use regular eig solver as it is good enough
