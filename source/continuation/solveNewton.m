@@ -3,6 +3,10 @@ function [U,errorU,iterations]=solveNewton(U,myFunction,myMatrix,errorMax,option
 R=-myFunction(U);
 errorU=max(abs(R(:)));
 iterations=0;
+if ~exist('errorMax','var')
+    errorMax=1e-5;
+end
+
 if ~exist('options','var')
     options.verboseFlag = false;
 end

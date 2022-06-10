@@ -1,10 +1,4 @@
-function z = dot(G,u1col,u2col)
+function z = dot(G,column1,column2)
 
-if G.isUniform
-    z = dotUniform(G,u1col,u2col);
-elseif G.isChebyshev
-    z = dotChebyshev(G,u1col,u2col);
-else
-   error('quantumGraph:dotWrongDiscretization',...
-         'Discretization must be uniform or Chebyshev')
-end
+y=column1.*conj(column2);
+z=G.integral(y);

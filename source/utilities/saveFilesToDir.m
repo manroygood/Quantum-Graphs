@@ -22,7 +22,7 @@ for k=2:nargin
         save(filename,'x')
     else
         if ~isreal(x)
-            x=[real(x) imag(x)]; %#ok<NASGU>
+            x=[real(x) imag(x)]; 
         end
         
         save(filename,'x','-ascii','-double')

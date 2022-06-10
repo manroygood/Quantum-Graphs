@@ -8,8 +8,10 @@ classdef quantumGraph < matlab.mixin.Copyable
         discretization;
         laplacianMatrix;
         weightMatrix;
+        weightMatrixWithBCs;
         vertexConditionAssignmentMatrix;
         explicitLaplacian;
+        derivativeMatrix;
     end
     methods
         function obj=quantumGraph(source,target,LVec,opts)

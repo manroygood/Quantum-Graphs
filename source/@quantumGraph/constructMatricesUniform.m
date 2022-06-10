@@ -10,6 +10,7 @@ nNodes=G.numnodes;
 [nxVec,nxC,nxTot]=nx(G);
 LMat = spalloc(nxTot,nxTot,3*nxTot);
 WMat = spalloc(nxTot,nxTot,nxTot);
+DMat = spalloc(nxTot,nxTot,2*nxTot+2*nEdges);
 
 dx=G.Edges.dx;
 alpha= G.Nodes.robinCoeff;
@@ -29,6 +30,12 @@ for k=1:nEdges
     % Construct the weight matrix
     B =speye(n+2);
     WMat(topRow:bottomRow,leftCol:rightCol)=B(2:end-1,:);
+    % Construct the 2nd order centered difference matrix for the first
+    % derivative matrix (one sided at endpoints)
+    D1=spdiags([-e zeros(size(e)) e]/2/dx(k),-1:1,n+2,n+2);
+    D1(1,1:3)=[-3 4 -1]/2/dx(k);
+    D1(end,end-2:end)=[1 -4 3]/2/dx(k);
+    DMat(leftCol:rightCol,leftCol:rightCol)=D1;
 end
 
 %% Populate the boundary condition rows
@@ -121,6 +128,6 @@ G.laplacianMatrix = LMat;
 G.weightMatrix = WMat;
 G.explicitLaplacian = EMat*WMat'*LMat;
 G.vertexConditionAssignmentMatrix=VCAMat;
-
+G.derivativeMatrix = DMat;
 
 end

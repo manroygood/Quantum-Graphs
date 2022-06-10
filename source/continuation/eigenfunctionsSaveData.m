@@ -1,4 +1,4 @@
-function diagramNumber=eigenfunctionsSaveData(Phi,tag,nToPlot,nDoubles,nTriples)
+function dataDir=eigenfunctionsSaveData(Phi,tag,nToPlot,nDoubles,nTriples)
 %% EigenfunctionsSaveData
 % Computes the eigenvalues and eigenfunctions of the Laplace operator
 % Saves the data to files in the directory
@@ -9,25 +9,25 @@ function diagramNumber=eigenfunctionsSaveData(Phi,tag,nToPlot,nDoubles,nTriples)
 % These take the arguments (V,k,Phi)
 
 if ~exist('nToPlot','var'); nToPlot=4;end
+if ~exist('nDoubles','var'); nDoubles=0;end
+if ~exist('nTriples','var'); nTriples=0;end
+
 
 close all
-dataDir=fullfile('data',tag);
-if ~exist(dataDir,'dir')
-    mkdir(dataDir)
-end
 diagramNumber=incrementRunNumber(tag);
-outputDir=fullfile(dataDir,getLabel(diagramNumber));
-mkdir(outputDir);
+
+dataDir=createDataDirectories(tag,diagramNumber);
+
 
 %% Plot the graph layout
 Phi.plot('mutelayout')
 
 %% Save the template to a file
-filename=fullfile(outputDir,'template');
+filename=fullfile(dataDir,'template');
 save(filename,'Phi');
 
 %% Save a comment file
-filename=fullfile(outputDir,'comment.txt');
+filename=fullfile(dataDir,'comment.txt');
 fid=fopen(filename,'w');
 fprintf(fid,'This directory contains:\n');
 
@@ -46,11 +46,11 @@ for j=1:nToPlot
     title(sprintf('(%s) $\\lambda = %0.3f$', letter(j),lambda(singles(j))));
     %    title(sprintf('Eigenfunction %i, \\lambda = %0.3f',singles(k), lambda(singles(k))));
     fcnfile=['eigenfunction.' getLabel(j)];
-    filename=fullfile(outputDir,fcnfile);
+    filename=fullfile(dataDir,fcnfile);
     eigenfunction=V(:,singles(j));
     save(filename,'eigenfunction','-ascii')
     lambdafile=['lambda.' getLabel(j)];
-    filename=fullfile(outputDir,lambdafile);
+    filename=fullfile(dataDir,lambdafile);
     eigenvalue=lambda(singles(j));
     save(filename,'eigenvalue','-ascii')
     fprintf(fid,'lambda.%i: Multiplicity 1, eigenvalue = %0.3f\n',j, eigenvalue);
@@ -72,10 +72,10 @@ if exist('nDoubles','var') && nDoubles>0 && ~isempty(doubles)
             Phi.plot(v1)
             title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(doubles(j))));
             fcnfile=['eigenfunction.' getLabel(nn)];
-            filename=fullfile(outputDir,fcnfile);
+            filename=fullfile(dataDir,fcnfile);
             save(filename,'v1','-ascii')
             lambdafile=['lambda.' getLabel(nn)];
-            filename=fullfile(outputDir,lambdafile);
+            filename=fullfile(dataDir,lambdafile);
             eigenvalue=lambda(doubles(j));
             save(filename,'eigenvalue','-ascii')
             fprintf(fid,'lambda.%i: Multiplicity 2, eigenvalue = %0.3f\n',nn, eigenvalue);
@@ -97,10 +97,10 @@ if exist('nTriples','var') && nTriples>0 && ~isempty(triples)
             Phi.plot(v1)
             title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(triples(j))));
             fcnfile=['eigenfunction.' getLabel(nn)];
-            filename=fullfile(outputDir,fcnfile);
+            filename=fullfile(dataDir,fcnfile);
             save(filename,'v1','-ascii')
             lambdafile=['lambda.' getLabel(nn)];
-            filename=fullfile(outputDir,lambdafile);
+            filename=fullfile(dataDir,lambdafile);
             eigenvalue=lambda(triples(j));
             save(filename,'eigenvalue','-ascii')
             fprintf(fid,'lambda.%i: Multiplicity 3, eigenvalue = %0.3f\n',nn, eigenvalue);
@@ -108,5 +108,5 @@ if exist('nTriples','var') && nTriples>0 && ~isempty(triples)
     end
 end
 fclose(fid);
-fprintf('Saved to directory %s.\n',outputDir)
+fprintf('Saved to directory %s.\n',dataDir)
 fprintf('Run number is %i.\n',diagramNumber)

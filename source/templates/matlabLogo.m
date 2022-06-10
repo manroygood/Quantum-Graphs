@@ -5,9 +5,9 @@ arguments
     opts.Lx1=1;
     opts.robinCoeff=0;
     opts.nX=20;
-    opts.Discretization='Uniform';
     opts.dirichletFlag=false;
     opts.weight=1;
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
 end
 
 % note that I interpret nx1 and nx1 as the number of cells in each

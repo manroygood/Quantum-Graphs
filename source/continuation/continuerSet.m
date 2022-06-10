@@ -6,14 +6,14 @@ end
 
 % Set the default value of each field either to its value in optionsIn or
 % to the rightmost value in the parentheses
-defaultMaxTheta=setDefault(optionsIn,'maxTheta',3);
+defaultMaxTheta=setDefault(optionsIn,'maxTheta',2);
 defaultBeta=setDefault(optionsIn,'beta',0.1);
 defaultNThresh=setDefault(optionsIn,'NThresh',4);
 defaultLambdaThresh=setDefault(optionsIn,'LambdaThresh',-1);
 defaultSaveFlag=setDefault(optionsIn,'saveFlag',true);
 defaultPlotFlag=setDefault(optionsIn,'plotFlag',true);
 defaultVerboseFlag=setDefault(optionsIn,'verboseFlag',false);
-defaultMinNormDelta=setDefault(optionsIn,'minNormDelta',1e-2);
+defaultMinNormDelta=setDefault(optionsIn,'minNormDelta',1e-3);
 
 % Define some tests for input validity
 validPosNum = @(x) isnumeric(x) && x > 0;

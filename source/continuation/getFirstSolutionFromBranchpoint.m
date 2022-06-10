@@ -1,5 +1,5 @@
 function [PhiColumn,Lambda0,direction,NVecOld,LambdaVecOld]= ...
-    getFirstSolutionFromBranchpoint(dataDir,branchNumber,pointNumber,fcns,direction)
+    getFirstSolutionFromBranchpoint(dataDir,branchNumber,bifNumber,fcns,direction)
 
 initTol=1e-6;
 branchDataDir=fullfile(dataDir,['branch' getLabel(branchNumber)]);
@@ -7,6 +7,9 @@ assert(exist(branchDataDir,'dir'),'No such branch file exists')
 
 NVecOld=load(fullfile(branchDataDir,'NVec'));
 LambdaVecOld=load(fullfile(branchDataDir,'LambdaVec'));
+bifTypeVec=load(fullfile(branchDataDir,'bifTypeVec'));
+bifurcationLocations=find(bifTypeVec==1);
+pointNumber=bifurcationLocations(bifNumber);
 LambdaOld=LambdaVecOld(pointNumber);
 pointlabel=getLabel(pointNumber);
 PhiOld=load(fullfile(branchDataDir,['PhiColumn.' pointlabel]));

@@ -1,20 +1,14 @@
-function fileNumber=saveHighFrequencyStandingWave(tag,dataDirNum,Lambda0,edges,signs)
+function fileNumber=saveHighFrequencyStandingWave(dataDir,Lambda0,edges,signs)
 % Find a standing wave of a given graph and save it to a file. The graph
 % must be read from a file in the directory data/<tag>/getLabel(dataDirNum)
 % INPUT ARGUMENTS
-% tag..............the template used
-% dataDirNum.......the subdirectory where the template is stored
+% dataDir.......the subdirectory where the template is stored
 % Lambda0..........(minus) the frequency of the desired standing wave. We
 %                  assume that Lambda0>>1 so that the solution is localized on each edge
 % edges............A list of edges supporting sech-like initial guesses
 % signs............a list of the signs of the sech function on each nonzero edge
 
-topDir=fullfile('data',tag);
-if ~(exist(topDir,'dir'))
-    fprintf('No such directory.\n')
-end
 
-dataDir=fullfile(topDir,getLabel(dataDirNum));
 savedTag='saved';
 fileNumber=incrementRunNumber(savedTag,dataDir);
 fileLabel=getLabel(fileNumber);
@@ -60,7 +54,7 @@ for k=1:Phi.numedges
     Phi.applyFunctionToEdge(f,k)
 end
 y=Phi.graph2column;
-fcns=getGraphFcns(Phi);
+fcns=getNLSFunctionsGraph(Phi);
 [fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,Lambda0);
 initTol=1e-6;
 [y,~,~]=solveNewton(y,fDeflated,matrixDeflated,initTol);

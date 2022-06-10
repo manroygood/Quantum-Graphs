@@ -1,12 +1,5 @@
 function Phi=multibell(opts)
 
-% This is a generalization of the dumbbell graph to multiple "bells"
-
-% nBells = 1 returns the lollipop
-% nBells = 2 returns the dumbbell
-% nBells >= 3 returns the multibell, which consists of lollipops joined at
-%            the "bottoms of the sticks"
-
 arguments
     opts.LVec  {mustBeNumeric} = [2 pi];
     opts.nBells {mustBeNumeric} = 3;
@@ -31,6 +24,7 @@ assert(any(length(opts.nX)==[1 2 2*n]),'nX must have length 1, 2  or 2n');
 if length(opts.nX) == 2
     opts.nX = [opts.nX(1)*nOnes opts.nX(2)*nOnes];
 end
+
 
 assert( any(length(opts.robinCoeff) == [1 n+1]), 'robinCoeff must have length 1 or n+1')
 

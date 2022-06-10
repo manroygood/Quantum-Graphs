@@ -1,9 +1,7 @@
 function plotCoords = multibellPlotCoords(Phi)
-% Creates coordinates on which to lay out functions defined on the
-% multibell.
-% These are independent of the coordinates used to define the multibell
-% initially.
-% No effort has been made to prevent the overlap of edges
+% Creates coordinates on which to lay out functions defined on the tribell
+% These are independent of the coordinates used to define the tribell
+% initially
 
 LVec=Phi.L;
 nBells =length(LVec)/2;
@@ -19,16 +17,18 @@ plotCoords.x1Edge = cell(2*nBells,1);
 plotCoords.x2Edge = cell(2*nBells,1);
 
 for j=1:nBells
-    phaseShift=exp(1i*phi(j));
-    
     % The straight parts
-    handle = Phi.distributePlotCoords(0,L(j),j) * phaseShift;
-    plotCoords.x1Edge{j}=real(handle);
-    plotCoords.x2Edge{j}=imag(handle);
+    n1=Phi.Edges.nx(j);
+    handle = Phi.distributePlotCoords(0,L(j),j);
+    %z =handle*exp(1i*phi(j));
+    plotCoords.x1Edge{j}=handle*cos(phi(j));
+    plotCoords.x2Edge{j}=handle*sin(phi(j));
     
     % The round parts
+    n2=Phi.Edges.nx(nBells+j);
     theta = Phi.distributePlotCoords(0,2*pi,j+nBells);
-    hoop = (L(j) +r(j)*(1-exp(1i*theta))) * phaseShift;
-    plotCoords.x1Edge{j+nBells}=real(hoop);
-    plotCoords.x2Edge{j+nBells}=imag(hoop);
+    hoop = L(j) +r(j)*(1-exp(1i*theta));
+    %z =hoop*exp(1i*phi(j));
+    plotCoords.x1Edge{j+nBells}=real(hoop*exp(1i*phi(j)));
+    plotCoords.x2Edge{j+nBells}=imag(hoop*exp(1i*phi(j)));
 end

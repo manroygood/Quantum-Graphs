@@ -1,19 +1,13 @@
 %% Continuation of NLS on quantum graph from linear eigenfunction
-function [branchNum,bifLocs,NVec,LambdaVec,bifTypeVec] = ...
-    continueFromSaved(tag,dataDirNum,fileNum,direction,options)
+function [branchNum,bifLocs,NVec,LambdaVec,energyVec,bifTypeVec] = ...
+    continueFromSaved(dataDir,fileNum,direction,options)
 if ~exist('options','var'); options=continuerSet; end
 
 %% Load the data and assign it to the quantum graph
-topDir=fullfile('data',tag);
-if ~(exist(topDir,'dir'))
-    fprintf('No such directory.\n') 
-end
-
-dataDir=makeDataDir(tag,dataDirNum);
 [branchDir,branchNum]=makeBranchDir(dataDir,options);
 
 Phi=loadGraphTemplate(dataDir);
-fcns=getGraphFcns(Phi);
+fcns=getNLSFunctionsGraph(Phi);
 
 label=getLabel(fileNum);
 yFile=fullfile(dataDir,['savedFunction.' label]);
@@ -29,7 +23,7 @@ if options.plotFlag; figure(1)
 end
 
 initialization='Saved';
-saveFilesToDir(branchDir,initialization,dataDirNum,fileNum,direction,options);
-[NVec,LambdaVec,bifTypeVec,bifLocs]=...
+saveFilesToDir(branchDir,initialization,fileNum,direction,options);
+[NVec,LambdaVec,energyVec,bifTypeVec,bifLocs] = ...
     graphNonlinearCont(Phi,fcns,branchDir,PhiColumn,LambdaFirst,direction,options);
 continuationFinalOutput(branchNum,branchDir,bifLocs)

@@ -5,12 +5,13 @@ arguments
     opts.edgeLength=2;
     opts.L=1;
     opts.robinCoeff=0;
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
 end
 
 % note that I interpret nx1 and nx2 as the number of cells in each
 % direction, so we need one more row of vertices in each direction
 nRings=opts.edgeLength-1;
-nx1=2*opts.edgeLength+2; 
+nx1=2*opts.edgeLength+2;
 nx2=nx1;
 L=opts.L;
 v1=L*[sqrt(3) 1]/2;
@@ -20,7 +21,7 @@ w1=v1-v2;
 w2=v1+v3;
 
 
-% edges pointing along vector v1. 
+% edges pointing along vector v1.
 % Note that this expression adds a row vector to a column vector to produce
 % a rectangualar array.
 v1Source=(1:nx1)+2*nx1*(0:nx2-1)';
@@ -31,8 +32,8 @@ v2Target=v2Source+nx1-1;
 % edges pointed along vector v3:
 v3Source = v1Target(1:end-1,:);
 v3Target = v3Source+nx1;
-x1=(1:nx1); 
-x2=(1:nx2); 
+x1=(1:nx1);
+x2=(1:nx2);
 [X2,X1]=meshgrid(x2,x1);X1=X1(:);X2=X2(:);
 
 blueNodes=[X1 X2]*[w1; w2];
@@ -59,8 +60,8 @@ nodes=[X1 X2];
 nodes=nodes(2:end-1,:);
 
 Edges=[v1Source(:) v1Target(:);
-       v2Source(:) v2Target(:) 
-       v3Source(:) v3Target(:)];
+    v2Source(:) v2Target(:)
+    v3Source(:) v3Target(:)];
 Edges=sortrows(Edges);
 Edges=Edges(2:end-1,:)-1;
 source=Edges(:,1);

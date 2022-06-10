@@ -1,4 +1,4 @@
-function applyGraphicalFunction(G,f)
+function y=applyGraphicalFunction(G,f)
 
 if ismember('relinked', G.qg.Edges.Properties.VariableNames)
     relinked=G.qg.Edges.relinked;
@@ -27,3 +27,7 @@ else
     end
 end
 G.interpAtNodes;
+
+if nargout==1
+    y = graph2column(G);
+end

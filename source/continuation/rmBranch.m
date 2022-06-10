@@ -1,12 +1,12 @@
-function rmBranch(tag,diagramNumber,branchNumber)
+function status = rmBranch(dataDir,branchNumber)
 % Remove the branch of the computed diagram
-if nargin ==2
-    branchNumber=load(fullfile('data',tag,getLabel(diagramNumber),'.branch_number'));
+if nargin ==1
+    branchNumber=load(fullfile(dataDir,'.branch_number'));
 elseif ischar(branchNumber)
     assert(strcmp(branchNumber,'last'),'If branchNumber is a character it must be ''last''')
-    branchNumber=load(fullfile('data',tag,getLabel(diagramNumber),'.branch_number'));
+    branchNumber=load(fullfile(dataDir,'.branch_number'));
 end
-branchDir=getBranchDir(tag,diagramNumber,branchNumber);
+branchDir=getBranchDir(dataDir,branchNumber);
 if exist(branchDir,'dir')
     rmdir(branchDir,'s');
     status=1;

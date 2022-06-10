@@ -1,16 +1,12 @@
-function [branchNum,bifLocs,NVec,LambdaVec,bifTypeVec] = ...
-    continueFromEnd(tag,dataDirNumber,inBranchNumber,firstorlast,NExtra,LambdaExtra,options)
-if ~exist('options','var')
-    options=continuerSet;
-end
+function [branchNum,bifLocs,NVec,LambdaVec,energyVec,bifTypeVec] = ...
+    continueFromEnd(dataDir,inBranchNumber,firstorlast,NExtra,LambdaExtra,options)
 
-dataDir=makeDataDir(tag,dataDirNumber);
 [branchDir,branchNum]=makeBranchDir(dataDir,options);
 
 inputDir=fullfile(dataDir,['branch' getLabel(inBranchNumber)]);
 
 Phi=loadGraphTemplate(dataDir);
-fcns=getGraphFcns(Phi);
+fcns=loadNLSFunctionsGraph(dataDir);
 
 NVecOld=load(fullfile(inputDir,'NVec'));
 LambdaVecOld=load(fullfile(inputDir,'LambdaVec'));
@@ -30,9 +26,9 @@ direction=1;
 if options.plotFlag;figure(1);clf;hold on;end
 
 initialization='End';
-saveFilesToDir(branchDir,initialization,dataDirNumber,pointNumber,direction,options);
+saveFilesToDir(branchDir,initialization,pointNumber,direction,options);
 
-[NVec,LambdaVec,bifTypeVec,bifLocs]=...
+[NVec,LambdaVec,energyVec,bifTypeVec,bifLocs]=...
     graphNonlinearCont(Phi,fcns,branchDir,PhiColumn,Lambda0,direction,options);
 continuationFinalOutput(branchNum,branchDir,bifLocs)
 

@@ -1,3 +1,2 @@
-function [branchDir,topDir]=getBranchDir(tag,diagramNumber,branchNumber)
-topDir=fullfile('data',tag,getLabel(diagramNumber));
-branchDir=fullfile(topDir,['branch' getLabel(branchNumber)]);
+function branchDir=getBranchDir(dataDir,branchNumber)
+branchDir=fullfile(dataDir,['branch' getLabel(branchNumber)]);

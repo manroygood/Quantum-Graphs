@@ -1,10 +1,12 @@
 function Phi = delaunaySquare(opts)
 
 arguments
-opts.n  {mustBeNumeric} = 4;
-opts.nX {mustBeNumeric} = 40;
-opts.robinCoeff = 0;
+    opts.n  {mustBeNumeric} = 4;
+    opts.nX {mustBeNumeric} = 40;
+    opts.robinCoeff = 0;
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
 end
+
 n=opts.n;
 
 bottomside = [ [0;rand(n-1,1)] zeros(n,1)       ];

@@ -16,8 +16,8 @@ lambda0=load(lambdaFile);
 % Form the guess
 Phi.column2graph(phi0);
 phinorm4=Phi.norm(4);
-Lambda1=-2*phinorm4;
-LambdaFirst=lambda0+epsilon*Lambda1;
+Lambda1=-2*phinorm4^4;
+LambdaFirst=-lambda0+epsilon*Lambda1;
 PhiGuess = sqrt(epsilon)*(phi0);
 
 [fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,LambdaFirst);

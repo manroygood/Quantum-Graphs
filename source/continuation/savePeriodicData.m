@@ -1,9 +1,5 @@
-function savePeriodicData(tag,diagramNumber,PhiX,extensionMap)
+function savePeriodicData(dataDir,PhiX,extensionMap)
 
-topDir=fullfile('data',tag);
-assert(exist(topDir,'dir'), sprintf('No directory $%s exists.',topDir)) 
-
-dataDir=makeDataDir(tag,diagramNumber);
 filename=fullfile(dataDir,'templateX');
 save(filename,'PhiX');
 nodeMap=extensionMap.nodes;

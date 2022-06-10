@@ -1,10 +1,12 @@
-function animateBranch(Phi,tag,diagramNumber,branchNumber)
-[branchDir,~]=getBranchDir(tag,diagramNumber,branchNumber);
+function animateBranch(dataDir,branchNumber)
+Phi=loadGraphTemplate(dataDir);
+branchDir=getBranchDir(dataDir,branchNumber);
 
 Lambda=load(fullfile(branchDir,'LambdaVec'));
 NVec=load(fullfile(branchDir,'NVec'));
 N=length(NVec);
 
+figure
 plot(Lambda,NVec)
 xlabel('$\Lambda$');ylabel('$N$')
 text(Lambda(1),NVec(1),'Start')
