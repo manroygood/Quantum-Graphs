@@ -5,12 +5,13 @@ function plotOnGraph2D(G,myColor)
 if nargin==1
     myColor=mcolor('blueish');
 end
+myGray=mcolor('silver');
 nEdges=numedges(G);
 Edges=G.Edges;
 for k=1:nEdges
     [y,x1,x2]= G.fullEdge(k);
     ww=Edges.Weight(k)*2;
-    lh=plot3(x1,x2,zeros(size(x1)),'color',.7*[1 1 1],'linewidth',ww);
+    lh=plot3(x1,x2,zeros(size(x1)),'color',myGray,'linewidth',ww);
     hold on
     plot3(x1,x2,y,'color',myColor,'linewidth',ww)
     

@@ -28,8 +28,8 @@ if G.has3DLayout
         drawnow
     end
 else
-    myBlue = [0 0.4470 0.7410]; % The default MATLAB line color
-    myGray = 0.7*[1 1 1];
+    myBlue = mcolor('blue'); % The default MATLAB line color
+    myGray = mcolor('silver');
     l=cell(nEdges,1);
     clf;
     plot3(nan,nan,nan);
