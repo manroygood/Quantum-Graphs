@@ -13,7 +13,7 @@ arguments
     opts.nX  {mustBeNumeric} = 20;
     opts.r {mustBeNumeric} = pi;
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 n=opts.n;

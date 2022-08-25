@@ -10,6 +10,8 @@ branchDir=getBranchDir(dataDir,branchNumber);
 if exist(branchDir,'dir')
     rmdir(branchDir,'s');
     status=1;
+    addComment(dataDir,'Removing %s',branchDir)
+    addComment(dataDir)
 else
     fprintf('No such directory.\n')
     status=0;

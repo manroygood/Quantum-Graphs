@@ -1,4 +1,4 @@
-function animatePDESolution(G,U,t)
+function animatePDESolution(G,U,t,nSkip)
 % Plots a graph G over its skeleton.
 % Graph must have Nodes.x1 and Nodes.x2 defined
 
@@ -6,9 +6,10 @@ tString=toGreek(inputname(3));
 realFlag=isreal(U);
 nEdges=G.numedges;
 nt=length(t);
+if ~exist('nSkip','var'); nSkip = 1; end
 
 if G.has3DLayout
-    for n=1:nt
+    for n=1:nSkip:nt
         hold off
         if realFlag
             Ut=U(:,n);
@@ -61,7 +62,7 @@ else
     set(gca,'DataAspectRatio',[xRange xRange 1.25*zRange])
     set(gca,'ZLim',[zMin,1.1*zMax])
     
-    for n=1:nt
+    for n=1:nSkip:nt
         if realFlag
             Ut=U(:,n);
         else

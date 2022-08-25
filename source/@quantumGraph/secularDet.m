@@ -49,12 +49,12 @@ for j=1:2*n
                 S(jprime,j) = -1;
             end
         elseif jprime==jbar
-            node = G.sharedNode(j,jprime);              % Kirchhoff condition
+            node = G.sharednode(j,jprime);              % Kirchhoff condition
             alpha = -G.robinCoeff(node);
             S(jprime,j) = 2/(dv-alpha/(1i*x))-1;
             ThetaK = ThetaK + atan(alpha/(dv*x))/dv;    % Divide by dv because the code loops through edges so we'll do this for each edge
         elseif G.follows(j,jprime)
-            node = G.sharedNode(j,jprime);              % Kirchhoff condition
+            node = G.sharednode(j,jprime);              % Kirchhoff condition
             alpha = -G.robinCoeff(node);
             S(jprime,j) = 2/(dv-alpha/(1i*x));
         end
@@ -77,7 +77,7 @@ if imag(f) == 0
 elseif real(f) == 0
     f = imag(f);
 else
-    disp('Warning: Secular Determinant is not real.')
+    warning('seculardet:non-real','Secular determinant is not real.')
 end
 
 end

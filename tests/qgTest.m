@@ -55,37 +55,6 @@ verifyThat(testCase,G.numedges,IsEqualTo(4));
 verifyThat(testCase,G.numnodes,IsEqualTo(3));
 verifyClass(testCase,G,'quantumGraph')
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Test various things about leaf nodes
-% function leafTest(testCase)
-% s=[2, 3, 4];t=[1,1,1];L=10;robinCoeff=[nan, nan, nan, 0];
-% verifyError(testCase,@()quantumGraph(s,t,L,'robinCoeff',robinCoeff),'quantumGraph:dirichletNotLeaf');
-% s=[1,1,1];t=[2, 3, 4];robinCoeff=[0,nan, nan, nan];
-% G=quantumGraph(s,t,L,'robinCoeff',robinCoeff);  % should work
-% % now test that node 1 returns false, nodes 2,3,4 return true
-% import matlab.unittest.constraints.IsTrue
-% import matlab.unittest.constraints.IsFalse
-% 
-% verifyThat(testCase,isLeaf(G,1),IsFalse)
-% verifyThat(testCase,isLeaf(G,2),IsTrue)
-% verifyThat(testCase,isLeaf(G,3),IsTrue)
-% verifyThat(testCase,isLeaf(G,4),IsTrue)
-% % Test that returns an error when edge points from leaf (instead of to it)
-% s=[1 1 4];t=[2 3 1];robinCoeff=[0 0 0 nan];
-% verifyError(testCase,@()quantumGraph(s,t,L,'robinCoeff',robinCoeff),'quantumGraph:leafDirection');
-% 
-% % Test that if a k nodes dirichlet it must be the last 
-% s=[1 1 1]; t = [2 3 4]; robinCoeff=[0 nan 0 0];
-% verifyError(testCase,@()quantumGraph(s,t,L,'robinCoeff',robinCoeff),'quantumGraph:leafNotLast');
-% end
-% 
-% % The following graph definition does not include a node 4. Test that an
-% % error is thrown
-% function dumbNodeTest(testCase)
-% s=[1 1 1]; t = [2 3 5]; % note no node 4
-% L=10;
-% verifyError(testCase,@()quantumGraph(s,t,L),'quantumGraph:nodesMissing');
-% end
 
 %% Test that it responds appropriately when multigraph entered
 function versionMultiGraphTest(testCase)

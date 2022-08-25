@@ -2,10 +2,10 @@ function Phi=bubbleTower(opts)
 
 arguments
     opts.L (1,1) {mustBeNumeric} = 10;  % The component of the real line
-    opts.circumferences (1,:) {mustBeNumeric} = [4*pi 2*pi]; % note that these are the circumferences of the bubbles
+    opts.circumferences (1,:) {mustBeNumeric} = [6*pi 4*pi 2*pi]; % note that these are the circumferences of the bubbles
     opts.nX  {mustBeNumeric} = 10;
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 circumferences=opts.circumferences;

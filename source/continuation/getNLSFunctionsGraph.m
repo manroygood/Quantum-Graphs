@@ -1,29 +1,32 @@
-function fcns=getNLSFunctionsGraph(Phi,F)
+function fcns=getNLSFunctionsGraph(Phi,fSymbolic)
 % The functions used by the nonlinear continuation routines for continuing
 % the focusing cubic NLS on a graph
 % M is the Laplacian matrix
-% F is the basic function. It must be a symbolic function of z. 
+% f is the basic function. It must be a symbolic function of z. 
+% It is assumed that f(0) = f'(0) = 0
 % All the others are its derivatives
-% We assume Lambda Psi = Laplacian Psi + F'(Psi^2) Psi so that 
+% We assume that
+%                 Lambda Psi+ Laplacian Psi + f(Psi) =0
 
-% Note: initially F is defined as a function of z but at the last step, we
-% substitute in z^2
-
-syms z
-if ~exist('f','var')
-    F = z^2;
+syms z 
+if ~exist('fSymbolic','var')
+    fSymbolic = 2*z^3;
 end
-Fprime = diff(F);
-f = subs(Fprime,z,z^2)*z;
-fprime= matlabFunction(diff(f));
-fpp = matlabFunction(diff(f,2));
-f = matlabFunction(f);
-F = matlabFunction(subs(F,z,z^2));
+fprime= matlabFunction(diff(fSymbolic));
+fpp = matlabFunction(diff(fSymbolic,2));
+f = matlabFunction(fSymbolic);
+F = matlabFunction(2*int(f,[0 z])); % The factor of two is correct but subtle.
+% % It comes from the fact that F'(|u|^2)u = f'(u)
+
+
+assert(f(0)==0,'Must assume f(0)=0')
+assert(fprime(0)==0,'Must assume fprime(0)=0')
 
 A = Phi.laplacianMatrix;
 B = Phi.weightMatrix;
 
 nA=length(A);
+fcns.fSymbolic = fSymbolic;
 fcns.f =@(z,Lambda)( A*z + B*(f(z) + Lambda*z));
 fcns.fLinMatrix = @(z,Lambda) (A + B*spdiags(fprime(z)+Lambda,0,nA,nA));
 fcns.fMu = @(z,Lambda)(B*z); % This is df/dmu where mu (i.e. Lambda) is the bifurcation parameter, here Lambda

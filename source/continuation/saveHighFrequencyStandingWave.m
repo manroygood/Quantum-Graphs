@@ -16,14 +16,21 @@ Phi=loadGraphTemplate(dataDir);
 Phi=initNLStanding(Phi,Lambda0,edges,signs);
 
 y=graph2column(Phi);
-eigFileName=fullfile(dataDir,['savedFunction.' fileLabel]);
-freqFileName=fullfile(dataDir,['savedFrequency.' fileLabel]);
+solutionFileName=fullfile(dataDir,['savedFunction.' fileLabel]);
+frequencyFileName=fullfile(dataDir,['savedFrequency.' fileLabel]);
 
-save(eigFileName,'y','-ascii','-double')
-save(freqFileName,'Lambda0','-ascii','-double')
+save(solutionFileName,'y','-ascii','-double')
+save(frequencyFileName,'Lambda0','-ascii','-double')
 
-fprintf('File saved to %s.\n',eigFileName);
+fprintf('File saved to %s.\n',solutionFileName);
 fprintf('File number is %i. \n',fileNumber);
+
+addComment(dataDir,'savedFunction.%s has support localized  on ',fileLabel)
+for k=1:length(edges)
+    if signs(k)==1; s = '+1'; else; s = '-1'; end
+    addComment(dataDir,'Edge #%i, with sign %2',edges(k),s);
+end
+addComment(dataDir);
 
 end
 
@@ -42,7 +49,7 @@ for k=1:Phi.numedges
     if ismember(k,nonZeroEdges)
         spot=(k==nonZeroEdges);
         j=Phi.target(k);
-        if Phi.isLeaf(j) && ~Phi.isDirichlet(j)
+        if Phi.isleaf(j) && ~Phi.isDirichlet(j)
             x0=L(k);     % If edge kk ends in a leaf node with non-dirichlet BC at the leaf, center the guess at the end
         else
             x0=L(k)/2;   % Otherwise center the guess at the center of the edge

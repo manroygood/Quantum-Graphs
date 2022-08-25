@@ -1,6 +1,8 @@
 function plot(G,varargin)
 % Converts column vector to a graph, interpolates at the nodes, and plots
 
+assert(~strcmp(G.discretization,'None'),'Can not plot without discretization')
+
 if nargin==1
     myColor=mcolor('blueish');
 elseif nargin==2

@@ -1,57 +1,83 @@
 function [NVec,LambdaVec,energyVec,bifTypeVec,bifLocs]= ...
-    graphNonlinearCont(Phi,fcns,outputDir,PhiColumn,Lambda0,direction,options)
+    graphNonlinearCont(Phi,fcns,outputDir,PhiColumn,Lambda0,direction,options,PhiColumnOld,LambdaOld)
 % If the continuer options are unset, use the defaults
 if ~exist('options','var')
     options=continuerSet;
 end
 
-x=1:length(PhiColumn);
-NVec=zeros(2,1);
-LambdaVec=zeros(2,1);
-energyVec=zeros(2,1);
-bifTypeVec=zeros(2,1);
+testPhi = exist('PhiColumnOld','var');
+testLambda = exist('LambdaOld','var');
+
+assert( (testPhi&&testLambda) || (~testPhi&&~testLambda),...
+    'Either both or neither of PhiColumnOld and LambdaOld must be defined')
+
+
 
 dotProduct.dot=@(Phi1,Phi2) Phi.dot(Phi1,Phi2);
 dotProduct.beta=options.beta;
 dotProduct.big=@(Phi1,Phi2,w1,w2) (dotProduct.dot(Phi1,Phi2)+options.beta*w1*w2);
 
-ds=0.01;params.vContract=.75;params.maxCount=4;params.maxTheta=options.maxTheta;
+ds=0.01;params.vContract=.8;params.maxCount=4;params.maxTheta=options.maxTheta;
+
+
+k=1;
+
+x=1:length(PhiColumn);
+n0=2+int8(testPhi);
+NVec=zeros(n0,1);
+LambdaVec=zeros(n0,1);
+energyVec=zeros(n0,1);
+bifTypeVec=zeros(n0,1);
+
+if testPhi
+    NVec(k)=dotProduct.dot(PhiColumnOld,PhiColumnOld);
+    LambdaVec(k)=LambdaOld;
+    energyVec(k)=energyNLS(Phi,PhiColumnOld,fcns);
+    if options.plotFlag; plot(x,PhiColumnOld,'color',randomColor); end
+    if options.saveFlag; PhiTemp=PhiColumn;PhiColumn=PhiColumnOld;saveToDir(PhiColumn,outputDir,k); PhiColumn=PhiTemp;end
+    k=k+1;
+end
+
+
+NVec(k)=dotProduct.dot(PhiColumn,PhiColumn);
+LambdaVec(k)=Lambda0;
+energyVec(k)=energyNLS(Phi,PhiColumn,fcns);
 
 if options.plotFlag; plot(x,PhiColumn,'color',randomColor); end
-if options.saveFlag; saveToDir(PhiColumn,outputDir,1); end
-
-NVec(1)=dotProduct.dot(PhiColumn,PhiColumn);
-LambdaVec(1)=Lambda0;
-energyVec(1)=energyNLS(Phi,PhiColumn,fcns);
+if options.saveFlag; saveToDir(PhiColumn,outputDir,k); end
 
 PhiColOld=PhiColumn;
 LambdaOld=Lambda0;
 tauOld=nan;
 
-jmax=10; dsfactor=0.85; % constants used to reduce stepsize if the Newton solver fails to find a solution
+jmax=10; dsfactor=params.vContract; % constants used to reduce stepsize if the Newton solver fails to find a solution
 
 % the second solution on the branch. Assume no bifurcations between first
 % and second solutions
 params.direction=1;
-[PhiColumn,LambdaVec(2),~]=graphContinuer(fcns,ds,PhiColOld,LambdaOld,dotProduct,params.direction,[],[]);
-NVec(2)=dotProduct.dot(PhiColumn,PhiColumn);
-energyVec(2)=energyNLS(Phi,PhiColumn,fcns);
+k=k+1;
+[PhiColumn,LambdaVec(k),~]=graphContinuer(fcns,ds,PhiColOld,LambdaOld,dotProduct,params.direction,[],[]);
+NVec(k)=dotProduct.dot(PhiColumn,PhiColumn);
+energyVec(k)=energyNLS(Phi,PhiColumn,fcns);
 % Assumes that we are looking for direction*Lambda to be initially increasing along the
 % computed branch of solutions
-if direction*(LambdaVec(2)-LambdaVec(1))>0
+if direction*(LambdaVec(k)-LambdaVec(k-1))>0
     params.direction=-params.direction;
-    [PhiColumn,LambdaVec(2),tauOld]=graphContinuer(fcns,ds,PhiColOld,LambdaOld,dotProduct,params.direction,[],[]);
-    NVec(2)=dotProduct.dot(PhiColumn,PhiColumn);
-    energyVec(2)=energyNLS(Phi,PhiColumn,fcns);
+    [PhiColumn,LambdaVec(k),tauOld]=graphContinuer(fcns,ds,PhiColOld,LambdaOld,dotProduct,params.direction,[],[]);
+    NVec(k)=dotProduct.dot(PhiColumn,PhiColumn);
+    energyVec(k)=energyNLS(Phi,PhiColumn,fcns);
 end
 if options.plotFlag; plot(x,PhiColumn,'color',randomColor); end
-if options.saveFlag; saveToDir(PhiColumn,outputDir,2); end
+if options.saveFlag; saveToDir(PhiColumn,outputDir,k); end
 
-normDelta=1; % Fake value so as not to trip up the 
+normDelta=1; % Fake value so as not to trip up the
 % calculate subsequent solutions on the branch
-k=2;
-LambdaOld=LambdaVec(1);Lambda=LambdaVec(2);
-while ~crossThresh(options.LambdaThresh,LambdaVec,k) && ~crossThresh(options.NThresh,NVec,k) &&normDelta > options.minNormDelta
+
+LambdaOld=LambdaVec(k-1);Lambda=LambdaVec(k);
+while ~crossThresh(options.LambdaThresh,LambdaVec,k) ...
+        && ~crossThresh(options.NThresh,NVec,k) ...
+        && normDelta > options.minNormDelta ...
+        && k <= options.maxPoints
     if k == length(NVec)
         if options.saveFlag;saveFilesToDir(outputDir,NVec,LambdaVec,energyVec,bifTypeVec);end
         [NVec,LambdaVec,energyVec,bifTypeVec]=extendAll(10,NVec,LambdaVec,energyVec,bifTypeVec);
@@ -75,12 +101,12 @@ while ~crossThresh(options.LambdaThresh,LambdaVec,k) && ~crossThresh(options.NTh
         NVec(k+1)=dotProduct.dot(PhiColumn,PhiColumn);
         energyVec(k)=energyNLS(Phi,PhiBif,fcns);
         energyVec(k+1)=energyNLS(Phi,PhiColumn,fcns);
-        
+
         LambdaVec(k)=LambdaBif;
         LambdaVec(k+1)=Lambda;
         bifTypeVec(k)=bifType;
         bifTypeVec(k+1)=0;
-        
+
         if options.saveFlag
             PhiTemp=PhiColumn;
             PhiColumn=PhiBif; saveToDir(PhiColumn,outputDir,k);
@@ -118,6 +144,8 @@ if crossThresh(options.LambdaThresh,LambdaVec,k)
     fprintf('Lambda threshold crossed.\n')
 elseif crossThresh(options.NThresh,NVec,k)
     fprintf('N threshold crossed.\n')
+elseif k > options.maxPoints
+    fprintf('Maximum number of points on curve exceeded. Change maxPoints if needed.\n')
 elseif normDelta<options.minNormDelta
     fprintf('Exited because distance between successive solutions below threshold.\n')
 end

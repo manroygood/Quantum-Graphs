@@ -4,7 +4,7 @@ arguments
     opts.L {mustBeNumeric} = 1;
     opts.nX  {mustBeNumeric} = 20;
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 switch shapeString

@@ -5,7 +5,7 @@ arguments
     opts.LVec  {mustBeNumeric} = [pi pi];
     opts.nX  {mustBeNumeric} = 10;
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 n=opts.n;

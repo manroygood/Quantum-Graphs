@@ -4,7 +4,7 @@ arguments
     opts.LVec {mustBeNumeric} = [2*pi 4 2*pi];
     opts.nX  {mustBeNumeric} = 10;
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 % If LVec has length 2, then 1st argument -> hoop and 2nd argument -> handle

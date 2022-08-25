@@ -1,9 +1,9 @@
-function [branchNum,bifLocs,NVec,LambdaVec,energyVec,bifTypeVec] = ...
-    continueFromEnd(dataDir,inBranchNumber,firstorlast,NExtra,LambdaExtra,options)
+function [newBranchNumber,bifLocs,NVec,LambdaVec,energyVec,bifTypeVec] = ...
+    continueFromEnd(dataDir,oldBranchNumber,firstorlast,NExtra,LambdaExtra,options)
 
-[branchDir,branchNum]=makeBranchDir(dataDir,options);
+[branchDir,newBranchNumber]=makeBranchDir(dataDir,options);
 
-inputDir=fullfile(dataDir,['branch' getLabel(inBranchNumber)]);
+inputDir=fullfile(dataDir,['branch' getLabel(oldBranchNumber)]);
 
 Phi=loadGraphTemplate(dataDir);
 fcns=loadNLSFunctionsGraph(dataDir);
@@ -25,12 +25,16 @@ direction=1;
 
 if options.plotFlag;figure(1);clf;hold on;end
 
-initialization='End';
-saveFilesToDir(branchDir,initialization,pointNumber,direction,options);
+if options.saveFlag
+    initialization='End';
+    saveFilesToDir(branchDir,initialization,pointNumber,direction,options);
+    addComment(dataDir,'branch%s is an extension of branch%s.',...
+        getLabel(newBranchNumber),getLabel(oldBranchNumber));
+end
 
 [NVec,LambdaVec,energyVec,bifTypeVec,bifLocs]=...
     graphNonlinearCont(Phi,fcns,branchDir,PhiColumn,Lambda0,direction,options);
-continuationFinalOutput(branchNum,branchDir,bifLocs)
+continuationFinalOutput(dataDir,newBranchNumber,branchDir,bifLocs)
 
 if options.plotFlag
     figure(2)

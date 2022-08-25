@@ -11,7 +11,7 @@ arguments
     opts.nX  {mustBeNumeric} = 10;
     opts.r {mustBeNumeric} = pi*[1 1];
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 n=opts.n;

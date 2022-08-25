@@ -4,7 +4,7 @@ arguments
     opts.L {mustBeNumeric} = 1;
     opts.nX  {mustBeNumeric} = 20;
     opts.robinCoeff {mustBeNumeric} = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 switch shapeString
@@ -58,7 +58,7 @@ switch shapeString
     case 'buckyball'
         [nodes,edges] = buckyball();
     otherwise
-        error('geom3Dtemplate:wrongShape','Not a valid geom3d shape');
+        error('solidTemplate:wrongShape','Not a listed solid shape');
 end
 nodes=nodes-mean(nodes,1); % Recenter the vertices so their center of mass is at the origin
 source = edges(:,1);

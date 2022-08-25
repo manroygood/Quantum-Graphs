@@ -5,7 +5,7 @@ arguments
     opts.edgeLength=2;
     opts.L=1;
     opts.robinCoeff=0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 % note that I interpret nx1 and nx2 as the number of cells in each

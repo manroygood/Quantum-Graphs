@@ -17,28 +17,8 @@ plotCoords.x2Node=[0; imag(zInner); imag(zOuter)];
 plotCoords.x1Edge = cell(3*n,1);
 plotCoords.x2Edge = cell(3*n,1);
 
-innerRadius = Phi.distributePlotCoords(0,r1,1);
-outerRadius = Phi.distributePlotCoords(r1,r1+r2,n+2);
-
-nextPoint = exp(1i*2*pi/n);
-zEdgeInner = Phi.distributePlotCoords(r1,r1*nextPoint,n+1);
-zEdgeOuter = Phi.distributePlotCoords(r1+r2,(r1+r2)*nextPoint,Phi.numedges);
-
-for k=1:n
-    % inner spoke
-    zInner =innerRadius*exp(1i*phi(k));
-    plotCoords.x1Edge{k}=real(zInner);
-    plotCoords.x2Edge{k}=imag(zInner);
-    % inner circumference
-    zInner =zEdgeInner*exp(1i*phi(k));
-    plotCoords.x1Edge{n+2*k-1}=real(zInner);
-    plotCoords.x2Edge{n+2*k-1}=imag(zInner);
-    % outer spoke
-    zOuter =outerRadius*exp(1i*phi(k));
-    plotCoords.x1Edge{n+2*k}=real(zOuter);
-    plotCoords.x2Edge{n+2*k}=imag(zOuter);    
-    % outer circumference
-    zOuter =zEdgeOuter*exp(1i*phi(k));
-    plotCoords.x1Edge{3*n+k}=real(zOuter);
-    plotCoords.x2Edge{3*n+k}=imag(zOuter);
+for k=1:Phi.numedges
+    [x1,x2]=Phi.straightEdge(k,plotCoords);
+    plotCoords.x1Edge{k}=x1;
+    plotCoords.x2Edge{k}=x2;
 end

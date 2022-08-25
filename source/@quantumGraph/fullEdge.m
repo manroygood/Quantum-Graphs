@@ -1,4 +1,5 @@
 function varargout = fullEdge(G,k)
+
 y=G.Edges.y{k};
 x1=G.Edges.x1{k};
 x2=G.Edges.x2{k};

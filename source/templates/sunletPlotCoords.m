@@ -17,19 +17,8 @@ plotCoords.x2Node=[imag(z1); imag(z2)];
 plotCoords.x1Edge = cell(2*n,1);
 plotCoords.x2Edge = cell(2*n,1);
 
-nextPoint = exp(1i*2*pi/n);
-zEdge = Phi.distributePlotCoords(r1,r1*nextPoint,1);
-
-spoke = Phi.distributePlotCoords(r1,r1+r2,n+1);
-
-for k=1:n
-    % segment of the circumference
-    z1 =zEdge*exp(1i*phi(k));
-    plotCoords.x1Edge{2*k-1}=real(z1);
-    plotCoords.x2Edge{2*k-1}=imag(z1);
-    
-    %sticky-outy bit
-    z1 =spoke*exp(1i*phi(k));
-    plotCoords.x1Edge{2*k}=real(z1);
-    plotCoords.x2Edge{2*k}=imag(z1);
+for k=1:Phi.numedges
+    [x1,x2]=Phi.straightEdge(k,plotCoords);
+    plotCoords.x1Edge{k}=x1;
+    plotCoords.x2Edge{k}=x2;
 end

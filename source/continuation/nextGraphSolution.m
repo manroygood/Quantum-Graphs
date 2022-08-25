@@ -2,7 +2,7 @@ function [UNew,U,muNew,mu,ds,j,success,tau]= ...
     nextGraphSolution(fcns,dotProduct,U,UOld,mu,muOld,ds,j,params,options)
 
 dU=U-UOld; dmu = mu-muOld;
-reduceFactor=0.9;
+reduceFactor=params.vContract;
 
 % Find a point on the curve
 [UNew,muNew,tau] = ...
@@ -13,7 +13,7 @@ reduceFactor=0.9;
 theta=getAngle(UNew,U,UOld,muNew,mu,muOld,dotProduct); 
 count=1;
 while theta>params.maxTheta && count< params.maxCount
-    ds=ds*params.vContract;
+    ds=ds*reduceFactor;
     [UNew,muNew,tau]=...
         graphContinuer(fcns,ds,U,mu,dotProduct,params.direction,dU,dmu);
     theta=getAngle(UNew,U,UOld,muNew,mu,muOld,dotProduct); 

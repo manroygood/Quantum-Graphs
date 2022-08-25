@@ -10,7 +10,7 @@ classdef quantumGraph < matlab.mixin.Copyable
         weightMatrix;
         weightMatrixWithBCs;
         vertexConditionAssignmentMatrix;
-        explicitLaplacian;
+%        explicitLaplacian;
         derivativeMatrix;
     end
     methods
@@ -29,7 +29,7 @@ classdef quantumGraph < matlab.mixin.Copyable
                 opts.RobinCoeff double {mustBeVector} = 0;
                 opts.Weight double {mustBeVector,mustBePositive} = 1;
                 opts.nodeData double {mustBeVector} = 0;
-                opts.Discretization char {mustBeMember(opts.Discretization,{'None','Uniform','Chebyshev'})} = 'None'
+                opts.Discretization char {mustBeMember(opts.Discretization,{'None','Uniform','Chebyshev'})} = 'Uniform';
                 opts.nxVec double {mustBeVector,mustBePositive,mustBeFinite} = 20;
                 opts.plotCoordinateFcn function_handle
             end
@@ -120,10 +120,10 @@ classdef quantumGraph < matlab.mixin.Copyable
             obj.qg.Nodes.nodeData=nodeData;
             
             obj.discretization=opts.Discretization;
-            % If the nxVec is set but the discretization is not, then the
-            % discretization should be Uniform
+            % If the nxVec is set but the discretization is set to 'None'
+            % but 'nxVec' is given, remove 'nxVec' 
             if (~isempty(opts.nxVec) && strcmp(obj.discretization,'None'))
-                obj.discretization='Uniform';
+                opts.nxVec=[];
             end
             
             if (~isempty(opts.nxVec) && ~strcmp(obj.discretization,'None'))

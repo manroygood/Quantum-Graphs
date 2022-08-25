@@ -51,23 +51,10 @@ end
 % Create the Vertex Condition Assignment Matrix VCAMat which maps the nonhomogeneous data
 % defined at the vertices to the correct row
 
-% There are times when data is given only on the interior points of the
-% numerical quantum graph. The discretized boundary condition at each vertex can be put
-% in the form
-%  GhostMat * v_ghost = InteriorMat * v_interior + nonhomogneous term
-%  where v_ghost is a vector of ghost points on each edge
-%        v_interior is a vector containing the first points on the interior of each edge
-%        GhostMat & InteriorMat are square matrices of size fullDegree
-% These matrices are stored as entries in the Nodes table
-
 VCAMat = spalloc(nxTot,nNodes,nNodes);
-EMat=speye(nxTot);
-
 row = bottomRow;
 for j=1:nNodes   % Loop over the nodes
     [fullDegree,inOrOut,connectedEdges] = G.fullDegreeEtc(j);
-    GhostMat=zeros(fullDegree);
-    InteriorMat=zeros(fullDegree);
     for k=1:fullDegree   % Loop over the edges connected to the node
         edge = connectedEdges(k);
         direction = inOrOut(k);
@@ -78,8 +65,6 @@ for j=1:nNodes   % Loop over the nodes
             if G.isDirichlet(j)  % Define Dirichlet Boundary Condition
                 LMat(row,ghostPt)=1/2;
                 LMat(row,interiorPt)=1/2;
-                GhostMat(1,1)= 1/2;
-                InteriorMat(1,1) = -1/2;
             else                 % Define flux condition
                 for branch = 1:fullDegree
                     edge = connectedEdges(branch);
@@ -88,8 +73,6 @@ for j=1:nNodes   % Loop over the nodes
                     LMat(row,ghostPt) = alpha(j)/2/fullDegree - w(edge)/dx(edge);
                     LMat(row,interiorPt) = alpha(j)/2/fullDegree + w(edge)/dx(edge);
                     
-                    GhostMat(1,branch) = LMat(row,ghostPt);
-                    InteriorMat(1,branch) = -  LMat(row,interiorPt);
                 end
             end
             VCAMat(row,j)=1;
@@ -101,32 +84,12 @@ for j=1:nNodes   % Loop over the nodes
             [ghostPt,interiorPt] = getEndPoints(G,direction,edge);
             LMat(row,ghostPt) = -1;
             LMat(row,interiorPt) = -1;
-            
-            GhostMat(k,1) = -1; InteriorMat(k,1) = 1;
-            GhostMat(k,k) =  1; InteriorMat(k,k) = -1;
-        end
-    end
-    
-    %G.qg.Nodes.interiorMat{j} = InteriorMat;
-    EMatNode= GhostMat\InteriorMat;
-    
-    for iRow=1:fullDegree
-        edge = connectedEdges(iRow);
-        direction = inOrOut(iRow);
-        [ghostRow,~] = G.getEndPoints(direction,edge);
-        EMat(ghostRow,ghostRow)=0;
-        for jColumn=1:fullDegree
-            edge = connectedEdges(jColumn);
-            direction = inOrOut(jColumn);
-            [~,interiorColumn] = G.getEndPoints(direction,edge);
-            EMat(ghostRow,interiorColumn) = EMatNode(iRow,jColumn);
         end
     end
 end
 
 G.laplacianMatrix = LMat;
 G.weightMatrix = WMat;
-G.explicitLaplacian = EMat*WMat'*LMat;
 G.vertexConditionAssignmentMatrix=VCAMat;
 G.derivativeMatrix = DMat;
 

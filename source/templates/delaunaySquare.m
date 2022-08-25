@@ -4,7 +4,7 @@ arguments
     opts.n  {mustBeNumeric} = 4;
     opts.nX {mustBeNumeric} = 40;
     opts.robinCoeff = 0;
-    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev'})} = 'Uniform';
+    opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
 
 n=opts.n;

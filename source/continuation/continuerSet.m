@@ -14,12 +14,14 @@ defaultSaveFlag=setDefault(optionsIn,'saveFlag',true);
 defaultPlotFlag=setDefault(optionsIn,'plotFlag',true);
 defaultVerboseFlag=setDefault(optionsIn,'verboseFlag',false);
 defaultMinNormDelta=setDefault(optionsIn,'minNormDelta',1e-3);
+defaultMaxPoints = setDefault(optionsIn,'maxPoints',999);
 
 % Define some tests for input validity
 validPosNum = @(x) isnumeric(x) && x > 0;
 validRealNum = @(x) isnumeric(x) && isreal(x);
 validLogical = @(x) islogical(x) || (isnumeric(x) && (x==0 || x==1));
 validOptions = @(x) isstruct(x) || isempty(x);
+validPosInt = @(x) isnumeric(x) && x > 0 && round(x)==x;
 
 p=inputParser;
 addRequired(p,'optionsIn',validOptions);
@@ -31,6 +33,7 @@ addParameter(p,'saveFlag',defaultSaveFlag,validLogical);
 addParameter(p,'plotFlag',defaultPlotFlag,validLogical);
 addParameter(p,'verboseFlag',defaultVerboseFlag,validLogical);
 addParameter(p,'minNormDelta',defaultMinNormDelta,validPosNum);
+addParameter(p,'maxPoints',defaultMaxPoints,validPosInt);
 
 parse(p,optionsIn,varargin{:});
 

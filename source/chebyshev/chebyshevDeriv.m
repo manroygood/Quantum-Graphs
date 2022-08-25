@@ -5,7 +5,6 @@ N=n-1;
 
 if N==0
     D=0;
-    x=1;
     return
 end
 
