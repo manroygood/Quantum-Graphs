@@ -1,65 +1,62 @@
-function [t,u] = odeQGARK(G,f,u0,h,tend)
-% Given a graph G, function f and initial condition u0, this function 
-% evolves the solution to f(t,x) = u_xx in time using a 2nd, 4th or 8th
-% order scheme until t=tend using the given step size h. The result will be
-% a matrix the ith row of u is the solution evaluated at ith value of tvec.
+function [tVec,U] = odeQGARK(G,mu,F,tFinal,u0,dt,opts)
+% Solves the PDE u_t = mu * Laplace(u) + F(t,u) on a quantum graph G
+% from t = 0 to t = tFinal with step size dt
+% using a form of Nørsett's three-stage, 4th order Diagonally Implicit Runge–Kutta method
+% which has been adapted so that the solution at all times satisfies the
+% discrete form of the vertex conditions
 
-told = 0;        % t_n
-tnew = told;     % t_n+1
-s = 3;           % Number of b_i coeff's
-j = 1;           % Index for t and u
-m = round(tend/h);      % Number of t points
-n = length(u0);         % Number of x points
 
-nEdges = length(G.L);   % Number of edges
-nBCs = 2*nEdges;        % Number of BC conditions
-A = full(G.laplacianMatrix);                % The second spatial derivative operator
-B = full(G.weightMatrix);                   % The rectangular collocation or weight matrix
-C = [B(1:(n-nBCs),:); A((n-nBCs+1):n,:)];   % Weight matrix diagonal with boundary data in bottom rows
-
-if size(u0,1)==1    % Corrects orientation of u0
-    u0=u0';
+arguments
+    G
+    mu
+    F,
+    tFinal
+    u0
+    dt
+    opts.phi = @(t)zeros(G.numnodes,1);
 end
 
-u = zeros(n,m);
-t = zeros(1,m);
-u(:,1) = u0;
-uold = u(:,1);      % u_n
+tVec = 0:dt:tFinal;
+m=length(tVec);
+n = length(u0);  
+U = zeros(n,m);
+U(:,1) = u0;
 
-x = 1.06858;
+% Build the matrix C used in the RK method and the function f
+nVC = 2*G.numedges;                        % Number of vertex conditions
+L = full(G.laplacianMatrix);                % The second spatial derivative operator
+P = full(G.weightMatrix);                   % The rectangular collocation or weight matrix
+PBC = [P(1:(n-nVC),:); L((n-nVC+1):n,:)];   % Weight matrix diagonal with boundary data in bottom rows
+L(n-nVC+1,:)=0;
+MVCA = G.vertexConditionAssignmentMatrix;
+f=@(t,z) mu*L*z + P*F(t,z) ;
+
+% Define the coefficients a, b, and c that define the RK scheme
+% These are all multiplied by dt to reduce number of multiplications in the
+% main loop
+r = roots([1 -3/2 1/2 -1/24]); 
+x = max(r);
 a = [x         0 0; 
      1/2-x     x 0; 
-     2*x   1-4*x x];
+     2*x   1-4*x x]*dt;
 b1 = 1/(6*(1-2*x)^2);
 b2 = (3*(1-2*x)^2 - 1) / (3*(1-2*x)^2);
-b3 = b1;
-b = [b1 b2 b3];
-c = zeros(s,1);
 
-for i=1:s
-    c(i) = sum(a(i,:));
-end
+b = [b1; b2; b1]*dt;
+c = sum(a,2);
 
+options = optimset('Display','off'); % Tell fsolve to be quiet!
 
-while tnew < tend
-    told = tnew;
-    
-    k1guess = f(told , uold);
-    k1 = fsolve(@(x) x - f(told + c(1)*h, uold + a(1,1)*h*(C\x)), k1guess);
-    k2 = fsolve(@(x) x - f(told + c(2)*h, uold + a(2,1)*h*(C\k1) + a(2,2)*h*(C\x)), k1);
-    k3 = fsolve(@(x) x - f(told + c(3)*h, uold + a(3,1)*h*(C\k1) + a(3,2)*h*(C\k2) + a(3,3)*h*(C\x)), k2);
-    
-    k = [transpose(k1); transpose(k2); transpose(k3)];    
-    
-    K = transpose(b*k);
-    K((n-nBCs+1):n) = 0;
-    unew = uold + C\(h*K);
-    tnew = told + h;
-    
-    j = j + 1;
-    u(:,j) = unew;
-    uold = unew;
-    t(j) = tnew;
-end
-
+for j=2:m
+    t = tVec(j);
+    k1guess = f(t , u0);
+    k1int = fsolve(@(x) x - f(t + c(1), u0 + a(1,1)*(PBC\(x+MVCA*opts.phi(t+c(1))))), k1guess, options);
+    k1ext = PBC\(k1int+MVCA*opts.phi(t+c(1)));
+    k2int = fsolve(@(x) x - f(t + c(2), u0 + a(2,1)*k1ext + a(2,2)*(PBC\(x+MVCA*opts.phi(t+c(2))))), k1int, options);
+    k2ext = PBC\(k2int+MVCA*opts.phi(t+c(2)));
+    k3int = fsolve(@(x) x - f(t + c(3), u0 + a(3,1)*k1ext + a(3,2)*k2ext + a(3,3)*(PBC\(x+MVCA*opts.phi(t+c(3))))), k2int, options);
+    K = [k1int k2int k3int]*b;
+    K((n-nVC+1):n) = 0;
+    u0 = PBC\(u0+ K + MVCA*opts.phi(t+dt));
+    U(:,j) = u0;
 end

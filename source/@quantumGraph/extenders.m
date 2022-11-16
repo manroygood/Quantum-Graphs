@@ -1,4 +1,4 @@
-function M = extendedLaplacian(G)
+function [LaplaceXtended,ExtenderMat] = extendedLaplacian(G)
 
 assert(G.hasDiscretization('Uniform'),'Extended Laplacian needs to have uniform discretization')
 nEdges=G.numedges;
@@ -6,7 +6,7 @@ nNodes=G.numnodes;
 [~,nxC,nxTot]=nx(G);
 LMat=G.laplacianMatrix ;
 WMat=G.weightMatrix;
-EMat=speye(nxTot);
+ExtenderMat=speye(nxTot);
 
 [~,~,~,row]=getBounds(nxC,nEdges);
 for j=1:nNodes   % Loop over the nodes
@@ -41,14 +41,14 @@ for j=1:nNodes   % Loop over the nodes
         edge = connectedEdges(iRow);
         direction = inOrOut(iRow);
         [ghostRow,~] = G.getEndPoints(direction,edge);
-        EMat(ghostRow,ghostRow)=0;
+        ExtenderMat(ghostRow,ghostRow)=0;
         for jColumn=1:fullDegree
             edge = connectedEdges(jColumn);
             direction = inOrOut(jColumn);
             [~,interiorColumn] = G.getEndPoints(direction,edge);
-            EMat(ghostRow,interiorColumn) = EMatNode(iRow,jColumn); %#ok<*SPRIX> 
+            ExtenderMat(ghostRow,interiorColumn) = EMatNode(iRow,jColumn); %#ok<*SPRIX> 
         end
     end
 end
 
-M = EMat*WMat'*LMat;
+LaplaceXtended = ExtenderMat*WMat'*LMat;

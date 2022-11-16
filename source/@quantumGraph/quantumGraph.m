@@ -3,15 +3,16 @@ classdef quantumGraph < matlab.mixin.Copyable
     % i.e. if g is a graph then the command 'g1=copy(g)' will create a new object
     % g1 that duplicates all of the values of g, rather than simply being a
     % second name for g
-    properties
+    properties (Access = private)
         qg      % the main quantum graph, a digraph
-        discretization;
         laplacianMatrix;
         weightMatrix;
         weightMatrixWithBCs;
-        vertexConditionAssignmentMatrix;
-%        explicitLaplacian;
         derivativeMatrix;
+        vertexConditionAssignmentMatrix;
+    end
+    properties (SetAccess = immutable, GetAccess = public)
+        discretization  ;
     end
     methods
         function obj=quantumGraph(source,target,LVec,opts)

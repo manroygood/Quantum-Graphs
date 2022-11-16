@@ -10,12 +10,11 @@ nEdges = G.numedges;        % Number of edges
 nNodes = G.numnodes;        % Number of nodes
 [n,nxC,nxTot] = G.nx;       % A useful vector giving positions of final disc point of each edge
 L = G.L;                    % Vector of edge lengths
-D1matrix = zeros(nxTot,nxTot);
+D1matrix = zeros(nxTot,nxTot);             % Used to define Robin-Kirchhoff Boundary Conditions
 D2matrix = zeros(nxTot-2*nEdges, nxTot);   % D2matrix will contain the blocked D2 matricies and no BCs
 B = zeros(nxTot,nxTot);                    % Initializes projection matrix
 
 for i=1:nEdges       % Loops over each edge
-    clear D1 D2
     
     N = n(i)+2;   % Number of disc. pts. on e_i
     M = n(i);     % Number of rows needed
@@ -75,12 +74,12 @@ LMat = [D2matrix; BC];
 C = B;
 C(nxTot-2*nEdges+1:end,:) = BC;
 
-G.derivativeMatrix = -D1matrix;
+%G.derivativeMatrix = -D1matrix;
 G.laplacianMatrix = LMat;
 G.weightMatrix = B;
 G.weightMatrixWithBCs = C;
 G.vertexConditionAssignmentMatrix=VCAMat;
-
+G.derivativeMatrix = -D1matrix;
 
 
 end

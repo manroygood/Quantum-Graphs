@@ -8,5 +8,5 @@ else
 end
 saveFilesToDir(dataDir,fcns)
 
-addComment(dataDir,'Nonlinearity given by: %s',f);
+addComment(dataDir,'Nonlinearity given by: %s',fcns.fSymbolic);
 addComment(dataDir);

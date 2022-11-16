@@ -2,7 +2,7 @@ function Phi = hexOfHexes(opts)
 
 arguments
     opts.nx = 10;
-    opts.edgeLength=2;
+    opts.cellsPerSide=2; % This is the number of hexagons/side
     opts.L=1;
     opts.robinCoeff=0;
     opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
@@ -10,8 +10,8 @@ end
 
 % note that I interpret nx1 and nx2 as the number of cells in each
 % direction, so we need one more row of vertices in each direction
-nRings=opts.edgeLength-1;
-nx1=2*opts.edgeLength+2;
+nRings=opts.cellsPerSide-1;
+nx1=2*opts.cellsPerSide+2;
 nx2=nx1;
 L=opts.L;
 v1=L*[sqrt(3) 1]/2;
@@ -72,7 +72,7 @@ radiusSquared = (1+3*nRings+3*nRings^2)*L^2;
 keepers=X1.^2+X2.^2<radiusSquared+1e-9;
 tossers=find(X1.^2+X2.^2>radiusSquared+1e-9);
 PhiTemp=PhiTemp.rmnode(tossers);
-nodes=nodes(keepers,:);
+nodes=nodes(keepers,:); nodes(:,1)=nodes(:,1)-mean(nodes(:,1));
 source=PhiTemp.Edges.EndNodes(:,1);
 target=PhiTemp.Edges.EndNodes(:,2);
 LVec = L*ones(size(source));

@@ -24,13 +24,6 @@ save(freqFileName,'Lambda0','-ascii','-double')
 fprintf('File saved to %s.\n',eigFileName);
 fprintf('File number is %i. \n',fileNumber);
 
-addComment(dataDir,'savedFunction.%s has support localized  on ',fileLabel)
-for k=1:length(edges)
-    if signs(k)==1; s = '+1'; else; s = '-1'; end
-    addComment(dataDir,'Edge #%i, with sign %2',edges(k),s);
-end
-addComment(dataDir);
-
 end
 
 function Phi=initNLStandingGraphical(Phi,Lambda0,x0)

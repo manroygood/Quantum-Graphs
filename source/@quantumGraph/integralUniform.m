@@ -20,9 +20,7 @@ end
     function z = edgeIntegral(k)
     dx = G.Edges.dx(k);
     v1 = G.Edges.y{k};
-
     z = weightVec(k)* dx * sum(v1(2:end-1));
-
     end
 
 end

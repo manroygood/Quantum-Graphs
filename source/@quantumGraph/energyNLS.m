@@ -11,6 +11,7 @@ yDerivative=Phi.derivative;
 term1=Phi.integral(yDerivative.*conj(yDerivative));
 term2=Phi.integral(fcns.F(yColumn));
 
-vertexTerm = dot(Phi.robinCoeff,(Phi.Nodes.y).^2);
+rC=Phi.robinCoeff;rC(isnan(rC))=0;
+vertexTerm = dot(rC,(Phi.Nodes.y).^2);
 
-E = vertexTerm + term1 - term2;
+E = real(vertexTerm + term1 - term2);

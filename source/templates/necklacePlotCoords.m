@@ -6,7 +6,7 @@ function plotCoords = necklacePlotCoords(Phi)
 plotCoords=Phi.initPlotCoords;
 
 L = Phi.L;
-nPearls = length(L)/3;
+nPearls = Phi.numedges/3;
 
 lString=L(1);
 rPearl = L(2)*2/pi;
