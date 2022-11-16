@@ -2,6 +2,8 @@ function pcolor(G,u,uRange)
 
 if ~exist('u','var')
     u=G.graph2column;
+else
+    G.column2graph(u);
 end
 
 if ~exist('uRange','var')
@@ -27,4 +29,6 @@ for k=1:G.numedges
 end
 
 axis equal off
+view([0 90])
+
 colorbar
