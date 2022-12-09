@@ -5,23 +5,28 @@ classdef quantumGraph < matlab.mixin.Copyable
     % second name for g
     properties (Access = private)
         qg      % the main quantum graph, a digraph
-        laplacianMatrix;
-        weightMatrix;
-        weightMatrixWithBCs;
-        derivativeMatrix;
-        vertexConditionAssignmentMatrix;
+    end
+    properties (SetAccess = private, GetAccess = public)
+        wideLaplacianMatrix;        % the matrix L_int from text (dimension N_int x N_ext)
+        interpolationMatrix;        % the matrix P_int from text (dimension N_int x N_ext)
+        discreteVCMatrix;        % the matrix M_VC (dimenstion 2*numedges x N_ext)
+        nonhomogeneousVCMatrix;      % The matrix M_NH used for assigning nonhomogeneous VC terms to the right row, dimension N_ext x 2 numedges
+        derivativeMatrix;           % a square derivative matrix. Used for computing energy and momentum, dimension N_ext x N_ext
     end
     properties (SetAccess = immutable, GetAccess = public)
         discretization  ;
     end
     methods
-        function obj=quantumGraph(source,target,LVec,opts)
+        function G=quantumGraph(source,target,LVec,opts)
             % Three required arguments, the rest optional
             % Constructs a quantum graph data structure
             % This is the 2021 implementation implmenting all vertex conditions 
             % including Dirichlet via ghostpoints
             % 6/23/2021 replaced input parser with argument block
-            % 7/1/2021 made ghost points actual data points
+            % 7/1/2021 made ghost points actual data points 
+            % 11/16/2022 made laplacian matrix and interpolation wide
+            %            rectangles, to be supplemented by vertex
+            %            conditions or zeros
             
             arguments
                 source double {mustBeVector,mustBePositive,mustBeFinite}
@@ -90,13 +95,13 @@ classdef quantumGraph < matlab.mixin.Copyable
                 'Must have a discretization if setting up plot coordinates.');
             
             % Construct the basic graph structure
-            obj.qg=digraph(source,target,Weight);
+            G.qg=digraph(source,target,Weight);
             
             % Assign the edge lengths
-            obj.qg.Edges.L=LVec(:);
+            G.qg.Edges.L=LVec(:);
             
             % Test that the Robin coefficients are a sensible length
-            nNodes=numnodes(obj.qg);
+            nNodes=numnodes(G.qg);
             robinCoeff=opts.RobinCoeff;
             if length(robinCoeff)==nNodes
                 robinCoeff=robinCoeff(:);
@@ -106,7 +111,7 @@ classdef quantumGraph < matlab.mixin.Copyable
                 error('quantumGraph:robinMismatch','Robin coefficient vector length must equal number of nodes')
             end
             % Assign the Robin coefficients to the Nodes
-            obj.qg.Nodes.robinCoeff=robinCoeff;
+            G.qg.Nodes.robinCoeff=robinCoeff;
             
             % Test that the node Data vector is a sensible length
             nodeData=opts.nodeData;
@@ -118,22 +123,22 @@ classdef quantumGraph < matlab.mixin.Copyable
                 error('quantumGraph:nodeDataMismatch','Node data vector length must equal number of nodes')
             end
             % Assign the node data to the Nodes
-            obj.qg.Nodes.nodeData=nodeData;
+            G.qg.Nodes.nodeData=nodeData;
             
-            obj.discretization=opts.Discretization;
+            G.discretization=opts.Discretization;
             % If the nxVec is set but the discretization is set to 'None'
             % but 'nxVec' is given, remove 'nxVec' 
-            if (~isempty(opts.nxVec) && strcmp(obj.discretization,'None'))
+            if (~isempty(opts.nxVec) && strcmp(G.discretization,'None'))
                 opts.nxVec=[];
             end
             
-            if (~isempty(opts.nxVec) && ~strcmp(obj.discretization,'None'))
-                obj.addCoordinates(opts.nxVec);
-                obj.constructMatrices;
+            if (~isempty(opts.nxVec) && ~strcmp(G.discretization,'None'))
+                G.addCoordinates(opts.nxVec);
+                G.constructMatrices;
             end
             
             if isfield(opts,'plotCoordinateFcn')
-                obj.addPlotCoords(opts.plotCoordinateFcn);
+                G.addPlotCoords(opts.plotCoordinateFcn);
             end
             
         end % End of constructor

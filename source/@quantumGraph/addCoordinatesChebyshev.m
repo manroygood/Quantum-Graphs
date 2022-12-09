@@ -1,4 +1,4 @@
-function addChebyshevCoordinates(G,nxVec,ny)
+function addCoordinatesChebyshev(G,nxVec,ny)
 
 nEdges=G.numedges;
 nNodes=G.numnodes;

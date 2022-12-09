@@ -2,17 +2,15 @@ function constructMatricesChebyshev(G)
 % Constructs several matrices needed for the finite difference 
 
 %% Construct the Laplacian matrix for the quantum graph domain G
-% Produces the Laplacian matrix A with encoded boundary conditions and
-% projection matrix B that would be used for the eigenvalue problem
-% A*x = lambda.B*x
-
+% Produces the Laplacian matrix 
+% interpolation matrix B 
 nEdges = G.numedges;        % Number of edges
 nNodes = G.numnodes;        % Number of nodes
 [n,nxC,nxTot] = G.nx;       % A useful vector giving positions of final disc point of each edge
 L = G.L;                    % Vector of edge lengths
 D1matrix = zeros(nxTot,nxTot);             % Used to define Robin-Kirchhoff Boundary Conditions
 D2matrix = zeros(nxTot-2*nEdges, nxTot);   % D2matrix will contain the blocked D2 matricies and no BCs
-B = zeros(nxTot,nxTot);                    % Initializes projection matrix
+B = zeros(nxTot-2*nEdges,nxTot);                    % Initializes projection matrix
 
 for i=1:nEdges       % Loops over each edge
     
@@ -45,11 +43,12 @@ end
 % the Dirichlet condition. The remaining rows of the block enforce
 % continuity.
 
-% Create the Vertex Condition Assignment Matrix VCAMat which maps the nonhomogeneous data
-% defined at the vertices to the correct row
+% Create:
+%  * The nonhomogeneous VC matrix which maps the nonhomogeneous data defined at a vertex to the correct row
+%  * discreteVCMat--discretizes the vertex conditions
 
-VCAMat = zeros(nxTot,nNodes);
-BC = zeros(2*nEdges,nxTot);                % Initializes space for Boundary Conditions
+nonhomogeneousVCMat = zeros(nxTot,nNodes);
+discreteVCMat = zeros(2*nEdges,nxTot);                % Initializes space for vertex Conditions
 
 row = 0;
 for j=1:nNodes     % Loop over the nodes
@@ -59,29 +58,21 @@ for j=1:nNodes     % Loop over the nodes
         row = row + 1;
 
         if k == 1   % At first entry of block, enforce either Dirichlet or flux condition & put a one in the right spot of VCAMat
-            BC(row,:) = robinCondition(G,j,D1matrix);
-            VCAMat(nxTot-2*nEdges+row,j) = 1;
+            discreteVCMat(row,:) = robinCondition(G,j,D1matrix);
+            nonhomogeneousVCMat(nxTot-2*nEdges+row,j) = 1;
         else        % At remaining entries of block enforce continuity condition
             e1 = G.ek(j,1);
             e2 = G.ek(j,k);
-            BC(row,:) = e1 - e2;
+            discreteVCMat(row,:) = e1 - e2;
         end
         
     end
 end
 
-LMat = [D2matrix; BC];
-C = B;
-C(nxTot-2*nEdges+1:end,:) = BC;
-
-%G.derivativeMatrix = -D1matrix;
-G.laplacianMatrix = LMat;
-G.weightMatrix = B;
-G.weightMatrixWithBCs = C;
-G.vertexConditionAssignmentMatrix=VCAMat;
+G.wideLaplacianMatrix = D2matrix;
+G.interpolationMatrix = B;
+G.discreteVCMatrix =  discreteVCMat;
+G.nonhomogeneousVCMatrix=nonhomogeneousVCMat;
 G.derivativeMatrix = -D1matrix;
 
-
 end
-
-

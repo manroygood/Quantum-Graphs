@@ -19,7 +19,8 @@ assert(length(opts.edgeData)==nxTot,'quantumGraph:edgeDataLengthIncompatible',..
     'Length of the edge data vector incompatible with the graph');
 
 % The actual function
-rhs=G.weightMatrix * opts.edgeData + ...
-        G.vertexConditionAssignmentMatrix * G.nodeData;
+
+rhs=(G.interpolationMatrixWithZeros) * opts.edgeData + ...
+        (G.nonhomogenousVCMatrix) * G.nodeData;
     
-solution = G.laplacianMatrix \ rhs;
+solution = G.laplacianMatrixWithVC \ rhs;

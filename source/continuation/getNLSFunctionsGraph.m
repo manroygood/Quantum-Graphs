@@ -22,8 +22,8 @@ F = matlabFunction(2*int(f,[0 z])); % The factor of two is correct but subtle.
 assert(f(0)==0,'Must assume f(0)=0')
 assert(fprime(0)==0,'Must assume fprime(0)=0')
 
-A = Phi.laplacianMatrix;
-B = Phi.weightMatrix;
+A = Phi.laplacianMatrixWithVC;
+B = Phi.interpolationMatrixWithZeros;
 
 nA=length(A);
 fcns.fSymbolic = fSymbolic;

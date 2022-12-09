@@ -4,9 +4,10 @@ function [v,d] = eigs(G,n)
 % they are, it mods out by the kernal of A.
 assert(G.hasDiscretization,'quantumgraph:notDiscretized','Input graph G must have been discretized')
 
-A = G.laplacianMatrix;
-B = G.weightMatrix;
-v = zeros(length(A),n);
+A = G.extendWithVC(G.wideLaplacianMatrix);
+B = G.extendWithZeros(G.interpolationMatrix);
+[~,~,nxTot]=G.nx;
+v = zeros(nxTot,n);
 
 
 if isempty(null(full(A)))                  % If A is well conditioned

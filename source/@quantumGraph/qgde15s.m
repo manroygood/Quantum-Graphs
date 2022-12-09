@@ -1,4 +1,4 @@
-function [t,u] = odeQG15s(G,mu,F,t,u0,opts)
+function [t,u] = qgde15s(G,mu,F,t,u0,opts)
 % Given a function f and initial condition u0, this function evolves the
 % solution to du/dt =f(F,u,t) in time using a ode15s until t=tend using the
 % given step size h. The result will be a matrix the ith row of u is the
@@ -19,12 +19,12 @@ if length(t) == 1
 else
     tspan = t;
 end
-M = G.laplacianMatrix;
-B = G.weightMatrix;
-MVCA = G.vertexConditionAssignmentMatrix;
-f=@(t,z) mu*(M*z) + B*F(t,z) - MVCA*mu*opts.phi(t);
+Lvc = G.laplacianMatrixWithVC;
+P0 = G.interpolationMatrixWithZeros;
+MNH0 = G.nonhomogeneousVCMatrix;
+f=@(t,z) mu*(Lvc*z) + P0*F(t,z) - MNH0*mu*opts.phi(t);
 
-odeopt = odeset('mass', B, 'masssing', 'yes', 'AbsTol', 100*opts.tol, 'RelTol', opts.tol);
+odeopt = odeset('mass', P0, 'masssing', 'yes', 'AbsTol', 100*opts.tol, 'RelTol', opts.tol);
 
 [t, u] = ode15s(f, tspan, u0, odeopt);
 u = u.';

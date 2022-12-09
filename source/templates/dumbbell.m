@@ -2,7 +2,7 @@ function Phi=dumbbell(opts)
 
 arguments
     opts.LVec {mustBeNumeric} = [2*pi 4 2*pi];
-    opts.nX  {mustBeNumeric} = 10;
+    opts.nX  {mustBeNumeric} = 20;
     opts.robinCoeff {mustBeNumeric} = 0;
     opts.Discretization {mustBeNonzeroLengthText, mustBeMember(opts.Discretization,{'Uniform','Chebyshev','None'})} = 'Uniform';
 end
