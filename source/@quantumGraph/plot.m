@@ -1,7 +1,7 @@
 function plot(G,varargin)
 % Converts column vector to a graph, interpolates at the nodes, and plots
 
-assert(~strcmp(G.discretization,'None'),'Can not plot without discretization')
+assert(~strcmp(G.discretization,'None'),'Cannot plot without discretization')
 
 if nargin==1
     myColor=mcolor('blueish');
@@ -24,8 +24,8 @@ elseif nargin==2
 elseif nargin ==3
     column=varargin{1};
     G.column2graph(column);
-    assert(isa(varargin{3},'char'),'Third argument should be a char array')
-    myColor=varargin{3};
+    assert(isa(varargin{2},'char'),'Third argument should be a char array')
+    myColor=varargin{2};
 end
 
 

@@ -1,7 +1,7 @@
 function [v,d] = eigs(G,n)
 % Solves the eigenvalue problem Av=kBv for the first n smallest eigenvalues.
 % When A and B are not singular, it uses the normal function eigs but when
-% they are, it mods out by the kernal of A.
+% they are, it mods out by the kernel of A.
 assert(G.hasDiscretization,'quantumgraph:notDiscretized','Input graph G must have been discretized')
 
 A = G.extendWithVC(G.wideLaplacianMatrix);

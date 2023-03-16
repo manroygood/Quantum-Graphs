@@ -1,6 +1,7 @@
 function ek = ek(G,node,k)
 % Return a unit vector used in constructing various matrices and the
 % secular determinant
+    [~,nxC,nxTot] = G.nx;
     I = eye(nxTot);
     [~,inOrOut,adjacentEdges] = G.fullDegreeEtc(node);
     

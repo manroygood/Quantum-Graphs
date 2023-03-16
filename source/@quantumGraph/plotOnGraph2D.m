@@ -4,7 +4,10 @@ function plotOnGraph2D(G,myColor)
 
 if nargin==1
     myColor=mcolor('blueish');
+ elseif isa(myColor,'char') && length(myColor)>1
+    myColor=mcolor(myColor);
 end
+
 myGray=mcolor('silver');
 nEdges=numedges(G);
 Edges=G.Edges;

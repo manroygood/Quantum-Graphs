@@ -39,10 +39,14 @@ This package has been used in the following papers
 
 and in the 2022 doctoral dissertation of Grace Conte at the University of North Carolina
 
-#### Feature requests
+#### Planned additions and feature requests
+
+* Deflated continuation in order to locate nonlinear branches in a neighborhood of high-codimension bifurcations that arise in quantum graphs with large discrete symmetry groups.
+* Time stepping for more general evolutionary PDE of the form $u_t = \mu \triangle u + f(u,x,t)$ with time-dependent vertex conditions.
+
 We are happy to consider adding features and/or to merge in contributions.
 
-If you use the package please cite it as
+If you use the package for published work, please cite it as
 
 ```bibtex
 @misc{qgpackage,

@@ -6,15 +6,14 @@ classdef quantumGraph < matlab.mixin.Copyable
     properties (Access = private)
         qg      % the main quantum graph, a digraph
     end
-    properties (SetAccess = private, GetAccess = public)
+    properties (SetAccess = immutable, GetAccess = public)
+        discretization  ;
+    end    properties (SetAccess = private, GetAccess = public)
         wideLaplacianMatrix;        % the matrix L_int from text (dimension N_int x N_ext)
         interpolationMatrix;        % the matrix P_int from text (dimension N_int x N_ext)
         discreteVCMatrix;        % the matrix M_VC (dimenstion 2*numedges x N_ext)
         nonhomogeneousVCMatrix;      % The matrix M_NH used for assigning nonhomogeneous VC terms to the right row, dimension N_ext x 2 numedges
         derivativeMatrix;           % a square derivative matrix. Used for computing energy and momentum, dimension N_ext x N_ext
-    end
-    properties (SetAccess = immutable, GetAccess = public)
-        discretization  ;
     end
     methods
         function G=quantumGraph(source,target,LVec,opts)

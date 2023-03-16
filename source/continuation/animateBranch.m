@@ -13,6 +13,7 @@ text(Lambda(1),NVec(1),'Start')
 text(Lambda(end),NVec(end),'End')
 figure
 
+
 vec=load(fullfile(branchDir,'PhiColumn.001'));
 U=zeros(length(vec),N);
 U(:,1)=vec;
