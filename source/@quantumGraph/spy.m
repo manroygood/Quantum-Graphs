@@ -9,4 +9,4 @@ spy(G.interpolationMatrix);
 title(sprintf('Interpolation Matrix--%s discretization',discretization))
 figure
 spy(G.discreteVCMatrix)
-title(sprintf('Vortex condition matrix--%s discretization',discretization))
+title(sprintf('Vertex condition matrix--%s discretization',discretization))

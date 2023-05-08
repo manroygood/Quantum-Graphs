@@ -1,4 +1,4 @@
-function addUniformCoordinates(G,nxVec,ny)
+function addCoordinatesUniform(G,nxVec,ny)
 
 nEdges=G.numedges;
 nNodes=G.numnodes;

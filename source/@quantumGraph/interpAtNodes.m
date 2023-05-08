@@ -8,10 +8,18 @@ for k = 1:nNodes
     [~,inOrOut,allEdges]=fullDegreeEtc(G,k);
     edge=allEdges(1);
     y=G.y{edge};
-    if  inOrOut(1)==1
-        yNodes(k) = (y(end)+y(end-1))/2;
+    if G.hasDiscretization('Uniform')
+        if  inOrOut(1)==1
+            yNodes(k) = (y(end)+y(end-1))/2;
+        else
+            yNodes(k) = ( y(1)+y(2))/2;
+        end
     else
-        yNodes(k) = ( y(1)+y(2))/2;
+        if  inOrOut(1)==1
+            yNodes(k) = y(end);
+        else
+            yNodes(k) = y(1);
+        end
     end
 end
 
