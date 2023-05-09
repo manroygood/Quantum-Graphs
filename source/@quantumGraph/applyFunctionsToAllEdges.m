@@ -1,5 +1,6 @@
 function varargout = applyFunctionsToAllEdges(G,functionArray)
-
+% The functions are evaluated only at the interior points of each edge, and
+% then extended to the vertex or ghost points using the extendWithVC method
 assert(length(functionArray),G.numedges,'The number of elements in the function array must match the number of edges.')
 
 if ~G.hasEdgeField('xInterior')

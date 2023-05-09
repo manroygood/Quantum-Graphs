@@ -1,5 +1,5 @@
 function [x1,x2]=semicircularEdge(G,edge,plusminus,plotCoords)
-% Create a discretized line segment for plotting a given edge of the
+% Create a discretized semicircular segment for plotting a given edge of the
 % quantum graph G 
 
 endNodes=G.EndNodes(edge);
