@@ -10,7 +10,8 @@ arguments
     F
     t
     u0
-    opts.tol {mustBeNumeric} = 1e-6;
+    opts.AbsTol {mustBeNumeric} = 1e-6;
+    opts.RelTol {mustBeNumeric} = 1e-3;
     opts.phi = @(t)zeros(G.numnodes,1);
 end
 
@@ -24,7 +25,7 @@ P0 = G.interpolationMatrixWithZeros;
 MNH0 = G.nonhomogeneousVCMatrix;
 f=@(t,z) mu*(Lvc*z) + P0*F(t,z) - MNH0*mu*opts.phi(t);
 
-odeopt = odeset('mass', P0, 'masssing', 'yes', 'AbsTol', 100*opts.tol, 'RelTol', opts.tol);
+odeopt = odeset('mass', P0, 'masssing', 'yes', 'AbsTol', opts.AbsTol, 'RelTol', opts.RelTol);
 
 [t, u] = ode15s(f, tspan, u0, odeopt);
 u = u.';

@@ -3,10 +3,6 @@ function vv=dumbbellResolveDoubles(V,k,Phi)
 % graph in order to display that these eigenfunctions are identically zero
 % on some edges
 
-% Technical note: the function eigenfunctionsSaveData.m requires the double
-% eigenvalue resolution program to take three arguments V, k, and Phi.
-% For the dumbbell graph, we don't need Phi to calculate the resolved
-% eigenfunctions, so we use the ~ placeholder.
 V1=V(:,k);
 V2=flip(V1);
 [~,p]=max(abs(V1));
