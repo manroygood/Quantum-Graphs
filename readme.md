@@ -20,7 +20,12 @@ This will open up a project window. This does three things that allow you to run
 2. Change some plotting defaults. The users defaults are saved in a `tmp` directory and are restored when the user closes the project by closing the project window.
 3. Verify that certain MATLAB toolboxes are installed that are necessary for certain functioning of the package.
 
-There's some documentation:
+#### The preprint
+
+In December, 2023, we submitted a paper describing the algorithms underlying QGLAB to a journal for publication. A slightly-modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
+
+
+#### Documentation
 
 Basic instructions are in a matlab live script `quantumGraphRoutines.mlx`, which has also been saved as an [html file](quantumGraphRoutines.html).
 
@@ -28,7 +33,10 @@ Many additional examples are presented in live scripts in directories `source/ex
 
 A wide variety of graphs are implemented in `source/templates`. These are demonstrated in `source/templates/templateGallery.mlx`.
 
-This package has been used in the following papers
+If it doesn't make sense, just ask me.
+
+####  QGLAB in action
+This package has been used in the following papers:
 
 * Goodman, R. H., NLS bifurcations on the bowtie combinatorial graph and the dumbbell metric graph. *Discrete & Continuous Dynamical Systems - A*, *39*(4), 2203–2232, (2019). http://doi.org/10.3934/dcds.2019093
 * Kairzhan, A., Pelinovsky, D. E., & Goodman, R. H., Drift of Spectrally Stable Shifted States on Star Graphs. *SIAM Journal on Applied Dynamical Systems*, *18*(4), 1723–1755, (2019). http://doi.org/10.1137/19M1246146 (Much of this is reproduced in `source/examples/shiftedStates`.)
@@ -42,7 +50,6 @@ and in the 2022 doctoral dissertation of Grace Conte at the University of North 
 #### Planned additions and feature requests
 
 * Deflated continuation in order to locate nonlinear branches in a neighborhood of high-codimension bifurcations that arise in quantum graphs with large discrete symmetry groups.
-* Time stepping for more general evolutionary PDE of the form $u_t = \mu \triangle u + f(u,x,t)$ with time-dependent vertex conditions.
 
 We are happy to consider adding features and/or to merge in contributions.
 
