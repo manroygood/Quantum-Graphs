@@ -36,20 +36,22 @@ A wide variety of graphs are implemented in `source/templates`. These are demons
 If it doesn't make sense, just ask me.
 
 ####  QGLAB in action
-This package has been used in the following papers:
+This package (or earlier versions) has been used in the following papers:
 
-* Goodman, R. H., NLS bifurcations on the bowtie combinatorial graph and the dumbbell metric graph. *Discrete & Continuous Dynamical Systems - A*, *39*(4), 2203–2232, (2019). http://doi.org/10.3934/dcds.2019093
-* Kairzhan, A., Pelinovsky, D. E., & Goodman, R. H., Drift of Spectrally Stable Shifted States on Star Graphs. *SIAM Journal on Applied Dynamical Systems*, *18*(4), 1723–1755, (2019). http://doi.org/10.1137/19M1246146 (Much of this is reproduced in `source/examples/shiftedStates`.)
-* Berkolaiko, G., Marzuola, J. L., & Pelinovsky, D. E., Edge-localized states on quantum graphs in the limit of large mass, _Annales de l'Institut Henri Poincaré C, Analyse non linéaire,_ 2020,  https://doi.org/10.1016/j.anihpc.2020.11.003.
-* Beck, T., Bors, I., Conte, G., Cox, G. & Marzuola, J.L., Limiting eigenfunctions of Sturm–Liouville operators subject to a spectral flow. *Ann. Math. Québec* (2020). https://doi.org/10.1007/s40316-020-00142-6 (Gracie Conte's spectrally-accurate modifcation.)
-* Kairzhan, A. & Pelinovsky, D. E., Multi-pulse edge-localized states on quantum graphs, aXiv preprint 2105.11938 (2021), https://arxiv.org/abs/2105.11938
-* A. Kairzhan, D. Noja, and D.E. Pelinovsky, Standing waves on quantum graphs, J. Phys. A: Math. Theor. 55 (2022) 243001
+* Goodman, R. H., [NLS bifurcations on the bowtie combinatorial graph and the dumbbell metric graph](http://doi.org/10.3934/dcds.2019093). *Discrete & Continuous Dynamical Systems - A*, *39*(4), 2203–2232, (2019). 
+* Kairzhan, A., Pelinovsky, D. E., & Goodman, R. H., [Drift of Spectrally Stable Shifted States on Star Graphs](http://doi.org/10.1137/19M1246146). *SIAM Journal on Applied Dynamical Systems*, *18*(4), 1723–1755, (2019).  (Much of this is reproduced in `source/examples/shiftedStates`.)
+* Berkolaiko, G., Marzuola, J. L., & Pelinovsky, D. E., [Edge-localized states on quantum graphs in the limit of large mass](https://doi.org/10.1016/j.anihpc.2020.11.003), _Annales de l'Institut Henri Poincaré C, Analyse non linéaire,_ 2020.
+* Beck, T., Bors, I., Conte, G., Cox, G. & Marzuola, J.L., [Limiting eigenfunctions of Sturm–Liouville operators subject to a spectral flow](https://doi.org/10.1007/s40316-020-00142-6). *Ann. Math. Québec* (2020).  
+* Kairzhan, A. & Pelinovsky, D. E., [Multi-pulse edge-localized states on quantum graphs](https://doi.org/10.1007/s13324-021-00603-3), *Anal. Math. Phys.* *11,* 171 (2021).
+* A. Kairzhan, D. Noja, and D.E. Pelinovsky, [Standing waves on quantum graphs](https://doi.org/10.1088/1751-8121/ac6c60), J. Phys. A: Math. Theor. 55 (2022) 243001. 
 
-and in the 2022 doctoral dissertation of Grace Conte at the University of North Carolina
+and in the [2022 doctoral dissertation](https://cdr.lib.unc.edu/concern/dissertations/8623j7218?locale=en) of Grace Conte at the University of North Carolina.
 
 #### Planned additions and feature requests
 
 * Deflated continuation in order to locate nonlinear branches in a neighborhood of high-codimension bifurcations that arise in quantum graphs with large discrete symmetry groups.
+* More advanced IMEX time-steppers
+* More general vertex conditions
 
 We are happy to consider adding features and/or to merge in contributions.
 
