@@ -5,7 +5,7 @@ if nargin==0
 end
 
 % Set the default value of each field either to its value in optionsIn or
-% to the rightmost value in the parentheses
+% to the rightmost value in the parentheses blue  
 defaultMaxTheta=setDefault(optionsIn,'maxTheta',2);
 defaultBeta=setDefault(optionsIn,'beta',0.1);
 defaultNThresh=setDefault(optionsIn,'NThresh',4);

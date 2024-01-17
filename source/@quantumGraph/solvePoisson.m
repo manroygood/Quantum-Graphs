@@ -21,6 +21,6 @@ assert(length(opts.edgeData)==nxTot,'quantumGraph:edgeDataLengthIncompatible',..
 % The actual function
 
 rhs=(G.interpolationMatrixWithZeros) * opts.edgeData + ...
-        (G.nonhomogenousVCMatrix) * G.nodeData;
+        (G.nonhomogeneousVCMatrix) * G.nodeData;
     
 solution = G.laplacianMatrixWithVC \ rhs;

@@ -9,7 +9,7 @@ end
 for k=1:G.numedges
    G.applyFunctionToInteriorEdge(functionArray{k},k); 
 end
-rhs = G.graphInterior2column;
+rhs = G.graphInterior2column + (G.nonhomogeneousVCMatrix) * G.nodeData;
 PVC = G.extendWithVC(G.interpolationMatrix);
 
 f = PVC\rhs;

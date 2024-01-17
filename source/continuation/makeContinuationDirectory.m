@@ -20,4 +20,3 @@ fprintf(fid,'-------------------------------------------------------\n');
 fclose(fid);
 
 fprintf('Created directory %s.\n',dataDir)
-fprintf('Run number is %i.\n',diagramNumber);

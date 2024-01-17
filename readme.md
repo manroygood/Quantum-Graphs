@@ -24,10 +24,9 @@ This will open up a project window. This does three things that allow you to run
 
 In December, 2023, we submitted a paper describing the algorithms underlying QGLAB to a journal for publication. A slightly-modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
 
-
 #### Documentation
 
-Basic instructions are in a matlab live script `quantumGraphRoutines.mlx`, which has also been saved as an [html file](quantumGraphRoutines.html).
+Basic instructions are in a Matlab live script quantumGraphRoutines.mlx, which has also been saved as an HTML file](quantumGraphRoutines.html).
 
 Many additional examples are presented in live scripts in directories `source/examples` and its subdirectories, and in `documentation`.
 
@@ -35,7 +34,31 @@ A wide variety of graphs are implemented in `source/templates`. These are demons
 
 If it doesn't make sense, just ask me.
 
-####  QGLAB in action
+#### Reproducibility
+
+There is a live script to reproduce every figure in the preprint that was produced using QGLAB. Some of the figures were edited interactively for clarity after being created by a script so that formatting may differ slightly. The following table lists the figures (numbered as on the arXiV while the paper remains under review).
+
+| Figure      | Description                                                  | file                                                         |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 2.2         | Layout and Laplacian matrix ($\mathbf{L}_{\mathrm{VC}}$) nonzero pattern for lollipop graph | `documentation/figures_from_the_paper/figure2p2.mlx`         |
+| 2.4         | Same as 2.2 but for Chebyshev and includes interpolation matrix $\mathbf{V}_0$ | `documentation/figures_from_the_paper/figure2p4.mlx`         |
+| 2.5 and A.1 | Four eigenfunctions and spectral determinant for a Y-shaped graph | `documentation/figures_from_the_paper/figure2p5.mlx`         |
+| 2.6         | Stationary NLS solutions on dumbbell and spiderweb graphs    | `documentation/figures_from_the_paper/figure2p6.mlx`         |
+| 2.7 & A.6   | Continuation study of NLS solutions on the necklace graph and two eigenfunctions | `source/examples/stationary/necklaceBifurcationDiagram.mlx`  |
+| 2.8 and A.9 | Soliton solutions colliding with a vertex on balanced and unbalanced star graphs. | `source/examples/evolution/NLSOnBalancedStar23t.mlx` and `source/examples/evolution/NLSOnUnbalancedStar23t.mlx` |
+| 2.9         | KPP equation on a honeycomb                                  | `source/examples/evolution/KPPonHoneycomb.mlx`               |
+| 3.1         | Function plotting on graphs with 2D and 3D layout            | `documentation/figures_from_the_paper/figure3p1.mlx`         |
+| A.2         | QGLAB log (ground state of L-shaped quantum graph)           | In  `/documentation/templateGallery.mlx`                     |
+| A.3         | Solution of Poisson equation on a 3-node graph               | `source/examples/stationary/poissonExample.mlx` and `source/examples/chebyshev/poissonExampleChebyshev.mlx` |
+| A.4         | Cubic NLS continuation study on a dumbbell graph             | `documentation/continuationInstructions.mlx` contains these images and many more useful plotting routines for continuation studies |
+| A.5         | Cubic-Quintic NLS continuation on a dumbbell graph           | `source/examples/stationary/dumbbellContinuation35.mlx`      |
+| A.7         | Heat equation solution on dumbbell                           | `source/examples/evolution/heatOnDumbbell.mlx` also see `source/examples/evolution/heatOnDumbbellTestOrder.mlx`  for convergence study |
+| A.8         | sine-Gordon equation on tetrahedron (flattened to Mercedes-Benz logo for plotting) | `source/examples/evolution/sineGordonOnTetra.mlx`            |
+| B.2         | Visualization of a function defined on a random graph using `plot` and `pcolor` | Code in text                                                 |
+| B.3         | The "bubble tower" graph                                     | Code in text                                                 |
+
+#### QGLAB in action
+
 This package (or earlier versions) has been used in the following papers:
 
 * Goodman, R. H., [NLS bifurcations on the bowtie combinatorial graph and the dumbbell metric graph](http://doi.org/10.3934/dcds.2019093). *Discrete & Continuous Dynamical Systems - A*, *39*(4), 2203–2232, (2019). 
@@ -53,7 +76,7 @@ and in the [2022 doctoral dissertation](https://cdr.lib.unc.edu/concern/disserta
 * More advanced IMEX time-steppers
 * More general vertex conditions
 
-We are happy to consider adding features and/or to merge in contributions.
+We are happy to consider adding features and/or merging contributions.
 
 If you use the package for published work, please cite it as
 
