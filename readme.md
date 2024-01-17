@@ -22,7 +22,7 @@ This will open up a project window. This does three things that allow you to run
 
 #### The preprint
 
-In December, 2023, we submitted a paper describing the algorithms underlying QGLAB to a journal for publication. A slightly-modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
+In December, 2023, we submitted a paper entitled "QGLAB: A MATLAB Package for Computations on Quantum Graphs" describing the algorithms underlying QGLAB to a journal for publication. A slightly-modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
 
 #### Documentation
 
