@@ -1,9 +1,9 @@
-function [xBif,muBif,bifType]=graphBifurcationDetector(fcns,xGuess,muGuess,options)
-Fkx=fcns.fLinMatrix(xGuess,muGuess);
+function [xBif,muBif,bifType]=graphBifurcationDetector(fcns,x,mu,options)
+Fkx=fcns.fLinMatrix(x,mu);
 
 [u0,~]=eigs(Fkx,1,'smallestabs');
 
-Fk = fcns.f(xGuess,muGuess);
+Fk = fcns.f(x,mu);
 resid1  = norm(Fk);
 resid2 = norm(Fkx*u0);
 residual = resid1+resid2;
@@ -13,8 +13,8 @@ tol=1e-6;
 maxTries=200;
 tries=0;
 
-xBif=xGuess;
-muBif=muGuess;
+xBif=x;
+muBif=mu;
 while residual>tol && updateSize>tol && tries < maxTries
     tries=tries+1;
     Fkmu = fcns.fMu(xBif,muBif);

@@ -3,12 +3,12 @@
 QGLAB is an object-oriented framework for working with quantum graphs in MATLAB. The current version defines a quantum graph object and allows the following operations
 
 * Define a finite quantum graph with arbitrary topology, edge lengths, and vertex conditions.
-* Compute the spectral determinant symbolically for a variety of verex conditions
+* Compute the spectral determinant symbolically for a variety of vertex conditions
 * Define a Laplacian operator on the quantum graph, using two methods:
-   * Second-order centered differences on the edges and second order vertex conditions implemented using ghost points.
+   * Second-order centered differences on the edges and second-order vertex conditions implemented using ghost points.
    * Chebyshev spectral methods
 * Solve nonlinear Schrödinger equations, and continue branches of solutions. Switch branches.
-* Solve various time dependent PDE posed on a quantum graph
+* Solve various time-dependent PDE posed on a quantum graph
 * Beautiful and easy plots of functions defined over metric graphs, and of bifurcation diagrams
 
 This code is written as a MATLAB [_Project_](https://www.mathworks.com/help/simulink/project-management.html). In order to run it, first type
@@ -17,18 +17,18 @@ at the MATLAB prompt or else click on the file `QGObject.prj` in the file listin
 This will open up a project window. This does three things that allow you to run the codes:
 
 1. Set the paths.
-2. Change some plotting defaults. The users defaults are saved in a `tmp` directory and are restored when the user closes the project by closing the project window.
-3. Verify that certain MATLAB toolboxes are installed that are necessary for certain functioning of the package.
+2. Change some plotting defaults. The user's defaults are saved in a `tmp` directory and are restored when the user closes the project by closing the project window.
+3. Verify that certain MATLAB toolboxes are installed that are necessary for certain functions of the package.
 
 #### The preprint
 
-In December, 2023, we submitted a paper entitled "QGLAB: A MATLAB Package for Computations on Quantum Graphs" describing the algorithms underlying QGLAB to a journal for publication. A slightly-modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
+In December 2023, we submitted a paper entitled “QGLAB: A MATLAB Package for Computations on Quantum Graphs” describing the algorithms underlying QGLAB to a journal for publication. A slightly modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
 
 #### Documentation
 
-Basic instructions are in a Matlab live script quantumGraphRoutines.mlx, which has also been saved as an HTML file](quantumGraphRoutines.html).
+Basic instructions are in a MATLAB live script quantumGraphRoutines.mlx, which has also been saved as an HTML file](quantumGraphRoutines.html).
 
-Many additional examples are presented in live scripts in directories `source/examples` and its subdirectories, and in `documentation`.
+Many additional examples are presented in live scripts in the directory `source/examples`, its subdirectories, and `documentation`.
 
 A wide variety of graphs are implemented in `source/templates`. These are demonstrated in `source/templates/templateGallery.mlx`.
 
@@ -36,19 +36,19 @@ If it doesn't make sense, just ask me.
 
 #### Reproducibility
 
-There is a live script to reproduce every figure in the preprint that was produced using QGLAB. Some of the figures were edited interactively for clarity after being created by a script so that formatting may differ slightly. The following table lists the figures (numbered as on the arXiV while the paper remains under review).
+We provide a live script to reproduce each figure in the preprint generated using QGLAB. Some of the figures were edited interactively for clarity after being created by a script, so formatting may differ slightly. The following table lists the figures (numbered as on the arXiv while the paper remains under review).
 
 | Figure      | Description                                                  | file                                                         |
 | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 2.2         | Layout and Laplacian matrix ($\mathbf{L}_{\mathrm{VC}}$) nonzero pattern for lollipop graph | `documentation/figures_from_the_paper/figure2p2.mlx`         |
 | 2.4         | Same as 2.2 but for Chebyshev and includes interpolation matrix $\mathbf{V}_0$ | `documentation/figures_from_the_paper/figure2p4.mlx`         |
 | 2.5 and A.1 | Four eigenfunctions and spectral determinant for a Y-shaped graph | `documentation/figures_from_the_paper/figure2p5.mlx`         |
-| 2.6         | Stationary NLS solutions on dumbbell and spiderweb graphs    | `documentation/figures_from_the_paper/figure2p6.mlx`         |
+| 2.6         | Stationary NLS solutions on the dumbbell and spiderweb graphs | `documentation/figures_from_the_paper/figure2p6.mlx`         |
 | 2.7 & A.6   | Continuation study of NLS solutions on the necklace graph and two eigenfunctions | `source/examples/stationary/necklaceBifurcationDiagram.mlx`  |
 | 2.8 and A.9 | Soliton solutions colliding with a vertex on balanced and unbalanced star graphs. | `source/examples/evolution/NLSOnBalancedStar23t.mlx` and `source/examples/evolution/NLSOnUnbalancedStar23t.mlx` |
 | 2.9         | KPP equation on a honeycomb                                  | `source/examples/evolution/KPPonHoneycomb.mlx`               |
 | 3.1         | Function plotting on graphs with 2D and 3D layout            | `documentation/figures_from_the_paper/figure3p1.mlx`         |
-| A.2         | QGLAB log (ground state of L-shaped quantum graph)           | In  `/documentation/templateGallery.mlx`                     |
+| A.2         | QGLAB logo (ground state of L-shaped quantum graph)          | In  `/documentation/templateGallery.mlx`                     |
 | A.3         | Solution of Poisson equation on a 3-node graph               | `source/examples/stationary/poissonExample.mlx` and `source/examples/chebyshev/poissonExampleChebyshev.mlx` |
 | A.4         | Cubic NLS continuation study on a dumbbell graph             | `documentation/continuationInstructions.mlx` contains these images and many more useful plotting routines for continuation studies |
 | A.5         | Cubic-Quintic NLS continuation on a dumbbell graph           | `source/examples/stationary/dumbbellContinuation35.mlx`      |

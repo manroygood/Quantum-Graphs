@@ -25,8 +25,7 @@ rot90D = rot90(P, 2);
 P(ii) = rot90D(ii);
 P(isnan(P)) = 1;
    
-% Downsample the square matrix:
-%D = P*diffmat(n);
+
 
 end
 

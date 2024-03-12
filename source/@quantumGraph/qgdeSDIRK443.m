@@ -19,7 +19,7 @@ nSkip = opts.nSkip;
 tVec = 0:nSkip*dt:tFinal;
 nSteps= 1 + tFinal/dt;
 n = length(u0);  
-U = zeros(n,nSteps);
+U = zeros(n,length(tVec));
 U(:,1) = u0;
 
 L0 =   G.laplacianMatrixWithZeros;

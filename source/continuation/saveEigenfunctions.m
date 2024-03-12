@@ -1,4 +1,4 @@
-function saveEigenfunctions(Phi,tag,dataDir,nToPlot,nDoubles,nTriples)
+function saveEigenfunctions(Phi,tag,dataDir,nToPlot,nDoubles,nTriples,verbose)
 %% EigenfunctionsSaveData
 % Computes the eigenvalues and eigenfunctions of the Laplace operator
 % Saves the data to files in the directory
@@ -11,6 +11,7 @@ function saveEigenfunctions(Phi,tag,dataDir,nToPlot,nDoubles,nTriples)
 if ~exist('nToPlot','var'); nToPlot=4;end
 if ~exist('nDoubles','var'); nDoubles=0;end
 if ~exist('nTriples','var'); nTriples=0;end
+if ~exist('verbose','var'); verbose = false; end
 
 addComment(dataDir,"This directory contains eigenfunctions:")
 
@@ -20,14 +21,16 @@ addComment(dataDir,"This directory contains eigenfunctions:")
 % sorting.
 numEigs= 2*nToPlot+2*nDoubles+3*nTriples;
 [V,lambda]=Phi.eigs(numEigs);
-[singles,doubles,triples]=separateEigs(lambda); 
+[singles,doubles,triples]=separateEigs(lambda);
 
 %% Plot and Save the first few multiplicity-one eigenfunctions
 for j=1:nToPlot
     %%
-    figure
-    Phi.plot(V(:,singles(j)))
-    title(sprintf('(%s) $\\lambda = %0.3f$', letter(j),lambda(singles(j))));
+    if verbose
+        figure
+        Phi.plot(V(:,singles(j)))
+        title(sprintf('(%s) $\\lambda = %0.3f$', letter(j),lambda(singles(j))));
+    end
     fcnfile=['eigenfunction.' getLabel(j)];
     filename=fullfile(dataDir,fcnfile);
     eigenfunction=V(:,singles(j));
@@ -50,10 +53,12 @@ if exist('nDoubles','var') && nDoubles>0 && ~isempty(doubles)
             %%
             vDouble=resolveDoubles(V,doubles(j),Phi);
             nn=nn+1;
-            figure
             v1=vDouble{k};
-            Phi.plot(v1)
-            title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(doubles(j))));
+            if verbose
+                figure
+                Phi.plot(v1)
+                title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(doubles(j))));
+            end
             fcnfile=['eigenfunction.' getLabel(nn)];
             filename=fullfile(dataDir,fcnfile);
             save(filename,'v1','-ascii')
@@ -75,10 +80,12 @@ if exist('nTriples','var') && nTriples>0 && ~isempty(triples)
             %%
             vTriple=resolveTriples(V,triples(j),Phi);
             nn=nn+1;
-            figure
             v1=vTriple{k};
-            Phi.plot(v1)
-            title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(triples(j))));
+            if verbose
+                figure
+                Phi.plot(v1)
+                title(sprintf('(%s) $\\lambda = %0.3f$', letter(nn), lambda(triples(j))));
+            end
             fcnfile=['eigenfunction.' getLabel(nn)];
             filename=fullfile(dataDir,fcnfile);
             save(filename,'v1','-ascii')

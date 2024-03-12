@@ -1,5 +1,5 @@
 function Dp = diffMatrixOrderP(m,n,P,L)
-% Compute the mxn rectangular differentiation matrix of order P>1 which
+% Compute the mxn rectangular differentiation matrix of order P>=1 which
 % maps from n-point Chebyshev grid of the second kind to m-point Chebyshev
 % grid of the first kind and L is the length of the interval. 
 

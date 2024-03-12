@@ -6,6 +6,7 @@ function z = norm(G,varargin)
 % y = norm(G,p)    Calculates the 2-norm of the y-component of G
 % y = norm(G,v,p). Assigns the vector v to the y component of G and then
 %                  calculates the 2-norm
+% p should satisfy p>1. 
 
 if nargin==1
     p=2;
@@ -24,11 +25,15 @@ elseif nargin>1
         p=2;
     end
 end
-    
+
 assert(isscalar(p),'p must be a scalar')
 assert(isnumeric(p),'p must be a number')
 assert(p>=1,'p must be > 1')
 
 y=G.graph2column;
-yToTheP=(abs(y)).^p;
-z = (G.integral(yToTheP))^(1/p);
+if isinf(p)
+    z = max(abs(y));
+else
+    yToTheP=(abs(y)).^p;
+    z = (G.integral(yToTheP))^(1/p);
+end

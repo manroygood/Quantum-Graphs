@@ -11,16 +11,14 @@ classdef quantumGraph < matlab.mixin.Copyable
     end    properties (SetAccess = private, GetAccess = public)
         wideLaplacianMatrix;        % the matrix L_int from text (dimension N_int x N_ext)
         interpolationMatrix;        % the matrix P_int from text (dimension N_int x N_ext)
-        discreteVCMatrix;        % the matrix M_VC (dimenstion 2*numedges x N_ext)
-        nonhomogeneousVCMatrix;      % The matrix M_NH used for assigning nonhomogeneous VC terms to the right row, dimension N_ext x 2 numedges
+        discreteVCMatrix;           % the matrix M_VC (dimenstion 2*numedges x N_ext)
+        nonhomogeneousVCMatrix;     % The matrix M_NH used for assigning nonhomogeneous VC terms to the right row, dimension N_ext x 2 numedges
         derivativeMatrix;           % a square derivative matrix. Used for computing energy and momentum, dimension N_ext x N_ext
     end
     methods
         function G=quantumGraph(source,target,LVec,opts)
             % Three required arguments, the rest optional
             % Constructs a quantum graph data structure
-            % This is the 2021 implementation implmenting all vertex conditions 
-            % including Dirichlet via ghostpoints
             % 6/23/2021 replaced input parser with argument block
             % 7/1/2021 made ghost points actual data points 
             % 11/16/2022 made laplacian matrix and interpolation wide
@@ -72,7 +70,7 @@ classdef quantumGraph < matlab.mixin.Copyable
 
 
             % If LVec is scalar make all edges same length
-            if length(LVec)==1
+            if isscalar(LVec)
                 LVec=LVec*ones(size(source));
             end
             % Test that the Length vector is same size as number of edges
@@ -80,7 +78,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             
             % If opts.Weight is a scalar, assign same weight to all edges. 
             Weight=opts.Weight;
-            if length(Weight)==1
+            if isscalar(Weight)
                 Weight=Weight*ones(size(source));
             end
             % Test that the weight vecgor is same size as number of edges
@@ -104,7 +102,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             robinCoeff=opts.RobinCoeff;
             if length(robinCoeff)==nNodes
                 robinCoeff=robinCoeff(:);
-            elseif length(robinCoeff)==1
+            elseif isscalar(robinCoeff)
                 robinCoeff=robinCoeff*ones(nNodes,1);
             else
                 error('quantumGraph:robinMismatch','Robin coefficient vector length must equal number of nodes')
@@ -116,7 +114,7 @@ classdef quantumGraph < matlab.mixin.Copyable
             nodeData=opts.nodeData;
             if length(nodeData)==nNodes
                 nodeData=nodeData(:);
-            elseif length(nodeData)==1
+            elseif isscalar(nodeData)
                 nodeData=nodeData*ones(nNodes,1);
             else
                 error('quantumGraph:nodeDataMismatch','Node data vector length must equal number of nodes')

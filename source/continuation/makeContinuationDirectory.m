@@ -1,10 +1,12 @@
-function dataDir = makeContinuationDirectory(Phi,tag)
+function dataDir = makeContinuationDirectory(Phi,tag,verbose)
+if ~exist('verbose','var'); verbose = false; end
+
 diagramNumber=incrementRunNumber(tag);
 dataDir=createDataDirectories(tag,diagramNumber);
 
 %% Plot the graph layout
 close all;
-Phi.plot('mutelayout')
+if verbose; Phi.plot('mutelayout'); end
 
 %% Save the template to a file
 filename=fullfile(dataDir,'template');
