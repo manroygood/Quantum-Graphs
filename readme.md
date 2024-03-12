@@ -26,7 +26,7 @@ In December 2023, we submitted a paper entitled “QGLAB: A MATLAB Package for C
 
 #### Documentation
 
-Basic instructions are in a MATLAB live script quantumGraphRoutines.mlx, which has also been saved as an HTML file](quantumGraphRoutines.html).
+Basic instructions are in a Matlab live script quantumGraphRoutines.mlx, which has also been saved as an [HTML file](quantumGraphRoutines.html).
 
 Many additional examples are presented in live scripts in the directory `source/examples`, its subdirectories, and `documentation`.
 
