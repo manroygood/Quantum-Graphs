@@ -6,5 +6,5 @@ function col = graph2column(G)
 col=zeros(nxTot,1);
 
 for k=1:numedges(G)
-    col(nxC(k)+1:nxC(k+1))=G.Edges.y{k}(:);
+    col(nxC(k)+1:nxC(k+1))=G.y{k}(:);
 end

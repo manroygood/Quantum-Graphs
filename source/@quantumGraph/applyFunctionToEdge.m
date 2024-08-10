@@ -14,5 +14,7 @@ elseif isnumeric(func)
     elseif all(size(func')==size(G.x{j}))
         y=func';
     end
+else
+    error('applyfunctionToEdge:bad_function')
 end
 G.qg.Edges.y{j}=y;

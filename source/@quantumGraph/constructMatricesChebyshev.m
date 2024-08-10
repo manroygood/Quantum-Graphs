@@ -1,44 +1,71 @@
 function constructMatricesChebyshev(G)
-% Constructs several matrices needed for the finite difference 
+% Constructs several matrices needed for the finite difference
 
 %% Construct the Laplacian matrix for the quantum graph domain G
-% Produces the Laplacian matrix 
-% interpolation matrix B 
+% Produces the Laplacian matrix
+% interpolation matrix B
 nEdges = G.numedges;        % Number of edges
 nNodes = G.numnodes;        % Number of nodes
-[n,nxC,nxTot] = G.nx;       % A useful vector giving positions of final disc point of each edge
-L = G.L;                    % Vector of edge lengths
-D1matrix = zeros(nxTot,nxTot);             % Used to define Robin-Kirchhoff Boundary Conditions
-D2matrix = zeros(nxTot-2*nEdges, nxTot);   % D2matrix will contain the blocked D2 matricies and no BCs
-B = zeros(nxTot-2*nEdges,nxTot);                    % Initializes projection matrix
+[nxVec,nxC,nxTot] = G.nx;       % A useful vector giving positions of final disc point of each edge
+nxInt = nxTot-2*nEdges;
+LaplaceMat = zeros(nxInt, nxTot);   % D2matrix will contain the blocked D2 matricies and no BCs
+InterpoMat = zeros(nxInt,nxTot);                    % Initializes projection matrix
+DerivMat = zeros(nxTot,nxTot);             % Used to define Robin-Kirchhoff Boundary Conditions
 
-for i=1:nEdges       % Loops over each edge
-    
-    N = n(i)+2;   % Number of disc. pts. on e_i
-    M = n(i);     % Number of rows needed
-    
-    D1 = chebyshevDeriv(N,L(i));        % D1 matrix with chebyshev disc points of the second kind
-    D2 = diffMatrixOrderP(M,N,2,L(i));  % D2 has already been projected onto internal disc points
+L = G.L;                    % Vector of edge lengths
+
+for k=1:nEdges        % Loops over each edge
+
+    M = nxVec(k);     % Number of rows needed
+    N = nxVec(k)+2;   % Number of discrete points on e_i
     Project = rectdiff_bary(M,N);       % Projection matrix on edge_i
-    
-    % Builds D2 blocks for whole Quantum Graph
-    if i==1
-        x = 0;
+    [leftCol,rightCol,topRow,bottomRow]=getBounds(nxC,k);
+
+
+    if G.isCompact(k)
+
+
+        D = chebyshevDeriv(N,L(k));        % D1 matrix with Chebyshev discretization points of the second kind
+        D2 = diffMatrixOrderP(M,N,2,L(k));  % D2 has already been projected onto internal disc points
+
     else
-        x = x + n(i-1);         % Positions us so that we move past the previously built portion of the D2 part of the matrix
+        stretch=G.stretch(k);
+        % The interior grid sInt
+        sInt = (1 - cos( ((2* (0:(M-1))'+1) * pi)/(2*M) ))/2;
+
+        diff1 = diffMatrixOrderP(M,N,1,1);
+        diff2 = diffMatrixOrderP(M,N,2,1);
+
+        [g,gprime]=getStretchedDerivWeightsCheb(sInt,stretch);
+
+        D2a = diag(g.^2)*diff2;
+        D2b = diag(g.*gprime)*diff1;
+        D2 = D2a + D2b;
+
+        % The extended grid sExt 
+        %sExt = (1 - cos( pi*(0:(M+1))'/(M+1) ))/2;
+        sExt = chebptsSecondKind(M);
+        g=getStretchedDerivWeightsCheb(sExt,stretch);
+        D = diag(g)*chebyshevDeriv(N,1);
+
     end
-    
-    D1matrix( (nxC(i)+1):nxC(i+1) , (nxC(i)+1):nxC(i+1)) = D1;     % Creates square D1 matrix
-    D2matrix( (x+1):(x+M) , (nxC(i)+1):nxC(i+1) ) = D2;
-    B( (x+1):(x+M) , (nxC(i)+1):nxC(i+1) ) = Project;
- 
+
+
+    DerivMat(leftCol:rightCol, leftCol:rightCol) = D;     % Creates square D1 matrix
+    LaplaceMat(topRow:bottomRow, leftCol:rightCol) = D2;
+    InterpoMat(topRow:bottomRow, leftCol:rightCol) = Project;
+
 end
 
-%% Populate the boundary condition rows
+G.derivativeMatrix = DerivMat;
+G.wideLaplacianMatrix = LaplaceMat;
+G.interpolationMatrix = InterpoMat;
+
+%% Populate the vertex condition matrices
 % The last (2*numedges) rows of the Laplacian matrix implement the boundary
 % conditions. Note that the sum of the degrees of all nodes = (2*numedges).
 % Therefore first loop over the nodes and then loop over the connected
-% edges. The boundary conditions at each vertex are implemented in a block of 
+% edges. The boundary conditions at each vertex are implemented in a block of
 % "fullDegree" rows. The first row of a block encodes the flux condition or
 % the Dirichlet condition. The remaining rows of the block enforce
 % continuity.
@@ -53,26 +80,23 @@ discreteVCMat = zeros(2*nEdges,nxTot);                % Initializes space for ve
 row = 0;
 for j=1:nNodes     % Loop over the nodes
     [fullDegree,~,~] = G.fullDegreeEtc(j);
-    
+
     for k=1:fullDegree   % Loop over the edges connected to the node
         row = row + 1;
 
         if k == 1   % At first entry of block, enforce either Dirichlet or flux condition & put a one in the right spot of VCAMat
-            discreteVCMat(row,:) = robinCondition(G,j,D1matrix);
-            nonhomogeneousVCMat(nxTot-2*nEdges+row,j) = 1;
+            discreteVCMat(row,:) = G.robinCondition(j,DerivMat);
+            nonhomogeneousVCMat(nxInt+row,j) = 1;
         else        % At remaining entries of block enforce continuity condition
             e1 = G.ek(j,1);
             e2 = G.ek(j,k);
             discreteVCMat(row,:) = e1 - e2;
         end
-        
+
     end
 end
 
-G.wideLaplacianMatrix = D2matrix;
-G.interpolationMatrix = B;
 G.discreteVCMatrix =  discreteVCMat;
 G.nonhomogeneousVCMatrix=nonhomogeneousVCMat;
-G.derivativeMatrix = -D1matrix;
 
 end

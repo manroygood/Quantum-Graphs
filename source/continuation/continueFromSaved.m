@@ -17,7 +17,7 @@ freqFile=fullfile(dataDir,['savedFrequency.' label]);
 LambdaFirst=load(freqFile);
 NN=Phi.dot(PhiColumn, PhiColumn);
 NT=max(options.NThresh,1.02*NN);
-options= continuerSet(options,'NThresh',NT,'LambdaThresh',1.02*LambdaFirst);
+options= continuerSet(options,'NThresh',NT);%,'LambdaThresh',1.02*LambdaFirst);
 
 if options.plotFlag; figure(1)
     clf; hold on;

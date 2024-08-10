@@ -7,10 +7,10 @@ if(or(j<0,j>1000))
 end
 
 label='000';
-if(and(0<j,j<10))
+if 0<j && j<10
   label(3)=num2str(j);
-elseif (and(9<j,j<100))
+elseif 9<j && j<100
   label(2:3)=num2str(j);
-elseif(99<j)
+elseif 99<j
   label=num2str(j);
 end

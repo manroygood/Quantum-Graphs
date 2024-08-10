@@ -5,12 +5,17 @@ function solution = solvePoisson(G,opts)
 arguments
    G % no tests, no default
    opts.edgeData {mustBeNumeric, mustBeVector} = 0
+   opts.nodeData {mustBeNumeric, mustBeVector} = 0
 end
 
 [~,~,nxTot]=G.nx;
 
 if isscalar(opts.edgeData) 
     opts.edgeData = opts.edgeData * ones(nxTot,1);
+end
+
+if isscalar(opts.nodeData)
+    opts.nodeData=opts.nodeData*ones(G.numnodes,1);
 end
 
 % Some error checking
@@ -21,6 +26,6 @@ assert(length(opts.edgeData)==nxTot,'quantumGraph:edgeDataLengthIncompatible',..
 % The actual function
 
 rhs=(G.interpolationMatrixWithZeros) * opts.edgeData + ...
-        (G.nonhomogeneousVCMatrix) * G.nodeData;
+        (G.nonhomogeneousVCMatrix) * opts.nodeData;
     
 solution = G.laplacianMatrixWithVC \ rhs;

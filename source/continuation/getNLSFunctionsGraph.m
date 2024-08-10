@@ -35,7 +35,7 @@ fcns.fxxu =@(z,Lambda,u)B*spdiags(fpp(z).*u,0,nA,nA); % this is fxx*u, which tak
 fcns.F = F; % used in computing the energy
 
 % This is Fzz considered as a tensor that takes three arguments,
-% essentially a cubic form
+% i.e., a trilinear form
 % This is used in (7.130) of Govaerts 2000 SIAM book
 % Note the components (1:end-1) of phi1 and phi2 contain the function 
 % and the end component contains the frequency parameter Lambda

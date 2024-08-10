@@ -141,9 +141,9 @@ while ~crossThresh(options.LambdaThresh,LambdaVec,k) ...
 end
 
 if crossThresh(options.LambdaThresh,LambdaVec,k)
-    fprintf('Lambda threshold crossed.\n')
+    fprintf('Lambda threshold %0.1f crossed.\n',options.LambdaThresh)
 elseif crossThresh(options.NThresh,NVec,k)
-    fprintf('N threshold crossed.\n')
+    fprintf('N threshold %0.1f crossed.\n',options.NThresh)
 elseif k > options.maxPoints
     fprintf('Maximum number of points on curve exceeded. Change maxPoints if needed.\n')
 elseif normDelta<options.minNormDelta

@@ -8,33 +8,22 @@ function fileNumber=saveHighFrequencyStandingWave(dataDir,Lambda0,edges,signs)
 % edges............A list of edges supporting sech-like initial guesses
 % signs............a list of the signs of the sech function on each nonzero edge
 
-
-savedTag='saved';
-fileNumber=incrementRunNumber(savedTag,dataDir);
-fileLabel=getLabel(fileNumber);
 Phi=loadGraphTemplate(dataDir);
-Phi=initNLStanding(Phi,Lambda0,edges,signs);
+guess = constructHighFrequencyGuess(Phi,Lambda0,edges,signs);
+fileNumber=saveStandingWave(dataDir,Lambda0,guess);
+fileLabel=getLabel(fileNumber);
 
-y=graph2column(Phi);
-solutionFileName=fullfile(dataDir,['savedFunction.' fileLabel]);
-frequencyFileName=fullfile(dataDir,['savedFrequency.' fileLabel]);
-
-save(solutionFileName,'y','-ascii','-double')
-save(frequencyFileName,'Lambda0','-ascii','-double')
-
-fprintf('File saved to %s.\n',solutionFileName);
-fprintf('File number is %i. \n',fileNumber);
 
 addComment(dataDir,'savedFunction.%s has support localized  on ',fileLabel)
 for k=1:length(edges)
     if signs(k)==1; s = '+1'; else; s = '-1'; end
-    addComment(dataDir,'Edge #%i, with sign %2',edges(k),s);
+    addComment(dataDir,'Edge #%i, with sign %s. ',edges(k),s);
 end
 addComment(dataDir);
 
 end
 
-function Phi=initNLStanding(Phi,Lambda0,nonZeroEdges,signs)
+function guess=constructHighFrequencyGuess(Phi,Lambda0,nonZeroEdges,signs)
 % Finds a large-amplitude standing wave with frequency Lambda0
 %
 % It looks for a solution which looks like a sum of sech functions which
@@ -60,10 +49,6 @@ for k=1:Phi.numedges
     end
     Phi.applyFunctionToEdge(f,k)
 end
-y=Phi.graph2column;
-fcns=getNLSFunctionsGraph(Phi);
-[fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,Lambda0);
-initTol=1e-6;
-[y,~,~]=solveNewton(y,fDeflated,matrixDeflated,initTol);
-Phi.column2graph(y);
+guess=Phi.graph2column;
+
 end

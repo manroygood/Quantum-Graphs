@@ -22,7 +22,7 @@ Lambda1=-leadingCoeff*phinorm^leadingExponent;
 LambdaFirst=-lambda0+epsilon*Lambda1;
 PhiGuess = sqrt(epsilon)*(phi0);
 
-[fDeflated,matrixDeflated] = deflateFunctionsFromZero(fcns,LambdaFirst);
+[fDeflated,matrixDeflated] = deflatedFunctions(Phi,fcns,LambdaFirst);
 
 % Solve for the nonlinear standing wave numerically
 [PhiColumn,~,~]=solveNewton(PhiGuess,fDeflated,matrixDeflated,initTol);

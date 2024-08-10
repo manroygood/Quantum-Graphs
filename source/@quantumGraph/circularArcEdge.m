@@ -5,7 +5,7 @@ function [x1,x2]=circularArcEdge(G,edge,theta,plusminus,plotCoords)
 endNodes=G.EndNodes(edge);
 node1=endNodes(1);
 node2=endNodes(2);
-assert(node1~=node2,'Straight edges must start and end at the different nodes')
+assert(node1~=node2,'Arc edges must start and end at the different nodes')
 assert(strcmp(plusminus,'plus')||strcmp(plusminus,'minus'),...
     'plusminus must be ''plus'' or ''minus'' ');
 assert(0<theta && theta<2*pi, 'Theta must lie between 0 and 2 pi.')

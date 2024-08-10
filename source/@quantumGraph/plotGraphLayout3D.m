@@ -9,9 +9,9 @@ for k=1:numedges(G)
     ww=Edges.Weight(k)*2;
     plot3(x1,x2,x3,'color',blueish,'linewidth',ww);
     hold on;
-    x1m=x1(round(length(x1)/2));
-    x2m=x2(round(length(x1)/2));
-    x3m=x3(round(length(x1)/2));
+    x1m=(x1(1)+x1(end))/2;
+    x2m=(x2(1)+x2(end))/2;
+    x3m=(x3(1)+x3(end))/2;
     if ~muteFlag
         text(x1m,x2m,x3m,int2str(k),'fontsize',18,'edgecolor','k','background',creamcolor,'horizontalalignment','center')
     end

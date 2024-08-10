@@ -7,7 +7,6 @@ node1=endNodes(1);
 node2=endNodes(2);
 assert(node1~=node2,'Straight edges must start and end at the different nodes')
 
-
 x1start=plotCoords.x1Node(node1);
 x1end=plotCoords.x1Node(node2);
 x1=G.distributePlotCoords(x1start,x1end,edge);

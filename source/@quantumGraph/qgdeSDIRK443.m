@@ -1,9 +1,9 @@
 function [tVec,U] = qgdeSDIRK443(G,mu,F,tFinal,u0,dt,opts)
 % Solves the PDE u_t = mu * Laplace(u) + F(u) on a quantum graph G
 % from t = 0 to t = tFinal with step size dt
-% using a form of Nørsett's three-stage, 4th order Diagonally Implicit Runge–Kutta method
-% which has been adapted so that the solution at all times satisfies the
-% discrete form of the vertex conditions
+% using a version of the scheme (4,4,3) from 
+% Ascher, Ruuth, Spiteri 1997 IMEX Runge-Kutta Schemes paper
+% modified to keep the solution in the function space
 
 arguments
     G
@@ -22,13 +22,9 @@ n = length(u0);
 U = zeros(n,length(tVec));
 U(:,1) = u0;
 
-L0 =   G.laplacianMatrixWithZeros;
-Pvc =  G.interpolationMatrixWithVC;
-P0 =   G.interpolationMatrixWithZeros;
-
 % Define the coefficients A and Ahat that define the IMEX-SDIRK scheme
 % These are multiplied by dt to reduce number of multiplications in the
-% main loop
+% main loop and simplify the code.
 
 A = [ 1/2    0   0   0
       1/6  1/2   0   0
@@ -40,7 +36,11 @@ Ahat = [ 18   0  0   0
          30 -30 18   0
           9  63 27 -63]*dt/36;
 
-P1 = G.extendWithVC(G.interpolationMatrix-mu*A(1,1)*G.wideLaplacianMatrix);
+Lvc = G.laplacianMatrixWithVC;
+L0  = G.laplacianMatrixWithZeros;
+Pvc = G.interpolationMatrixWithVC;
+P0  = G.interpolationMatrixWithZeros;
+P1 = Pvc -mu*A(1,1)*Lvc;
 
 column=1;
 for j=2:nSteps

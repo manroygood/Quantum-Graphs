@@ -7,7 +7,14 @@ plotCoords=Phi.initPlotCoords;
 
 n = Phi.numedges;
 phi = 2*pi/n*(0:n-1)';
-z = Phi.L .* exp(1i*phi);
+L = Phi.L;
+if ismember('stretch',Phi.Edges.Properties.VariableNames)
+    for j = find(isinf(L))
+        LL=Phi.stretch(j);
+        L(j)=sinh(LL);
+    end
+end
+z = L .* exp(1i*phi);
 
 plotCoords.x1Node=[0; real(z)];
 plotCoords.x2Node=[0; imag(z)];

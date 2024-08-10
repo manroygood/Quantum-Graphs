@@ -9,10 +9,7 @@ end
 
 weightVec = G.Edges.Weight;
 
-
 z = 0;
 for k = 1:G.numedges
-    y=G.y{k};
-    L = G.Edges.L(k);
-    z = z + weightVec(k)*clencurt(y,L);
+    z = z + weightVec(k)*dot(G.y{k},G.integrationWeight{k});
 end

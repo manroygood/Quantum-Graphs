@@ -13,11 +13,14 @@ end
 Edges=G.Edges; Nodes=G.Nodes;
 for k=1:numedges(G)
     [~,x1,x2]=G.fullEdge(k);
+    midpt = ceil(G.nx(k)/2);
     ww=Edges.Weight(k)*2;
     nextLine=plot(x1,x2,'color',blueish,'linewidth',ww);
     if relinked(k); set(nextLine,'color',reddish);end
-    x1m=x1(round(length(x1)/2));
-    x2m=x2(round(length(x1)/2));
+    % x1m=(x1(1)+x1(end))/2;
+    % x2m=(x2(1)+x2(end))/2;
+    x1m = x1(midpt);
+    x2m = x2(midpt);
     if ~muteFlag
         text(x1m,x2m,int2str(k),'fontsize',18,'edgecolor','k','background',creamcolor,'horizontalalignment','center')
     end
@@ -28,7 +31,7 @@ xlim=get(gca,'xlim'); dx=diff(xlim)/30;
 plot(Nodes.x1,Nodes.x2,'o','color',blueish,'markersize',10,'MarkerFaceColor',blueish)
 
 if ~muteFlag
-    
+
     for k=1:numnodes(G)
         text(Nodes.x1(k)+dx,Nodes.x2(k)+dx,int2str(k),'fontsize',18,'horizontalalignment','center',...
             'edgecolor','k','background',lightgray)
