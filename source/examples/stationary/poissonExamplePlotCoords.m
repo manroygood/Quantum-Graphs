@@ -1,31 +1,37 @@
-function plotCoords = poissonExamplePlotCoords(Phi)
+function plotCoords = poissonExamplePlotCoords(G)
 
-L=Phi.L;
+L=G.L;
 
-plotCoords.x1Node=[0;L(2);L(2)];
-if isinf(L(4))
-    y4=-sinh(Phi.stretch(4));
+if isinf(L(5))
+    x5=sinh(G.stretch(5));
 else
-    y4 = -L(4);
+    x5 = L(5);
 end
-plotCoords.x2Node=[0;0;y4];
-plotCoords.x1Edge = cell(4,1);
-plotCoords.x2Edge = cell(4,1);
+theta=pi/6;
+plotCoords.x1Node=[0;L(3);L(3)+x5*cos(theta)];
+plotCoords.x2Node=[0;0;x5*sin(theta)];
+plotCoords.x1Edge = cell(5,1);
+plotCoords.x2Edge = cell(5,1);
 
-% Edge 1
-theta=Phi.distributePlotCoords(0,2*pi,1);
-plotCoords.x1Edge{1} = L(1)*(cos(theta)-1)/2/pi;
-plotCoords.x2Edge{1} = L(1)*sin(theta)/2/pi;
+% Left hoop 1
+edge=1;
+[hoop1LeftX1,hoop1LeftX2] = G.teardropEdge(edge,5*pi/4,pi/3,plotCoords);
 
-% Edge 2
-plotCoords.x1Edge{2} = Phi.distributePlotCoords(0,L(2),2);
-plotCoords.x2Edge{2} = zeros(size(plotCoords.x1Edge{2}));
+% Left hoop 1
+edge=2;
+[hoop2LeftX1,hoop2LeftX2] = G.teardropEdge(edge,3*pi/4,pi/3,plotCoords);
 
-% Edge 3
-theta=Phi.distributePlotCoords(0,2*pi,3);
-plotCoords.x1Edge{3} = L(3)*sin(theta)/2/pi+L(2);
-plotCoords.x2Edge{3} = L(3)*(-cos(theta)+1)/2/pi;
+% Handle
+edge=3;
+[handleX1,handleX2] = G.straightEdge(edge,plotCoords);
 
-% Edge 4
-plotCoords.x2Edge{4} = Phi.distributePlotCoords(0,y4,4);
-plotCoords.x1Edge{4} = L(2)+zeros(size(plotCoords.x2Edge{4}));
+% Right hoop
+edge=4;
+[hoopRightX1,hoopRightX2] = G.teardropEdge(edge,pi/4,pi/3,plotCoords);
+
+% Dangling Edge
+edge=5;
+[dangleX1,dangleX2]=G.straightEdge(edge,plotCoords);
+
+plotCoords.x1Edge={hoop1LeftX1; hoop2LeftX1; handleX1; hoopRightX1; dangleX1};
+plotCoords.x2Edge={hoop1LeftX2; hoop2LeftX2; handleX2; hoopRightX2; dangleX2};

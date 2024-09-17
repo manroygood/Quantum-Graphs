@@ -17,6 +17,6 @@ vertexTerm = dot(rC,(Phi.Nodes.y).^2);
 E = real(vertexTerm + term1 - term2);
 
 if Phi.hasPotential
-    term3 = Phi.integral(Phi.potentialVector.*abs(yColumn).^2);
+    term3 = Phi.integral(Phi.potential.*abs(yColumn).^2);
     E = E + term3;
 end

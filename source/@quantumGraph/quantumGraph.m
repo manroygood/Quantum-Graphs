@@ -14,8 +14,7 @@ classdef quantumGraph < matlab.mixin.Copyable
         discreteVCMatrix;           % the matrix M_VC (dimension 2*numedges x N_ext)
         nonhomogeneousVCMatrix;     % The matrix M_NH used for assigning nonhomogeneous VC terms to the right row, dimension N_ext x 2 numedges
         derivativeMatrix;           % a square derivative matrix. Used for computing energy and momentum, dimension N_ext x N_ext
-        potentialMatrix;            % The matrix that implements the edgewise potential
-        potentialVector;            % The vector containing the edgewise potential
+        potential;            % The vector containing the edgewise potential
     end
     methods
         function G=quantumGraph(source,target,LVec,opts)
@@ -37,6 +36,7 @@ classdef quantumGraph < matlab.mixin.Copyable
                 opts.nxVec double {mustBeVector,mustBePositive,mustBeFinite} = 20;
                 opts.plotCoordinateFcn function_handle
                 opts.stretch double {mustBeVector,mustBeNonnegative,mustBeFinite}
+                opts.potential cell
             end
 
             %%%% Here we do some error checking on the input and
@@ -100,6 +100,11 @@ classdef quantumGraph < matlab.mixin.Copyable
                     'Length of stretch must match number of edges');
             end
 
+            if isfield(opts,'Potential')
+                assert(length(opts.potential)==numEdges,...
+                    'quantumGraph:PotentialMismatch',...
+                    'Length of Potential must match number of edges');
+            end
             % END OF ERROR CHECKING SECTION
 
             % CONSTRUCT THE QUANTUM GRAPH AND OPERATORS
@@ -189,6 +194,10 @@ classdef quantumGraph < matlab.mixin.Copyable
 
             if isfield(opts,'plotCoordinateFcn')
                 G.addPlotCoords(opts.plotCoordinateFcn);
+            end
+
+            if isfield(opts,'potential')
+                G.addPotential(opts.potential);
             end
 
         end % End of constructor

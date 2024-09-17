@@ -40,7 +40,7 @@ Lvc = G.laplacianMatrixWithVC;
 L0  = G.laplacianMatrixWithZeros;
 Pvc = G.interpolationMatrixWithVC;
 P0  = G.interpolationMatrixWithZeros;
-P1 = Pvc -mu*A(1,1)*Lvc;
+P1 = Pvc -mu*A(1,1)*L0;
 
 column=1;
 for j=2:nSteps

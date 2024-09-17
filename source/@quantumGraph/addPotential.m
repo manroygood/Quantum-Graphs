@@ -18,5 +18,4 @@ end
 assert(length(V)==size(G.wideLaplacianMatrix,2),...
     'If V is a vector its length must equal the total number of unknowns in the discretization.');
 
-G.potentialMatrix = G.interpolationMatrix*diag(V);
-G.potentialVector = V;
+G.potential = V;

@@ -22,11 +22,11 @@ This will open up a project window. This does three things that allow you to run
 
 #### The preprint
 
-In December 2023, we submitted a paper entitled “QGLAB: A MATLAB Package for Computations on Quantum Graphs” describing the algorithms underlying QGLAB to a journal for publication. A slightly modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
+In December 2023, we submitted a paper entitled “QGLAB: A MATLAB Package for Computations on Quantum Graphs” to a journal for publication, describing the algorithms underlying QGLAB. A slightly modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
 
 #### Documentation
 
-Basic instructions are in a Matlab live script quantumGraphRoutines.mlx, which has also been saved as an [HTML file](documentation/quantumGraphRoutines.html). 
+Basic instructions are in a Matlab live script `documentation/quantumGraphRoutines.mlx`, which has also been saved as an [HTML file](documentation/quantumGraphRoutines.html). 
 
 This has been expanded further into a tutorial that was entered into the 2024 SIAM Dynamical Systems Tutorial Contest. It is saved as a [PDF](documentation/Tutorial/QGLABtutorial.pdf).
 
@@ -34,11 +34,11 @@ Many additional examples are presented in live scripts in the directory `source/
 
 A wide variety of graphs are implemented in `source/templates`. These are demonstrated in `source/templates/templateGallery.mlx`.
 
-If it doesn't make sense, just ask me.
+If it doesn't make sense, ask me.
 
 #### Reproducibility
 
-We provide a live script to reproduce each figure in the preprint generated using QGLAB. Some of the figures were edited interactively for clarity after being created by a script, so formatting may differ slightly. The following table lists the figures (numbered as on the arXiv while the paper remains under review).
+We provide a live script to reproduce each figure in the preprint generated using QGLAB. Some figures were edited interactively for clarity after being created by a script so that formatting may differ slightly. The following table lists the figures (numbered as on the arXiv while the paper remains under review).
 
 | Figure      | Description                                                  | file                                                         |
 | ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -47,7 +47,7 @@ We provide a live script to reproduce each figure in the preprint generated usin
 | 2.5 and A.1 | Four eigenfunctions and spectral determinant for a Y-shaped graph | `documentation/figures_from_the_paper/figure2p5.mlx`         |
 | 2.6         | Stationary NLS solutions on the dumbbell and spiderweb graphs | `documentation/figures_from_the_paper/figure2p6.mlx`         |
 | 2.7 & A.6   | Continuation study of NLS solutions on the necklace graph and two eigenfunctions | `source/examples/stationary/necklaceBifurcationDiagram.mlx`  |
-| 2.8 and A.9 | Soliton solutions colliding with a vertex on balanced and unbalanced star graphs. | `source/examples/evolution/NLSOnBalancedStar23t.mlx` and `source/examples/evolution/NLSOnUnbalancedStar23t.mlx` |
+| 2.8 and A.9 | Soliton solutions colliding with a vertex on balanced and unbalanced star graphs. | `source/examples/evolution/NLSOnBalancedStarSDIRK443.mlx` and `source/examples/evolution/NLSOnUnbalancedStarSDIRK443.mlx` |
 | 2.9         | KPP equation on a honeycomb                                  | `source/examples/evolution/KPPonHoneycomb.mlx`               |
 | 3.1         | Function plotting on graphs with 2D and 3D layout            | `documentation/figures_from_the_paper/figure3p1.mlx`         |
 | A.2         | QGLAB logo (ground state of L-shaped quantum graph)          | In  `/documentation/templateGallery.mlx`                     |
