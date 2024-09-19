@@ -98,7 +98,5 @@ If you use the package for published work, please cite it as
 
 
 
-```
 [![DOI](https://zenodo.org/badge/298713469.svg)](https://zenodo.org/badge/latestdoi/298713469)
-```
 
