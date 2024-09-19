@@ -18,7 +18,6 @@ for k=1:numedges(G)
     nextLine=plot(x1,x2,'color',blueish,'linewidth',ww);
     if relinked(k); set(nextLine,'color',reddish);end
     if ~muteFlag
-        assert(exist('arrow3')==2,'The arrow3 package required for this function')
         midpt = ceil(G.nx(k)*0.55);
         x1m = x1(midpt); dx1=diff(x1(midpt+[-1 1]));
         x2m = x2(midpt); dx2=diff(x2(midpt+[-1 1]));
@@ -33,17 +32,27 @@ for k=1:numedges(G)
 
     end
 end
-daspect([1 1 1]);
-colorarray=zeros(2,21,3);
-for j=1:21
-    colorarray(1,j,:)=blueish;
-end
-if ~muteFlag; hh=arrow3(leftends,rightends,'^b');
-    for j=1:length(hh)
-        props=get(hh(j));
-        if strcmp(props.Type,'surface')
-            set(hh(j),'CData',colorarray)
+
+
+if ~muteFlag
+
+    daspect([1 1 1]);
+    colorarray=zeros(2,21,3);
+    for j=1:21
+        colorarray(1,j,:)=blueish;
+    end
+    if (exist('arrow3','file')==2)
+        hh=arrow3(leftends,rightends,'^b');
+        for j=1:length(hh)
+            props=get(hh(j));
+            if strcmp(props.Type,'surface')
+                set(hh(j),'CData',colorarray)
+            end
         end
+    else
+        warning(['The arrow3 package is required to annotate the edges with direction arrows. ' ...
+            'Find it at https://www.mathworks.com/matlabcentral/fileexchange/14056-arrow3 or '...
+            'use the Add-Ons menu in the Home tab on the MATLAB Desktop.'])
     end
 end
 %axis equal
@@ -52,7 +61,6 @@ xlim=get(gca,'xlim'); dx=diff(xlim)/30;
 plot(Nodes.x1,Nodes.x2,'o','color',blueish,'markersize',10,'MarkerFaceColor',blueish)
 
 if ~muteFlag
-
     for k=1:numnodes(G)
         text(Nodes.x1(k)+dx,Nodes.x2(k)+dx,int2str(k),'fontsize',18,'horizontalalignment','center',...
             'edgecolor','k','background',lightgray)
