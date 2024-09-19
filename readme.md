@@ -85,18 +85,18 @@ We are happy to consider adding features and/or merging contributions.
 If you use the package for published work, please cite it as
 
 ```bibtex
-@misc{qgpackage,
-    author       = {R. H. Goodman and G. Conte and J. L. Marzuola},
-    title        = {Quantum Graphs Package},
-    year         = 2021,
-    doi          = {https://doi.org/10.5281/zenodo.4898112},
-    version      = {0.96},
-    publisher    = {Zenodo},
-    url          = {https://doi.org/10.5281/zenodo.4898112}
-    }
+@software{roy_goodman_2024_13290303,
+  author       = {Roy Goodman and
+                  Gracie Conte},
+  title        = {manroygood/Quantum-Graphs: v1.2},
+  month        = aug,
+  year         = 2024,
+  publisher    = {Zenodo},
+  version      = {v1.2},
+  doi          = {10.5281/zenodo.13290303},
+  url          = {https://doi.org/10.5281/zenodo.13290303}
+}
 ```
 
-
-
-[![DOI](https://zenodo.org/badge/298713469.svg)](https://zenodo.org/badge/latestdoi/298713469)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13290303.svg)](https://doi.org/10.5281/zenodo.13290303)
 
