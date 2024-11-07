@@ -31,4 +31,4 @@ end
 axis equal off
 view([0 90])
 
-cb=colorbar('southoutside')
+colorbar('southoutside');
