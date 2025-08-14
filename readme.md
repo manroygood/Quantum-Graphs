@@ -22,16 +22,23 @@ This will open up a project window. This does three things that allow you to run
    1. The Symbolic Mathematics Toolbox.
    2. The *arrow3* package is used to add annotation arrows to plots.
 
+#### The paper
 
-#### The preprint
+We published a paper describing this work. The complete citation is:
 
-In December 2023, we submitted a paper entitled “QGLAB: A MATLAB Package for Computations on Quantum Graphs” to a journal for publication. The paper describes the algorithms underlying QGLAB. A slightly modified version has been posted to the [arXiv](https://arxiv.org/abs/2401.00561).
+R. H. Goodman, G. Conte, and J. L. Marzuola. **QGLAB: A MATLAB package for computations on quantum graphs**. *SIAM Journal on Scientific Computing*, 47(2): B428–B453, 2025.
+
+You can download it from 
+
+* The first author's [website](https://roygoodman.net/publication/qglab/)
+* [SIAM Publications](https://epubs.siam.org/doi/10.1137/23M1627729)
+* [arXiv](https://arxiv.org/abs/2401.00561).
 
 #### Documentation
 
-Basic instructions are in a Matlab live script `documentation/quantumGraphRoutines.mlx`, also saved as an [HTML file](documentation/quantumGraphRoutines.html). 
+Basic instructions are in a MATLAB Live script `documentation/quantumGraphRoutines.mlx`, also saved as an [HTML file](documentation/quantumGraphRoutines.html). 
 
-This has been expanded further into a tutorial that was entered into the 2024 SIAM Dynamical Systems Tutorial Contest. It is saved as a [PDF](documentation/Tutorial/QGLABtutorial.pdf).
+This has been expanded further into a tutorial that won first prize in the faculty division of the 2024 SIAM Dynamical Systems Tutorial Contest. It is saved as a [PDF](documentation/Tutorial/QGLABtutorial.pdf).
 
 Many additional examples are presented in live scripts in the directory `source/examples`, its subdirectories, and `documentation`.
 

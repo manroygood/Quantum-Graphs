@@ -1,0 +1,47 @@
+\begin{thebibliography}{1}
+
+\bibitem{Aurentz:2017}
+J.~L. Aurentz and L.~N. Trefethen.
+\newblock Block operators and spectral discretizations.
+\newblock {\em SIAM Review}, 59:423--446, 2017.
+
+\bibitem{Berkolaiko:2013bq}
+G.~Berkolaiko and P.~Kuchment.
+\newblock {\em {Introduction to Quantum Graphs}}, volume 186 of {\em Mathematical Surveys and Monographs}.
+\newblock American Mathematical Soc., Providence, RI, 2013.
+
+\bibitem{driscoll2016rectangular}
+T.~A. Driscoll and N.~Hale.
+\newblock Rectangular spectral collocation.
+\newblock {\em IMA J. Numer. Anal.}, 36:108--132, 2016.
+
+\bibitem{exner2005convergence}
+P.~Exner and O.~Post.
+\newblock Convergence of spectra of graph-like thin manifolds.
+\newblock {\em J. Geom. Phys.}, 54(1):77--115, 2005.
+
+\bibitem{Goodman:2019go}
+R.~H. Goodman.
+\newblock {NLS bifurcations on the bowtie combinatorial graph and the dumbbell metric graph}.
+\newblock {\em Discrete Contin. Dyn. Syst. A}, 39:2203--2232, 2019.
+
+\bibitem{goodman2023qglab}
+R.~H. Goodman, G.~Conte, and J.~L. Marzuola.
+\newblock Qglab: A matlab package for computations on quantum graphs, 2023.
+
+\bibitem{kottos1997quantum}
+T.~Kottos and U.~Smilansky.
+\newblock Quantum chaos on graphs.
+\newblock {\em Phys. Rev. Lett.}, 79(24):4794, 1997.
+
+\bibitem{kuchment2002graph}
+P.~Kuchment.
+\newblock Graph models for waves in thin structures.
+\newblock {\em Waves in Random Media}, 12(4):R1--R24., 2002.
+
+\bibitem{KuchmentPost}
+P.~Kuchment and O.~Post.
+\newblock On the spectra of carbon nano-structures.
+\newblock {\em Comm. Math. Phys.}, 275(3):805--826, 2007.
+
+\end{thebibliography}
